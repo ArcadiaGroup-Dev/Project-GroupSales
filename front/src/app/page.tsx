@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { mocksProducts } from "@/components/mockProduct";
 import CardProduct from "@/components/Products/CardProduct";
 import Image from "next/image";
+import WhatsApp from "@/components/WhatsApp/WhatsApp";
 
 export default function ProductList() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -30,9 +31,9 @@ export default function ProductList() {
   }, [slides.length]);
 
   return (
-    <div>
+    <div className="mt-12 md:mt-24 lg:mt-24">
       {/* Carrusel */}
-      <div className="relative w-full h-64 mt-24 mb-10 overflow-hidden">
+      <div className="relative w-full h-64  mb-10 overflow-hidden">
         {slides.map((slide, index) => (
           <div
             key={index}
@@ -42,16 +43,18 @@ export default function ProductList() {
             style={{ transform: `translateX(${(index - currentSlide) * 100}%)` }}
           >
             {slide.imgSrc ? (
-              // Mostrar la imagen si la propiedad imgSrc está definida
+              
+              <div className="w-full h-full relative">
               <Image
-                src={slide.imgSrc}
-                alt="Slide"
-                width={800}
-                height={600}
-                className="w-full h-full object-cover"
+               src={slide.imgSrc}
+               alt="Slide"
+                fill 
+                className="absolute top-0 left-0 object-cover"
+                priority
               />
+              </div>
             ) : (
-              // Mostrar el texto si imgSrc no está definido
+             
               <h2 className={`text-3xl font-bold ${slide.textColor}`}>
                 {slide.text}
               </h2>
@@ -59,12 +62,13 @@ export default function ProductList() {
           </div>
         ))}
       </div>
-
+  
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
         {mocksProducts.map((product, index) => (
           <CardProduct key={index} product={product} />
         ))}
       </div>
+      <WhatsApp />
     </div>
   );
-}
+}  

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { FaUser, FaShoppingCart, FaSearch } from 'react-icons/fa';
 import Link from 'next/link'; // Si estás usando Next.js
+import Image from 'next/image';
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false); 
@@ -21,10 +22,12 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-[#195252] p-4 text-white z-50 shadow-lg">
+    <nav className="fixed top-0 left-0 w-full bg-secondary p-4 text-white z-50 shadow-lg">
       <div className="container mx-auto flex items-center justify-between">
         {/* Logo */}
-        <div className="text-2xl font-bold">Mi Tienda</div>
+        <div className="text-2xl font-bold">
+        <Image src="/LogoMutual.webp" alt="Logo mutual" width={150} height={300} className="rounded-lg"/>
+        </div>
 
         {/* Íconos de la Navbar */}
         <div className="flex items-center space-x-6">
@@ -32,7 +35,7 @@ export default function Navbar() {
           <div className="relative">
             <FaUser className="text-xl cursor-pointer" onClick={toggleUserMenu} />
             {userMenuOpen && (
-              <div className="absolute right-0 mt-2 bg-[#195252] text-white p-2 rounded shadow-lg">
+              <div className="absolute right-0 mt-2 bg-secondary text-white p-2 rounded shadow-lg">
                 <ul>
                   <li>
                     <Link href="/login" className="block px-4 py-2 hover:bg-teal-700">Ingresar</Link>
@@ -41,7 +44,7 @@ export default function Navbar() {
                     <Link href="/register" className="block px-4 py-2 hover:bg-teal-700">Registrarse</Link>
                   </li>
                   <li>
-                    <Link href="/account" className="block px-4 py-2 hover:bg-teal-700">Mi Cuenta</Link>
+                    <Link href="/myAccount" className="block px-4 py-2 hover:bg-teal-700">Mi Cuenta</Link>
                   </li>
                 </ul>
               </div>
