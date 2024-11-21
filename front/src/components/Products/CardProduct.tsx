@@ -1,14 +1,31 @@
 "use client";
+
 import React from "react";
-import { IProduct } from "../Interfaces/IProduct";
+import { IProduct } from "@/Interfaces/IProduct";
+import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import Link from "next/link";
+import Swal from "sweetalert2"; // Importar SweetAlert2
 
 interface CardProductProps {
   product: IProduct;
 }
 
 export default function CardProduct({ product }: CardProductProps) {
+  const { addToCart } = useCart();
+
+  // Función para manejar el click de agregar al carrito
+  const handleAddToCart = (product: IProduct) => {
+    addToCart(product);
+    Swal.fire({
+      icon: "success",
+      title: "Producto agregado",
+      text: `${product.name} ha sido agregado al carrito.`,
+      confirmButtonText: "¡Genial!",
+      timer: 2000, // Desaparece automáticamente después de 2 segundos
+    });
+  };
+
   return (
     <div
       key={product.id}
@@ -43,12 +60,12 @@ export default function CardProduct({ product }: CardProductProps) {
             Ver más
           </Link>
 
-          <Link
-            href={"/carrito"}
+          <button
+            onClick={() => handleAddToCart(product)} // Usar la función para agregar al carrito y mostrar la alerta
             className="block w-full rounded bg-secondary px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-700"
           >
             Comprar
-          </Link>
+          </button>
         </div>
       </div>
     </div>
