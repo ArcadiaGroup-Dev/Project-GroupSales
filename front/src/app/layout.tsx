@@ -1,3 +1,4 @@
+import { CartProvider } from "@/context/cartContext"; // Asegúrate de que la ruta sea correcta
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -30,9 +31,13 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Navbar/>
-        {children}
-        <Footer/>
+        <CartProvider>
+          {" "}
+          {/* Aquí envolvemos la aplicación con el CartProvider */}
+          <Navbar />
+          {children}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
