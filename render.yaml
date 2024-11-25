@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: frontend
+    env: docker
+    build:
+      dockerfile_path: ./front/Dockerfile  # Ruta al Dockerfile del frontend
+      context_path: ./front  # Contexto de construcción para el frontend
+    plan: free
+    ports:
+      - "3001"  # Puerto en el que el frontend se expondrá
+
+  - type: web
+    name: backend
+    env: docker
+    build:
+      dockerfile_path: ./back/Dockerfile  # Ruta al Dockerfile del backend
+      context_path: ./back  # Contexto de construcción para el backend
+    plan: free
+    ports:
+      - "3000"  # Puerto en el que el backend se expondrá
