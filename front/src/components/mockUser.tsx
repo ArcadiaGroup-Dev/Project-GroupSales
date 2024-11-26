@@ -1,4 +1,4 @@
-import { IUser } from "./Interfaces/IUser";
+import { IUser } from "@/Interfaces/IUser"
 
 export const mocksUser:IUser[] = [
     {
