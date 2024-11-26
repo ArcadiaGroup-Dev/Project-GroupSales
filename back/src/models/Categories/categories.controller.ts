@@ -11,40 +11,41 @@ export class CategoryController {
 
   @ApiOperation({ summary: 'Crea una nueva categoría' })
   @ApiResponse({ status: 201, description: 'Categoría creada exitosamente.' })
+  @ApiResponse({ status: 400, description: 'Datos de entrada inválidos.' })
   @Post()
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+  async create(@Body() createCategoryDto: CreateCategoryDto) {
+    return await this.categoryService.create(createCategoryDto);
   }
 
   @ApiOperation({ summary: 'Obtiene todas las categorías' })
   @ApiResponse({ status: 200, description: 'Lista de categorías.' })
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  async findAll() {
+    return await this.categoryService.findAll();
   }
 
   @ApiOperation({ summary: 'Obtiene una categoría específica por ID' })
   @ApiResponse({ status: 200, description: 'Categoría obtenida exitosamente.' })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada.' })
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(id);
+  async findOne(@Param('id') id: string) {
+    return await this.categoryService.findOne(id);
   }
 
   @ApiOperation({ summary: 'Actualiza una categoría por ID' })
   @ApiResponse({ status: 200, description: 'Categoría actualizada exitosamente.' })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada.' })
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryService.update(id, updateCategoryDto);
+  async update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+    return await this.categoryService.update(id, updateCategoryDto);
   }
 
   @ApiOperation({ summary: 'Elimina una categoría por ID' })
   @ApiResponse({ status: 200, description: 'Categoría eliminada exitosamente.' })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada.' })
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(id);
+  async remove(@Param('id') id: string) {
+    return await this.categoryService.remove(id);
   }
 }
 
