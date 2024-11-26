@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from './config/typeorm.config';
 import { ProductModule } from './models/Products/products.module';
 import { CategoriesModule} from './models/Categories/categories.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -16,7 +17,8 @@ import { CategoriesModule} from './models/Categories/categories.module';
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
     ProductModule,
-    CategoriesModule
+    CategoriesModule,
+    UsersModule
   ],
 })
 
