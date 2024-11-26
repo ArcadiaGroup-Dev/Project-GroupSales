@@ -21,7 +21,10 @@ export class Product {
   @Column({ type: 'varchar', length: 255, nullable: true })
   imageUrl: string;
 
-  @ManyToOne(() => Category, (category) => category.products, { nullable: false })
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  seller:string;
+
+  @ManyToOne(() => Category, (category) => category.products, { nullable: true })
   category: Category;
 
   @CreateDateColumn()

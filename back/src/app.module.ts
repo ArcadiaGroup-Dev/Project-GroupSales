@@ -1,14 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from './config/typeorm.config';
-import { HttpModule } from '@nestjs/axios';
-import { Product } from './models/Products/entities/products.entities';
-import { Category } from './models/Categories/entities/categories.entity';
-import { CategoryModule } from './models/Categories/categories.module';
 import { ProductModule } from './models/Products/products.module';
+import { CategoriesModule} from './models/Categories/categories.module';
 
 @Module({
   imports: [
@@ -21,9 +16,11 @@ import { ProductModule } from './models/Products/products.module';
       useFactory: (config: ConfigService) => config.get('typeorm'),
     }),
     ProductModule,
-    CategoryModule,
+    CategoriesModule
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
+
+
+
 export class AppModule {}
+
