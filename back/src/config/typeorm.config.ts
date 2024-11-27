@@ -1,7 +1,7 @@
 import { registerAs } from '@nestjs/config';
 import { config as dotenvConfig } from 'dotenv';
-import { Category } from 'src/models/Categories/entities/categories.entity';
-import { Product } from 'src/models/Products/entities/products.entity';
+import { Category } from 'src/modules/Categories/entities/categories.entity';
+import { Product } from 'src/modules/Products/entities/products.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env.development' });
@@ -16,8 +16,8 @@ const config: DataSourceOptions = {
     dropSchema: false,
     logging: true,
     synchronize: true,
-    entities: [Product,Category],
-    //entities: [__dirname + '/../**/*.entity.{js,ts}'],
+/*     entities: [Product,Category], */
+    entities: [__dirname + '/../**/*.entity.{js,ts}'],
     migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   };
   

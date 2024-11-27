@@ -2,9 +2,11 @@ import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import typeOrmConfig from './config/typeorm.config';
-import { ProductModule } from './models/Products/products.module';
-import { CategoriesModule} from './models/Categories/categories.module';
-import { UsersModule } from './users/users.module';
+import { ProductModule } from './modules/Products/products.module';
+import { CategoriesModule } from './modules/Categories/categories.module';
+import { UsersModule } from './modules/users/users.module';
+import { AuthModule } from './config/auth/auth.module';
+
 
 @Module({
   imports: [
@@ -18,7 +20,8 @@ import { UsersModule } from './users/users.module';
     }),
     ProductModule,
     CategoriesModule,
-    UsersModule
+    UsersModule,
+    AuthModule
   ],
 })
 
