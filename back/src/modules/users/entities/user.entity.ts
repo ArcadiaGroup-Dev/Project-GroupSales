@@ -1,9 +1,15 @@
 import { Product } from "src/modules/Products/entities/products.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
+export enum UserRole {
+    ADMIN = 'admin',
+    SELLER = 'seller',
+    CLIENT = 'client',
+  }
 
-@Entity({name:"Seller"})
-export class Seller {
+
+@Entity({name:"Users"})
+export class User {
     @PrimaryGeneratedColumn('uuid')
     id:string
 
@@ -15,12 +21,6 @@ export class Seller {
     
     @Column()
     password:string
-
-    @Column({default:false})
-    isAdmin: boolean
-
-    @Column({default:true})
-    isSeller: boolean
 
     @Column()
     birthdate: Date
@@ -37,9 +37,11 @@ export class Seller {
     @Column()
     country: string
 
-    @OneToMany(() => Product, (products) => products.seller, { nullable: false })
-    products: Product[];
-  
+    @OneToMany(() => Product, (products) => products.user, { nullable: true })
+    products: Product[]
+
+    @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENT })
+    role: UserRole;
 
     @Column({default:true})
     isActive:boolean
