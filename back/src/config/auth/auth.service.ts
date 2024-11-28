@@ -1,13 +1,14 @@
-/* import { Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/modules/users/users.service';
+import { JwtPayload } from './jwt.interface';
 
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
-    private userService: UsersService, 
+    
   ) {}
 
   
@@ -20,4 +21,3 @@ export class AuthService {
 
  
 }
- */
