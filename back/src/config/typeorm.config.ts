@@ -19,6 +19,7 @@ const config: DataSourceOptions = {
 /*     entities: [Product,Category], */
     entities: [__dirname + '/../**/*.entity.{js,ts}'],
     migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+  
   };
   
  
