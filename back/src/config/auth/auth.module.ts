@@ -1,9 +1,11 @@
-/* import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
-import { UsersModule } from 'src/modules/users/users.module';
+import { UsersService } from 'src/modules/users/users.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from 'src/modules/users/entities/user.entity';
 
 
 @Module({
@@ -12,10 +14,9 @@ import { UsersModule } from 'src/modules/users/users.module';
       secret: process.env.JWT_SECRET, 
       signOptions: { expiresIn: '1h' }, 
     }),
-    UsersModule, 
+    TypeOrmModule.forFeature([User]), 
   ],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, UsersService],
   controllers: [AuthController],
 })
 export class AuthModule {}
- */
