@@ -4,7 +4,7 @@ import { Category } from 'src/modules/Categories/entities/categories.entity';
 import { Product } from 'src/modules/Products/entities/products.entity';
 import { DataSource, DataSourceOptions } from 'typeorm';
 
-dotenvConfig({ path: '.env.development' });
+dotenvConfig({ path: '.env.production.local' });
 
 const config: DataSourceOptions = {
     type: 'postgres',
