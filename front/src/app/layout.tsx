@@ -1,4 +1,4 @@
-import { CartProvider } from "@/context/cartContext"; // Asegúrate de que la ruta sea correcta
+import { CartProvider } from "@/context/cartContext"; 
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
