@@ -1,3 +1,2 @@
 npx prettier --write .
 
-npm install react-select

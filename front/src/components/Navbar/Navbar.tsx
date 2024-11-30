@@ -42,8 +42,8 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* Íconos y categorías en la navbar */}
-        <div className="flex items-center space-x-8">
+        {/* Menú de productos y servicios (visible en pantallas grandes) */}
+        <div className="hidden md:flex items-center space-x-8">
           <div
             className="relative cursor-pointer px-6 py-2"
             onMouseEnter={() => setCategoryOpen("productos")}
@@ -77,58 +77,58 @@ export default function Navbar() {
               </ul>
             )}
           </div>
+        </div>
 
-          {/* Iconos de usuario y carrito */}
-          <div className="flex items-center space-x-6">
-            <div className="relative">
-              <FaUser
-                className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300"
-                onClick={toggleUserMenu}
-              />
-              {userMenuOpen && (
-                <div className="absolute right-0 mt-2 bg-teal-800 text-white p-2 rounded shadow-lg">
-                  <ul>
-                    <li>
-                      <Link
-                        href="/login"
-                        className="block px-4 py-2 hover:bg-teal-700"
-                      >
-                        Ingresar
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/register"
-                        className="block px-4 py-2 hover:bg-teal-700"
-                      >
-                        Registrarse
-                      </Link>
-                    </li>
-                    <li>
-                      <Link
-                        href="/myAccount"
-                        className="block px-4 py-2 hover:bg-teal-700"
-                      >
-                        Mi Cuenta
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Carrito con contador */}
-            <Link href={"/Cart"} className="relative">
-              <FaShoppingCart className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300" />
-              {getTotalItemsInCart() > 0 && (
-                <span className="absolute top-0 right-0 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center font-semibold">
-                  {getTotalItemsInCart()}
-                </span>
-              )}
-            </Link>
-
-            <FaSearch className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300" />
+        {/* Íconos de usuario, carrito y búsqueda */}
+        <div className="flex items-center space-x-6">
+          <div className="relative">
+            <FaUser
+              className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300"
+              onClick={toggleUserMenu}
+            />
+            {userMenuOpen && (
+              <div className="absolute right-0 mt-2 bg-teal-800 text-white p-2 rounded shadow-lg">
+                <ul>
+                  <li>
+                    <Link
+                      href="/login"
+                      className="block px-4 py-2 hover:bg-teal-700"
+                    >
+                      Ingresar
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/register"
+                      className="block px-4 py-2 hover:bg-teal-700"
+                    >
+                      Registrarse
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/myAccount"
+                      className="block px-4 py-2 hover:bg-teal-700"
+                    >
+                      Mi Cuenta
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            )}
           </div>
+
+          {/* Carrito con contador */}
+          <Link href={"/Cart"} className="relative">
+            <FaShoppingCart className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300" />
+            {getTotalItemsInCart() > 0 && (
+              <span className="absolute top-0 right-0 text-xs bg-red-600 text-white rounded-full w-5 h-5 flex items-center justify-center font-semibold">
+                {getTotalItemsInCart()}
+              </span>
+            )}
+          </Link>
+
+          <FaSearch className="text-xl cursor-pointer hover:text-teal-300 transition-colors duration-300" />
         </div>
       </div>
 
@@ -150,7 +150,7 @@ export default function Navbar() {
         </svg>
       </button>
 
-      {/* Menú desplegable en móvil */}
+      {/* Menú desplegable en móvil (solo productos y servicios) */}
       {menuOpen && (
         <div className="md:hidden bg-teal-800 p-4 mt-4 space-y-4">
           <div

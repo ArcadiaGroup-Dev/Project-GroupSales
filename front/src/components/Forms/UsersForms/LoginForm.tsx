@@ -1,6 +1,71 @@
-import React from 'react'
+"use client"
+import { NotifFormsUsers } from '@/components/Notifications/NotifiFormsUsers';
+import { UserContext } from '@/context/userContext';
+import { ILoginClientProps } from '@/Interfaces/IUser';
+import { validationLogin } from '@/utils/validateLogin';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import React, { useContext, useState } from 'react'
 
-export default function LoginForm() {
+export default function LoginForm({ setToken }: ILoginClientProps) {
+const { signIn } = useContext(UserContext);
+const router = useRouter();
+const [userData, setUserData] = useState({
+  email: "",
+  password: "",
+});
+const [showNotification, setShowNotification] = useState(false);
+const [notificationMessage, setNotificationMessage] = useState("");
+const [errors, setErrors] = useState({} as { [key: string]: string });
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const { name, value } = e.target;
+  setUserData({ ...userData, [name]: value });
+
+  const { errors } = validationLogin({ ...userData, [name]: value });
+  setErrors(errors);
+};
+
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  const { formIsValid, errors } = validationLogin(userData);
+
+  if (formIsValid) {
+    const credentials = {
+      email: userData.email,
+      password: userData.password,
+    };
+
+    try {
+      const success = await signIn(credentials);
+      if (success) {
+        const token =
+          typeof window !== "undefined"
+            ? localStorage.getItem("token")
+            : null;
+        if (token) {
+          setToken(token);
+          setNotificationMessage("Has ingresado correctamente");
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+          router.push("/");
+        } else {
+          setNotificationMessage("Usuario Inválido");
+          setShowNotification(true);
+          setTimeout(() => setShowNotification(false), 3000);
+        }
+      }
+    } catch {
+      setNotificationMessage("Ocurrió un error, intenta de nuevo");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+    }
+  } else {
+    setErrors(errors);
+  }
+};
+
+
   return (
     <div className="mx-auto mt-28 max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-lg text-center">
@@ -11,13 +76,16 @@ export default function LoginForm() {
       </div>
 
       {/* Formulario con más padding y sombra */}
-      <form action="#" className="mx-auto mb-0 mt-16 max-w-md space-y-4 p-8 shadow-2xl shadow-gray-500/50 rounded-lg">
+      <form  onSubmit={onSubmit} className="mx-auto bg-white mb-0 mt-16 max-w-md space-y-4 p-8 shadow-2xl shadow-gray-500/50 rounded-lg">
         <div>
           <label htmlFor="email" className="sr-only">Email</label>
           <div className="relative">
             <input
               type="email"
-              className="w-full rounded-lg border-2 border-gray-200 p-4 pe-12 text-sm shadow-md shadow-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              name="email"
+              value={userData.email}
+              onChange={handleChange}
+              className="w-full rounded-lg border-2 border-gray-200 p-4 pe-12 text-sm shadow-md shadow-gray-400 text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
               placeholder="Ingresar email"
             />
             <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -37,6 +105,9 @@ export default function LoginForm() {
               </svg>
             </span>
           </div>
+          {errors.email && (
+              <p className="text-red-500 text-sm mt-2">{errors.email}</p>
+            )}
         </div>
 
         <div>
@@ -44,7 +115,10 @@ export default function LoginForm() {
           <div className="relative">
             <input
               type="password"
-              className="w-full rounded-lg border-2 border-gray-200 p-4 pe-12 text-sm shadow-md shadow-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
+              name="password"
+              value={userData.password}
+              onChange={handleChange}
+              className="w-full rounded-lg border-2 border-gray-200 text-gray-400 p-4 pe-12 text-sm shadow-md shadow-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200"
               placeholder="Ingresar contraseña"
             />
             <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -70,21 +144,30 @@ export default function LoginForm() {
               </svg>
             </span>
           </div>
+          {errors.password && (
+              <p className="text-red-500 text-sm mt-2">{errors.password}</p>
+            )}
         </div>
 
         <div className="flex items-center justify-between">
           <p className="text-sm text-gray-500">
             ¿No tienes cuenta?
-            <a className="underline hover:font-bold" href="/register"> Registrate aquí</a>
+            <Link className="underline hover:font-bold" href="/register"> Registrate aquí</Link>
           </p>
 
           <button
-            type="submit"
-            className="inline-block rounded-lg bg-tertiary hover:bg-orange-400 px-5 py-3 text-sm font-medium text-white"
+             disabled={Object.keys(errors).length > 0}
+              type="submit"
+            className="inline-block shadow-md shadow-gray-400 rounded-lg bg-tertiary hover:bg-orange-400 px-5 py-3 text-sm font-medium text-white"
           >
             Ingresar
           </button>
         </div>
+        {showNotification && (
+            <div className="absolute top-12 left-0 right-0 mx-auto w-max">
+              <NotifFormsUsers message={notificationMessage} />
+            </div>
+          )}
       </form>
     </div>
   )

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 import { FaEnvelope, FaFacebook, FaInstagram, FaWhatsapp } from 'react-icons/fa'
 
@@ -49,7 +50,7 @@ export default function Footer() {
 
 <ul className="mt-12 flex justify-center gap-6 md:gap-8">
   <li>
-    <a
+    <Link
       href="https://www.facebook.com/mipymemutualsantafe"
       rel="noreferrer"
       target="_blank"
@@ -58,11 +59,11 @@ export default function Footer() {
     >
       <span className="sr-only">Facebook</span>
       <FaFacebook className="size-6" />
-    </a>
+    </Link>
   </li>
 
   <li>
-    <a
+    <Link
       href="https://www.instagram.com/mipymemutualsantafe"
       rel="noreferrer"
       target="_blank"
@@ -70,31 +71,31 @@ export default function Footer() {
     >
       <span className="sr-only">Instagram</span>
       <FaInstagram className="size-6" />
-    </a>
+    </Link>
   </li>
 
   <li>
-    <a
-      href="https://wa.me/1234567890"  // Reemplaza con el número de WhatsApp
+    <Link
+      href="https://wa.me/3424383363"  
       rel="noreferrer"
       target="_blank"
       className="text-gray-700 transition hover:text-gray-700/75"
     >
       <span className="sr-only">WhatsApp</span>
       <FaWhatsapp className="size-6" />
-    </a>
+    </Link>
   </li>
 
   <li>
-    <a
-      href="mailto:your-email@example.com"  
+    <Link
+      href="mailto:mutualmipymesfe@gmail.com"  
       rel="noreferrer"
       target="_blank"
       className="text-gray-700 transition hover:text-gray-700/75"
     >
       <span className="sr-only">Gmail</span>
       <FaEnvelope className="size-6" />
-    </a>
+    </Link>
   </li>
 </ul>
 
