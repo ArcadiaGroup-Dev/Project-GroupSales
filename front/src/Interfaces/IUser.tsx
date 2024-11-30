@@ -6,8 +6,8 @@ export interface IUser {
     birthdate: Date;
     phone: number;
     address:string;
-    city: string;
     country: string;
+    city: string;
 }
 
 export enum UserRole {

@@ -19,3 +19,8 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Estilo más específico para inputs y selects de país y fecha */
+#country, #birthdate {
+  color: #939497 !important;  /* Asegura que se aplique el color específico */
+}
