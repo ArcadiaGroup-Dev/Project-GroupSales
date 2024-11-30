@@ -28,7 +28,7 @@ export class User {
   phone: number;
 
   @Column()
-  adress: string;
+  address: string;
 
   @Column()
   city: string;
