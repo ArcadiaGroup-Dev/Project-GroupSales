@@ -1,11 +1,11 @@
-import { 
-  IsString, 
-  IsNotEmpty, 
-  IsDecimal, 
-  IsInt, 
-  IsUUID, 
-  IsOptional, 
-  IsUrl 
+import {
+  IsString,
+  IsNotEmpty,
+  IsDecimal,
+  IsInt,
+  IsUUID,
+  IsOptional,
+  IsUrl,
 } from 'class-validator';
 import { ApiProperty, PickType } from '@nestjs/swagger';
 
@@ -20,7 +20,8 @@ export class CreateProductDto {
 
   @ApiProperty({
     description: 'Descripción detallada del producto',
-    example: 'Un smartphone de última generación con pantalla OLED de 6.5 pulgadas.',
+    example:
+      'Un smartphone de última generación con pantalla OLED de 6.5 pulgadas.',
   })
   @IsString()
   @IsNotEmpty()
@@ -62,10 +63,10 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto extends PickType(CreateProductDto, [
-  'name', 
-  'description', 
-  'price', 
-  'stock', 
-  'imageUrl', 
+  'name',
+  'description',
+  'price',
+  'stock',
+  'imageUrl',
   'categoryId',
 ] as const) {}

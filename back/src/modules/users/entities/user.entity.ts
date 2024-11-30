@@ -1,49 +1,47 @@
-import { Product } from "src/modules/Products/entities/products.entity";
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from 'src/modules/Products/entities/products.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 export enum UserRole {
-    ADMIN = 'admin',
-    SELLER = 'seller',
-    CLIENT = 'client',
-  }
+  ADMIN = 'admin',
+  SELLER = 'seller',
+  CLIENT = 'client',
+}
 
-
-@Entity({name:"Users"})
+@Entity({ name: 'Users' })
 export class User {
-    @PrimaryGeneratedColumn('uuid')
-    id:string
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-    @Column()
-    name:string
+  @Column()
+  name: string;
 
-    @Column()
-    email:string
-    
-    @Column()
-    password:string
+  @Column()
+  email: string;
 
-    @Column()
-    birthdate: Date
+  @Column()
+  password: string;
 
-    @Column()
-    phone: number
+  @Column()
+  birthdate: Date;
 
-    @Column()
-    adress: string
+  @Column()
+  phone: number;
 
-    @Column()
-    city:string
+  @Column()
+  adress: string;
 
-    @Column()
-    country: string
+  @Column()
+  city: string;
 
-    @OneToMany(() => Product, (products) => products.user, { nullable: true })
-    products: Product[]
+  @Column()
+  country: string;
 
-    @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENT })
-    role: UserRole;
+  @OneToMany(() => Product, (products) => products.user, { nullable: true })
+  products: Product[];
 
-    @Column({default:true})
-    isActive:boolean
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.CLIENT })
+  role: UserRole;
 
+  @Column({ default: true })
+  isActive: boolean;
 }

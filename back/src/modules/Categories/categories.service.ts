@@ -20,7 +20,10 @@ export class CategoryService {
     return this.categoriesRepository.findCategoryById(id);
   }
 
-  async update(id: string, updateCategoryDto: UpdateCategoryDto): Promise<Category> {
+  async update(
+    id: string,
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<Category> {
     return this.categoriesRepository.updateCategory(id, updateCategoryDto);
   }
 
@@ -28,4 +31,3 @@ export class CategoryService {
     await this.categoriesRepository.removeCategory(id);
   }
 }
-

@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Patch, Body, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Roles } from '../../config/role.decorator';
@@ -7,7 +17,6 @@ import { UserRole } from './entities/user.entity';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
 
   @Post()
   async createUser(@Body() createUserDto: CreateUserDto) {
@@ -19,9 +28,8 @@ export class UsersController {
     }
   }
 
-
   @Patch(':id/seller')
-  @Roles(UserRole.ADMIN)  
+  @Roles(UserRole.ADMIN)
   async createSeller(@Param('id') id: string) {
     try {
       return await this.usersService.createSeller(id);
@@ -30,9 +38,8 @@ export class UsersController {
     }
   }
 
-
   @Patch(':id/admin')
-  @Roles(UserRole.ADMIN)  
+  @Roles(UserRole.ADMIN)
   async createAdmin(
     @Param('id') id: string,
     @Body() createUserDto?: CreateUserDto,
@@ -44,13 +51,11 @@ export class UsersController {
     }
   }
 
-
   @Get()
-  @Roles(UserRole.ADMIN)  
+  @Roles(UserRole.ADMIN)
   async findAll() {
     return await this.usersService.findAll();
   }
-
 
   @Get(':id')
   async findOneById(@Param('id') id: string) {
@@ -61,7 +66,6 @@ export class UsersController {
     return user;
   }
 
-
   @Get('search')
   async findOneByEmail(@Query('email') email: string) {
     const user = await this.usersService.findOneByEmail(email);
@@ -71,9 +75,8 @@ export class UsersController {
     return user;
   }
 
-
   @Delete(':id')
-  @Roles(UserRole.ADMIN)  
+  @Roles(UserRole.ADMIN)
   async removeUser(@Param('id') id: string) {
     try {
       return await this.usersService.removeUser(id);
@@ -82,4 +85,3 @@ export class UsersController {
     }
   }
 }
-

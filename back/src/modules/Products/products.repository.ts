@@ -34,7 +34,10 @@ export class ProductsRepository {
     return this.productsRepository.findOne({ where: { name } });
   }
 
-  async updateProduct(id: string, updateProductDto: Partial<Product>): Promise<Product> {
+  async updateProduct(
+    id: string,
+    updateProductDto: Partial<Product>,
+  ): Promise<Product> {
     const product = await this.findProductById(id);
     Object.assign(product, updateProductDto);
     return this.productsRepository.save(product);

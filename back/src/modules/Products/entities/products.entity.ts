@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Category } from '../../Categories/entities/categories.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 
@@ -22,11 +29,12 @@ export class Product {
   @Column({ type: 'varchar', length: 255, nullable: true })
   imageUrl: string;
 
-
-  @ManyToOne(() => User, (user) => user.products , { nullable: false })
+  @ManyToOne(() => User, (user) => user.products, { nullable: false })
   user: User;
 
-  @ManyToOne(() => Category, (category) => category.products, { nullable: true })
+  @ManyToOne(() => Category, (category) => category.products, {
+    nullable: true,
+  })
   category: Category;
 
   @CreateDateColumn()

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { ProductService } from './products.service';
 import { CreateProductDto } from './dto/productos.dto';
 import { UpdateProductDto } from './dto/productos.dto';
@@ -32,7 +40,10 @@ export class ProductController {
   }
 
   @ApiOperation({ summary: 'Actualiza un producto por ID' })
-  @ApiResponse({ status: 200, description: 'Producto actualizado exitosamente.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Producto actualizado exitosamente.',
+  })
   @ApiResponse({ status: 404, description: 'Producto no encontrado.' })
   @Put(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {

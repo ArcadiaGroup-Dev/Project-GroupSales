@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
 import { CategoryService } from './categories.service';
 import { CreateCategoryDto } from './dto/categories.dto';
 import { UpdateCategoryDto } from './dto/categories.dto';
@@ -33,19 +41,27 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: 'Actualiza una categoría por ID' })
-  @ApiResponse({ status: 200, description: 'Categoría actualizada exitosamente.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Categoría actualizada exitosamente.',
+  })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada.' })
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
     return await this.categoryService.update(id, updateCategoryDto);
   }
 
   @ApiOperation({ summary: 'Elimina una categoría por ID' })
-  @ApiResponse({ status: 200, description: 'Categoría eliminada exitosamente.' })
+  @ApiResponse({
+    status: 200,
+    description: 'Categoría eliminada exitosamente.',
+  })
   @ApiResponse({ status: 404, description: 'Categoría no encontrada.' })
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.categoryService.remove(id);
   }
 }
-

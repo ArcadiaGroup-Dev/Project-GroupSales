@@ -20,7 +20,10 @@ export class ProductService {
     return this.productsRepository.findProductById(id);
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(
+    id: string,
+    updateProductDto: UpdateProductDto,
+  ): Promise<Product> {
     return this.productsRepository.updateProduct(id, updateProductDto);
   }
 

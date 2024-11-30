@@ -3,31 +3,31 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt  from "bcrypt"
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly userRepository: Repository<User>
+    private readonly userRepository: Repository<User>,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
     const { email, password } = createUserDto;
-  
+
     const existingUser = await this.userRepository.findOneBy({ email });
     if (existingUser) {
       throw new Error('Usuario ya registrado');
     }
-  
+
     const hashedPassword = await bcrypt.hash(password, 10);
-  
+
     const newUser = this.userRepository.create({
       ...createUserDto,
       password: hashedPassword,
     });
     const savedUser = await this.userRepository.save(newUser);
-  
+
     const { password: _, ...userNoPassword } = savedUser;
     return userNoPassword;
   }
@@ -49,15 +49,17 @@ export class UsersService {
   async createAdmin(id: string, createUserDto?: CreateUserDto) {
     try {
       let newAdmin = await this.findOneById(id);
-    
+
       if (!newAdmin) {
         if (!createUserDto) {
-          throw new Error('No se proporcionaron datos para crear el administrador');
+          throw new Error(
+            'No se proporcionaron datos para crear el administrador',
+          );
         }
-        await this.create(createUserDto); 
-        newAdmin = await this.findOneByEmail(createUserDto.email); 
+        await this.create(createUserDto);
+        newAdmin = await this.findOneByEmail(createUserDto.email);
       }
-    
+
       newAdmin.role = UserRole.ADMIN;
       return await this.userRepository.save(newAdmin);
     } catch (error) {
@@ -93,12 +95,12 @@ export class UsersService {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
-        return "Usuario inexistente";
+        return 'Usuario inexistente';
       }
 
       user.isActive = false;
       await this.userRepository.save(user);
-      return "Usuario eliminado";
+      return 'Usuario eliminado';
     } catch (error) {
       throw new Error(`Error al eliminar usuario: ${error.message}`);
     }

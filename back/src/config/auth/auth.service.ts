@@ -8,7 +8,7 @@ import { JwtPayload } from './jwt.interface';
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService, 
+    private readonly usersService: UsersService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -23,16 +23,18 @@ export class AuthService {
     }
 
     const { password: _, ...result } = user;
-    return result; 
+    return result;
   }
 
   async login(user: { email: string; password: string }) {
     const validatedUser = await this.validateUser(user.email, user.password);
 
-    const payload: JwtPayload = { username: validatedUser.name, sub: validatedUser.id };
+    const payload: JwtPayload = {
+      username: validatedUser.name,
+      sub: validatedUser.id,
+    };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
 }
-

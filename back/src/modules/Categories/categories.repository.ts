@@ -7,10 +7,12 @@ import { Category } from './entities/categories.entity';
 export class CategoriesRepository {
   constructor(
     @InjectRepository(Category)
-    private readonly categoriesRepository: Repository<Category>, 
+    private readonly categoriesRepository: Repository<Category>,
   ) {}
 
-  async createCategory(createCategoryDto: Partial<Category>): Promise<Category> {
+  async createCategory(
+    createCategoryDto: Partial<Category>,
+  ): Promise<Category> {
     const category = this.categoriesRepository.create(createCategoryDto);
     return this.categoriesRepository.save(category);
   }
@@ -27,7 +29,10 @@ export class CategoriesRepository {
     return category;
   }
 
-  async updateCategory(id: string, updateCategoryDto: Partial<Category>): Promise<Category> {
+  async updateCategory(
+    id: string,
+    updateCategoryDto: Partial<Category>,
+  ): Promise<Category> {
     const category = await this.findCategoryById(id);
     Object.assign(category, updateCategoryDto);
     return this.categoriesRepository.save(category);
@@ -38,5 +43,3 @@ export class CategoriesRepository {
     await this.categoriesRepository.remove(category);
   }
 }
-
-
