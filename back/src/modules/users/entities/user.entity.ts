@@ -1,5 +1,7 @@
+import { Orders } from 'src/modules/Orders/entities/order.entity';
 import { Product } from 'src/modules/Products/entities/products.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+
 
 export enum UserRole {
   ADMIN = 'admin',
@@ -44,4 +46,8 @@ export class User {
 
   @Column({ default: true })
   isActive: boolean;
+
+  @OneToMany(() => Orders, (order) => order.user)
+  @JoinColumn({ name: 'orders_id' })
+  orders: Orders[];
 }
