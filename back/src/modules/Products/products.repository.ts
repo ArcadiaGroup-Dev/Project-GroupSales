@@ -1,50 +1,83 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { Product } from './entities/products.entity';
+import { Repository } from 'typeorm';
+import { CreateProductDto } from './dto/productos.dto';
+import { UsersService } from '../users/users.service';
+import { UpdateProductDto } from './dto/productos.dto'; 
 
 @Injectable()
 export class ProductsRepository {
   constructor(
     @InjectRepository(Product)
-    private readonly productsRepository: Repository<Product>,
+    private readonly productRepository: Repository<Product>,
+    private readonly userService: UsersService,  
   ) {}
 
-  async createProduct(createProductDto: Partial<Product>): Promise<Product> {
-    const product = this.productsRepository.create(createProductDto);
-    return this.productsRepository.save(product);
+  async createProduct(createProductDto: CreateProductDto): Promise<Product> {
+    const { userId, ...productData } = createProductDto;
+  
+    const user = await this.userService.findOneById(userId);
+    if (!user) {
+      throw new Error('Usuario no encontrado');
+    }
+
+    const product = this.productRepository.create({
+      ...productData,
+      user, 
+    });
+
+    return this.productRepository.save(product);
   }
+
 
   async findAllProducts(): Promise<Product[]> {
-    return this.productsRepository.find({ relations: ['category'] });
+    try {
+      return await this.productRepository.find();
+    } catch (error) {
+      throw new Error(`Error al obtener todos los productos: ${error.message}`);
+    }
   }
+
 
   async findProductById(id: string): Promise<Product> {
-    const product = await this.productsRepository.findOne({
-      where: { id },
-      relations: ['category'],
-    });
-    if (!product) {
-      throw new NotFoundException(`Product with ID ${id} not found`);
+    try {
+      const product = await this.productRepository.findOne({ where: { id }, relations: ['user', 'category'] });
+      if (!product) {
+        throw new Error('Producto no encontrado');
+      }
+      return product;
+    } catch (error) {
+      throw new Error(`Error al obtener el producto: ${error.message}`);
     }
-    return product;
   }
 
-  async findProductByName(name: string): Promise<Product | undefined> {
-    return this.productsRepository.findOne({ where: { name } });
+
+  async updateProduct(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+    try {
+      const product = await this.productRepository.findOne({ where: { id } });
+      if (!product) {
+        throw new Error('Producto no encontrado');
+      }
+
+      const updatedProduct = this.productRepository.merge(product, updateProductDto);
+      return await this.productRepository.save(updatedProduct);
+    } catch (error) {
+      throw new Error(`Error al actualizar el producto: ${error.message}`);
+    }
   }
 
-  async updateProduct(
-    id: string,
-    updateProductDto: Partial<Product>,
-  ): Promise<Product> {
-    const product = await this.findProductById(id);
-    Object.assign(product, updateProductDto);
-    return this.productsRepository.save(product);
-  }
 
   async removeProduct(id: string): Promise<void> {
-    const product = await this.findProductById(id);
-    await this.productsRepository.remove(product);
+    try {
+      const product = await this.productRepository.findOne({ where: { id } });
+      if (!product) {
+        throw new Error('Producto no encontrado');
+      }
+
+      await this.productRepository.remove(product);
+    } catch (error) {
+      throw new Error(`Error al eliminar el producto: ${error.message}`);
+    }
   }
 }

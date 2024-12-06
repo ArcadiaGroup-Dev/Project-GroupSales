@@ -7,18 +7,33 @@ import {
   Param,
   Delete,
   Query,
-  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { Roles } from '../../config/role.decorator';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserRole } from './entities/user.entity';
 
+@ApiTags('Users') 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @ApiBody({
+    description: 'Datos necesarios para crear un usuario',
+    schema: {
+      example: {
+        name: 'Jane Doe',
+        email: 'janedoe@example.com',
+        password: 'securepassword123',
+        birthdate: '1990-01-01',
+        phone: 1234567890,
+        address: '123 Main Street',
+        city: 'Springfield',
+        country: 'USA',
+      },
+    },
+  })
   async createUser(@Body() createUserDto: CreateUserDto) {
     try {
       const user = await this.usersService.create(createUserDto);
@@ -29,7 +44,12 @@ export class UsersController {
   }
 
   @Patch(':id/seller')
-  @Roles(UserRole.ADMIN)
+  @ApiBody({
+    description: 'Convertir un usuario en vendedor (solo admin)',
+    schema: {
+      example: {},
+    },
+  })
   async createSeller(@Param('id') id: string) {
     try {
       return await this.usersService.createSeller(id);
@@ -39,7 +59,21 @@ export class UsersController {
   }
 
   @Patch(':id/admin')
-  @Roles(UserRole.ADMIN)
+  @ApiBody({
+    description: 'Convertir un usuario en administrador (opcionalmente se pueden enviar datos)',
+    schema: {
+      example: {
+        name: 'New Admin Name',
+        email: 'admin@example.com',
+        password: 'newsecurepassword',
+        birthdate: '1985-05-15',
+        phone: 987654321,
+        address: '456 Admin Lane',
+        city: 'Capital City',
+        country: 'USA',
+      },
+    },
+  })
   async createAdmin(
     @Param('id') id: string,
     @Body() createUserDto?: CreateUserDto,
@@ -52,7 +86,6 @@ export class UsersController {
   }
 
   @Get()
-  @Roles(UserRole.ADMIN)
   async findAll() {
     return await this.usersService.findAll();
   }
@@ -76,7 +109,6 @@ export class UsersController {
   }
 
   @Delete(':id')
-  @Roles(UserRole.ADMIN)
   async removeUser(@Param('id') id: string) {
     try {
       return await this.usersService.removeUser(id);
@@ -85,3 +117,4 @@ export class UsersController {
     }
   }
 }
+

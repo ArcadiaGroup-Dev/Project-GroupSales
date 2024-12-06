@@ -60,6 +60,11 @@ export class CreateProductDto {
   @IsUUID()
   @IsNotEmpty()
   categoryId: string;
+
+  @ApiProperty({ description: 'ID del usuario asociado al producto', type: String })
+  @IsString()
+  @IsNotEmpty()
+  userId: string;
 }
 
 export class UpdateProductDto extends PickType(CreateProductDto, [
