@@ -28,7 +28,7 @@ export default function CartPage() {
               >
                 <div className="flex items-center space-x-4">
                   <Image
-                    src={product.img}
+                    src={product.imageUrl}
                     alt={product.name}
                     width={100}
                     height={100}

@@ -33,7 +33,7 @@ export default function CardProduct({ product }: CardProductProps) {
     >
       <Link href={`/product/${product.id}`} className="block">
         <Image
-          src={product.img}
+          src={product.imageUrl}
           alt={product.name}
           className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
           width={300}
