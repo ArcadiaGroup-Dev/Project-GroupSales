@@ -1,19 +1,37 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { useEffect, useState } from "react";
 import { mocksProducts } from "@/components/mockProduct";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 
 interface ProductPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
-  const product = mocksProducts.find((p) => p.id === params.id);
+  const [product, setProduct] = useState<any>(null);
 
-  if (!product) {
-    notFound();
-  }
+  useEffect(() => {
+    const fetchProduct = async () => {
+      const resolvedParams = await params; // Resuelve el Promise
+      const productData = mocksProducts.find((p) => p.id === resolvedParams.id);
+
+      if (!productData) {
+        notFound();
+        return;
+      }
+
+      setProduct(productData);
+    };
+
+    fetchProduct();
+  }, [params]); // Solo se ejecuta cuando params cambia
+
+  if (!product) return <div>Loading...</div>; // O cualquier estado de carga que desees mostrar
 
   return (
     <div className="flex justify-center items-center px-4 mt-16">
