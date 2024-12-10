@@ -28,7 +28,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return [...prevCart, { ...product, quantity: 1 }];
     });
 
-    console.log("Producto agregado:", product); // Log para verificar
+    console.log("Producto agregado:", product); // Verificación
   };
 
   const removeFromCart = (id: string) => {
@@ -49,8 +49,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const getTotal = () => {
     return cart.reduce(
-      (total, product) =>
-        total + parseFloat(product.price) * (product.quantity || 1),
+      (total, product) => total + product.price * (product.quantity || 1),
       0
     );
   };
