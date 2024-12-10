@@ -1,10 +1,9 @@
 export interface IUserRegister {
-    id:string;
     name: string;
     email:string;
     password:string;
     birthdate: Date;
-    phone: number;
+    phone: string;
     address:string;
     country: string;
     city: string;

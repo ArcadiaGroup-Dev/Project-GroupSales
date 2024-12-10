@@ -7,8 +7,12 @@ import { OrderDetails } from './entities/order-detail.entity';
 export class OrderDetailService {
   constructor(private readonly orderDetailRepository: OrderDetailRepository) {}
 
-  async create(createOrderDetailDto: CreateOrderDetailDto): Promise<OrderDetails> {
-    return await this.orderDetailRepository.createOrderDetail(createOrderDetailDto);
+  async create(
+    createOrderDetailDto: CreateOrderDetailDto,
+  ): Promise<OrderDetails> {
+    return await this.orderDetailRepository.createOrderDetail(
+      createOrderDetailDto,
+    );
   }
 
   async findAll(): Promise<OrderDetails[]> {

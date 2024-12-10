@@ -29,7 +29,7 @@ export const fetchLoginUser = async (credentials: ILoginUser) => {
 export const fetchRegisterUser = async (user: IUserRegister) => {
   console.log("Datos del usuario a enviar:", user);
 
-  const response = await fetch(`${apiUrl}/auth/register`, {
+  const response = await fetch(`${apiUrl}/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

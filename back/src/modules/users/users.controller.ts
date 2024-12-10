@@ -13,7 +13,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
 import { UserRole } from './entities/user.entity';
 
-@ApiTags('Users') 
+@ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -60,7 +60,8 @@ export class UsersController {
 
   @Patch(':id/admin')
   @ApiBody({
-    description: 'Convertir un usuario en administrador (opcionalmente se pueden enviar datos)',
+    description:
+      'Convertir un usuario en administrador (opcionalmente se pueden enviar datos)',
     schema: {
       example: {
         name: 'New Admin Name',
@@ -117,4 +118,3 @@ export class UsersController {
     }
   }
 }
-

@@ -71,8 +71,9 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signUp = async (user: IUserRegister): Promise<boolean> => {
     try {
-      console.log(user);
+      console.log("Datos enviados al backend:", user);
       const data = await fetchRegisterUser(user);
+      console.log("Respuesta del servidor:", data);
       if (data) {
         console.log(data);
         await signIn({ email: user.email, password: user.password });

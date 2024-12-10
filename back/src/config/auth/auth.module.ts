@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';  // No se exporta JwtService
+import { JwtModule } from '@nestjs/jwt'; // No se exporta JwtService
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
@@ -19,4 +19,3 @@ import { User } from 'src/modules/users/entities/user.entity';
   controllers: [AuthController],
 })
 export class AuthModule {}
-

@@ -1,7 +1,12 @@
 import { Orders } from 'src/modules/Orders/entities/order.entity';
 import { Product } from 'src/modules/Products/entities/products.entity';
-import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 export enum UserRole {
   ADMIN = 'admin',

@@ -17,21 +17,22 @@ export class OrderDetailRepository {
     private readonly productRepo: Repository<Product>,
   ) {}
 
-  async createOrderDetail(createOrderDetailDto: CreateOrderDetailDto): Promise<OrderDetails> {
+  async createOrderDetail(
+    createOrderDetailDto: CreateOrderDetailDto,
+  ): Promise<OrderDetails> {
     const { orderId, productId, quantity, price } = createOrderDetailDto;
-
 
     const order = await this.ordersRepo.findOne({ where: { id: orderId } });
     if (!order) throw new NotFoundException('Order not found');
 
-  
-    const product = await this.productRepo.findOne({ where: { id: productId } });
+    const product = await this.productRepo.findOne({
+      where: { id: productId },
+    });
     if (!product) throw new NotFoundException('Product not found');
 
-    
     const orderDetail = this.orderDetailRepo.create({
       order,
-      products: [product], 
+      products: [product],
       quantity,
       price,
     });
@@ -41,17 +42,16 @@ export class OrderDetailRepository {
 
   async findAllOrderDetails(): Promise<OrderDetails[]> {
     return await this.orderDetailRepo.find({
-      relations: ['order', 'products'], 
+      relations: ['order', 'products'],
     });
   }
 
   async findOrderDetailById(id: string): Promise<OrderDetails> {
     const orderDetail = await this.orderDetailRepo.findOne({
       where: { id },
-      relations: ['order', 'products'], 
+      relations: ['order', 'products'],
     });
     if (!orderDetail) throw new NotFoundException('OrderDetail not found');
     return orderDetail;
   }
 }
-

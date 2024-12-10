@@ -9,7 +9,7 @@ async function bootstrap() {
     .setTitle('API de Reserva')
     .setDescription('Documentación de la API de reserva')
     .setVersion('1.0')
-    .addBearerAuth() 
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -18,4 +18,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-
