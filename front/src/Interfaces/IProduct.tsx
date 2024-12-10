@@ -7,10 +7,18 @@ export interface IProduct {
   imageUrl: string;
   seller: string;
   categoryId: string;
-  quantity?: number;
+  quantity: number;
 }
 
 export interface ICategory {
   name: string;
   description?: string;
+}
+
+
+export interface ICartItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
 }
