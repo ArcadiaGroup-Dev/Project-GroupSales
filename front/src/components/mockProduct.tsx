@@ -7,6 +7,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://http2.mlstatic.com/D_NQ_NP_860706-MLA42620357827_072020-O.webp",
     price: 2000,
+    quantity: 1,
     seller: "SweetClothes",
     categoryId: "Ropa",
     description:
@@ -18,6 +19,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://http2.mlstatic.com/D_NQ_NP_937770-MLA72170096371_102023-O.webp",
     price: 2500,
+    quantity: 1,
     seller: "MegaSport",
     categoryId: "Ropa",
     description:
@@ -29,6 +31,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://http2.mlstatic.com/D_NQ_NP_892877-MLA76111224166_052024-O.webp",
     price: 3500,
+    quantity: 1,
     seller: "Shoozing",
     categoryId: "Calzado",
     description:
@@ -40,6 +43,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://http2.mlstatic.com/D_NQ_NP_913865-MLU78327399902_082024-O.webp",
     price: 4500,
+    quantity: 1,
     seller: "TecnoTodo",
     categoryId: "Tecnología",
     description:
@@ -51,6 +55,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
     price: 3200,
+    quantity: 1,
     seller: "MegaVenta",
     categoryId: "Tecnología",
     description:
@@ -62,6 +67,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
     price: 1800,
+    quantity: 1,
     seller: "MegaVenta",
     categoryId: "Accesorios",
     description:
@@ -73,6 +79,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
     price: 6000,
+    quantity: 1,
     seller: "MegaVenta",
     categoryId: "Muebles",
     description:
@@ -84,6 +91,7 @@ export const mocksProducts: IProduct[] = [
     imageUrl:
       "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
     price: 3500,
+    quantity: 1,
     seller: "MegaVenta",
     categoryId: "Tecnología",
     description:

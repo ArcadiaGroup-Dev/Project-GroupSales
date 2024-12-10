@@ -12,26 +12,16 @@ interface CardProductProps {
 }
 
 export default function CardProduct({ product }: CardProductProps) {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const handleAddToCart = (product: IProduct) => {
-    const item = {
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      quantity: 1, // Asumimos que la cantidad por defecto es 1
-    };
-
-    console.log("Producto a agregar al carrito:", item); // Asegúrate de que los datos son correctos
-
-    addItem(item);
-
+    addToCart(product);
     Swal.fire({
       icon: "success",
       title: "Producto agregado",
       text: `${product.name} ha sido agregado al carrito.`,
       confirmButtonText: "¡Genial!",
-      timer: 2000,
+      timer: 2000, // Desaparece después de 2 segundos
     });
   };
 

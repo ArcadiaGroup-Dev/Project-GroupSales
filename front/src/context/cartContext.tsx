@@ -1,78 +1,79 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
-import { createContext, useContext, useState, ReactNode } from "react";
-
-interface CartItem {
-  id: string;
-  name: string;
-  quantity: number;
-  price: number;
-}
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { IProduct } from "../Interfaces/IProduct";
 
 interface CartContextType {
-  cartItems: CartItem[];
-  totalPrice: number;
-  addItem: (item: CartItem) => void;
-  removeItem: (id: string) => void;
+  cart: IProduct[];
+  addToCart: (product: IProduct) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
+  updateQuantity: (id: string, quantity: number) => void;
+  getTotal: () => number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const useCart = () => {
-  const context = useContext(CartContext);
-  if (!context) {
-    throw new Error("useCart debe ser usado dentro de un CartProvider");
-  }
-  return context;
-};
-
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [cart, setCart] = useState<IProduct[]>([]);
 
-  const addItem = (item: CartItem) => {
-    console.log("Agregar item al carrito:", item);
-
-    // Actualizamos el carrito con el nuevo producto o la cantidad si ya existe
-    setCartItems((prevItems) => {
-      const existingItem = prevItems.find(
-        (cartItem) => cartItem.id === item.id
-      );
-
-      if (existingItem) {
-        console.log("Producto existente, actualizando cantidad...");
-        return prevItems.map((cartItem) =>
-          cartItem.id === item.id
-            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-            : cartItem
+  const addToCart = (product: IProduct) => {
+    setCart((prevCart) => {
+      const existingProduct = prevCart.find((p) => p.id === product.id);
+      if (existingProduct) {
+        return prevCart.map((p) =>
+          p.id === product.id ? { ...p, quantity: (p.quantity || 1) + 1 } : p
         );
-      } else {
-        console.log("Producto nuevo, agregando al carrito...");
-        return [...prevItems, item];
       }
+      return [...prevCart, { ...product, quantity: 1 }];
     });
 
-    // Actualizamos el totalPrice después de agregar el item
-    setTotalPrice((prevTotal) => {
-      return prevTotal + item.price * item.quantity;
-    });
+    console.log("Producto agregado:", product); // Verificación
   };
 
-  const removeItem = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    setTotalPrice((prevTotal) => {
-      return cartItems
-        .filter((item) => item.id !== id)
-        .reduce((acc, curr) => acc + curr.price * curr.quantity, 0);
-    });
+  const removeFromCart = (id: string) => {
+    setCart((prevCart) => prevCart.filter((product) => product.id !== id));
+  };
+
+  const clearCart = () => {
+    setCart([]);
+  };
+
+  const updateQuantity = (id: string, quantity: number) => {
+    setCart((prevCart) =>
+      prevCart.map((product) =>
+        product.id === id ? { ...product, quantity } : product
+      )
+    );
+  };
+
+  const getTotal = () => {
+    return cart.reduce(
+      (total, product) => total + product.price * (product.quantity || 1),
+      0
+    );
   };
 
   return (
     <CartContext.Provider
-      value={{ cartItems, totalPrice, addItem, removeItem }}
+      value={{
+        cart,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        updateQuantity,
+        getTotal,
+      }}
     >
       {children}
     </CartContext.Provider>
   );
+};
+
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
 };

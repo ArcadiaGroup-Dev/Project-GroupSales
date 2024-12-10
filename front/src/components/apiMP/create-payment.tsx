@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextApiRequest, NextApiResponse } from "next";
 import api from "../apiMP/api";
-import { IProduct } from "@/Interfaces/IProduct";
+import { IProduct } from "@/Interfaces/IProduct"; 
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   if (req.method === "POST") {
+    
     const { items }: { items: IProduct[] } = req.body;
 
-    // Mapear los productos a la estructura que espera la API de MercadoPago
+    
     const products = items.map((item) => ({
       id: item.id,
       name: item.name,
@@ -19,9 +20,10 @@ export default async function handler(
     }));
 
     try {
-      const { init_point } = await api.message.submitCart(products); // Uso correcto de init_point
+      
+      const { init_point } = await api.message.submitCart(products);
 
-      res.status(200).json({ initPoint: init_point }); // Se devuelve la URL de pago
+      res.status(200).json({ init_point }); // Devuelve el link de pago
     } catch (error) {
       res.status(500).json({ error: "Error al crear la preferencia de pago" });
     }

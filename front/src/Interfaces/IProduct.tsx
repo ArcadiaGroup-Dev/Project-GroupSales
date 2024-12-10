@@ -15,7 +15,6 @@ export interface ICategory {
   description?: string;
 }
 
-
 export interface ICartItem {
   id: string;
   name: string;
