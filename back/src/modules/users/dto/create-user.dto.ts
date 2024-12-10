@@ -2,8 +2,7 @@ import {
   IsString,
   IsNotEmpty,
   IsEmail,
-  IsDate,
-  IsPhoneNumber,
+  IsDate,  
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -23,7 +22,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   birthdate: Date;
 
-  @IsPhoneNumber()
+  @IsString()
   @IsNotEmpty()
   phone: number;
 
