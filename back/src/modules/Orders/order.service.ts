@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { OrdersRepository } from './order.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../users/entities/user.entity';
@@ -18,7 +22,7 @@ export class OrderService {
     @InjectRepository(Product)
     private readonly productsRepository: Repository<Product>,
     @InjectRepository(OrderDetails)
-    private readonly orderDetailRepository: Repository<OrderDetails>
+    private readonly orderDetailRepository: Repository<OrderDetails>,
   ) {}
 
   async create(
@@ -27,28 +31,31 @@ export class OrderService {
   ) {
     let total = 0;
 
-   
     const user = await this.usersRepository.findOne({ where: { id: userId } });
-    if (!user) throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
+    if (!user)
+      throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
 
-   
     const order = new Orders();
     order.date = new Date();
     order.user = user;
     const newOrder = await this.ordersRepository.save(order);
 
-   
     const productsArray = await Promise.all(
       products.map(async (element) => {
-        const product = await this.productsRepository.findOne({ where: { id: element.id } });
-        if (!product) throw new NotFoundException(`Producto con id ${element.id} no encontrado`);
+        const product = await this.productsRepository.findOne({
+          where: { id: element.id },
+        });
+        if (!product)
+          throw new NotFoundException(
+            `Producto con id ${element.id} no encontrado`,
+          );
 
-        
         if (product.stock < element.quantity) {
-          throw new BadRequestException(`No hay suficiente stock para el producto ${product.name}`);
+          throw new BadRequestException(
+            `No hay suficiente stock para el producto ${product.name}`,
+          );
         }
 
-        
         total += product.price * element.quantity;
         await this.productsRepository.update(
           { id: element.id },
@@ -59,16 +66,17 @@ export class OrderService {
       }),
     );
 
-   
     const orderDetail = new OrderDetails();
     orderDetail.price = Number(total.toFixed(2));
-    orderDetail.products = productsArray.map(item => item.product);
-    orderDetail.quantity = productsArray.reduce((acc, item) => acc + item.quantity, 0);
+    orderDetail.products = productsArray.map((item) => item.product);
+    orderDetail.quantity = productsArray.reduce(
+      (acc, item) => acc + item.quantity,
+      0,
+    );
     orderDetail.order = newOrder;
 
     await this.orderDetailRepository.save(orderDetail);
 
-    
     return {
       order: await this.orderDetailRepository.find({
         where: { id: orderDetail.id },

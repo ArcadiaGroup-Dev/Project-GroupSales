@@ -1,13 +1,15 @@
 "use client"
+import { fetchLoginUser } from '@/components/Fetchs/FetchsUser';
 import { NotifFormsUsers } from '@/components/Notifications/NotifiFormsUsers';
 import { UserContext } from '@/context/userContext';
-import { ILoginClientProps } from '@/Interfaces/IUser';
+import { ILoginClientProps, ILoginUser } from '@/Interfaces/IUser';
 import { validationLogin } from '@/utils/validateLogin';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
 
-export default function LoginForm({ setToken }: ILoginClientProps) {
+export default function LoginForm() {
+const { setToken } = useContext(UserContext); 
 const { signIn } = useContext(UserContext);
 const router = useRouter();
 const [userData, setUserData] = useState({
@@ -28,40 +30,38 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+
   const { formIsValid, errors } = validationLogin(userData);
 
-  if (formIsValid) {
-    const credentials = {
-      email: userData.email,
-      password: userData.password,
-    };
+  if (!formIsValid) {
+    setErrors(errors);
+    return;
+  }
 
-    try {
-      const success = await signIn(credentials);
-      if (success) {
-        const token =
-          typeof window !== "undefined"
-            ? localStorage.getItem("token")
-            : null;
-        if (token) {
-          setToken(token);
-          setNotificationMessage("Has ingresado correctamente");
-          setShowNotification(true);
-          setTimeout(() => setShowNotification(false), 3000);
-          router.push("/");
-        } else {
-          setNotificationMessage("Usuario Inválido");
-          setShowNotification(true);
-          setTimeout(() => setShowNotification(false), 3000);
-        }
-      }
-    } catch {
-      setNotificationMessage("Ocurrió un error, intenta de nuevo");
+  const credentials: ILoginUser = { email: userData.email, password: userData.password };
+
+  try {
+    const data = await signIn(credentials);
+
+    if (data?.access_token) {
+      localStorage.setItem('access_token', data.access_token);
+      setToken(data.access_token);  // Usar setToken desde el contexto
+
+      setNotificationMessage("Has ingresado correctamente");
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+
+      router.push("/"); 
+    } else {
+      setNotificationMessage("Error al obtener el token");
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
     }
-  } else {
-    setErrors(errors);
+  } catch (error) {
+    console.error("Error en el login:", error);
+    setNotificationMessage("Ocurrió un error, intenta de nuevo");
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 3000);
   }
 };
 

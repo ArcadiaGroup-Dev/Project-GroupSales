@@ -22,7 +22,7 @@ import { OrderModule } from './modules/Orders/order.module';
     CategoriesModule,
     UsersModule,
     AuthModule,
-    OrderModule
+    OrderModule,
   ],
 })
 export class AppModule {}

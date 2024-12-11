@@ -2,9 +2,10 @@ import {ILoginUser, IUserRegister } from "@/Interfaces/IUser";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-//Formulario de login
+//Formulario Login
 export const fetchLoginUser = async (credentials: ILoginUser) => {
   try {
+    // Realizar la solicitud POST al backend
     const response = await fetch(`${apiUrl}/auth/login`, {
       method: "POST",
       headers: {
@@ -13,23 +14,24 @@ export const fetchLoginUser = async (credentials: ILoginUser) => {
       body: JSON.stringify(credentials),
     });
 
+    // Verificar si la respuesta fue exitosa
     if (!response.ok) {
       throw new Error("Error en la autenticación");
     }
 
+    // Procesar la respuesta
     const data = await response.json();
     console.log("Response data from login:", data);
-    return data;
+    return data;  // Devuelve los datos al frontend (el token y demás información)
   } catch (error) {
     console.error("Error en el login:", error);
-    throw error;
+    throw error;  // Re-lanzar el error para que signIn lo maneje
   }
 };
 
-export const fetchRegisterUser = async (user: IUserRegister) => {
-  console.log("Datos del usuario a enviar:", user);
 
-  const response = await fetch(`${apiUrl}/auth/register`, {
+export const fetchRegisterUser = async (user: IUserRegister) => {
+   const response = await fetch(`${apiUrl}/users`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

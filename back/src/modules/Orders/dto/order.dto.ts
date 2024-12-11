@@ -13,8 +13,5 @@ export class CreateOrderDto {
   })
   @IsArray()
   @ArrayMinSize(1)
-  products: Array<{ id: string, quantity: number }>;
+  products: Array<{ id: string; quantity: number }>;
 }
-
-
-

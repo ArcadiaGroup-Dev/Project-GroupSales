@@ -61,7 +61,10 @@ export class CreateProductDto {
   @IsNotEmpty()
   categoryId: string;
 
-  @ApiProperty({ description: 'ID del usuario asociado al producto', type: String })
+  @ApiProperty({
+    description: 'ID del usuario asociado al producto',
+    type: String,
+  })
   @IsString()
   @IsNotEmpty()
   userId: string;

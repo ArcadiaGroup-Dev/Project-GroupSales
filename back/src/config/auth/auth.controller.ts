@@ -3,13 +3,13 @@ import { AuthService } from './auth.service';
 import { loginUserDto } from './dto/login.dto';
 import { ApiTags, ApiBody, ApiOperation } from '@nestjs/swagger';
 
-@ApiTags('Auth') 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @ApiOperation({ summary: 'Iniciar sesión con email y contraseña' })
-  @ApiBody({ type: loginUserDto }) 
+  @ApiBody({ type: loginUserDto })
   @Post('login')
   async login(@Body() loginDto: loginUserDto) {
     return await this.authService.login(loginDto);
