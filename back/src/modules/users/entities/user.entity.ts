@@ -32,7 +32,7 @@ export class User {
   birthdate: Date;
 
   @Column()
-  phone: number;
+  phone: string;
 
   @Column()
   address: string;

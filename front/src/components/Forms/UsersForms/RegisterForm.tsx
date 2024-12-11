@@ -1,10 +1,11 @@
-"use client"
+"use client";
 import { NotifFormsUsers } from '@/components/Notifications/NotifiFormsUsers';
 import { UserContext } from '@/context/userContext';
 import { IUserRegister } from '@/Interfaces/IUser';
 import { validationRegister } from '@/utils/validateRegister';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react';
+import dayjs from "dayjs";
 
 export default function RegisterForm() {
   const { signUp } = useContext(UserContext);
@@ -14,7 +15,7 @@ export default function RegisterForm() {
     email: '',
     name: '',
     password: '',
-    birthdate: new Date(),
+    birthdate: '', 
     phone: '',
     address: '',
     country: '',
@@ -26,44 +27,50 @@ export default function RegisterForm() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [showErrorNotification, setShowErrorNotification] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [birthdate, setBirthdate] = useState<Date | null>(null);
-
-  const handleChangeBirthdate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newDate = new Date(event.target.value);
-    setBirthdate(newDate);
-    setUserRegister(prev => ({ ...prev, birthdate: newDate }));
-  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+) => {
     const { name, value } = e.target;
     const updatedUser = { ...userRegister, [name]: value };
+
+    
+    if (name === "birthdate") {
+        updatedUser[name] = value;  
+    }
+
     setUserRegister(updatedUser);
     setErrors(validationRegister(updatedUser));
-  };
+};
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const user: IUserRegister = { ...userRegister };
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  console.log("Formulario enviado");
+  const user: IUserRegister = { ...userRegister };
 
-    try {
+  if (user.birthdate) {
+    user.birthdate = dayjs(user.birthdate).format("YYYY-MM-DD");
+  }
+
+  try {
       const isRegistered = await signUp(user);
+      console.log("Resultado de signUp:", isRegistered);
       if (isRegistered) {
-        setNotificationMessage("Registro exitoso");
-        setShowNotification(true);
-        setTimeout(async () => {
-          router.push("/");
-        }, 2000);
+          setNotificationMessage("Registro exitoso");
+          setShowNotification(true);
+          setTimeout(() => {
+              router.push("/");
+          }, 2000);
       } else {
-        setErrors({ ...errors, general: "Registro inválido. Por favor, revisa los datos ingresados." });
+          setErrors({ ...errors, general: "Registro inválido. Por favor, revisa los datos ingresados." });
       }
-    } catch (error) {
+  } catch (error) {
       setErrorMessage(error instanceof Error ? error.message : "Error desconocido.");
       setShowErrorNotification(true);
       setTimeout(() => setShowErrorNotification(false), 3000);
-    }
-  };
+  }
+};
+
 
   return (
     <div className="mx-auto mt-28 max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
@@ -157,13 +164,13 @@ export default function RegisterForm() {
 
             {/* Fecha de nacimiento */}
             <div>
-              <label htmlFor="birthdate" className="block text-sm font-medium text-gray-700"></label>
+              <label htmlFor="birthdate" className="block text-sm font-medium text-gray-700 "></label>
               <input
-                name="birthdate"
+              className="w-full text-gray-500 rounded-lg border-2 border-gray-200 p-4 text-sm shadow-md shadow-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 hover:cursor-pointer"
                 type="date"
-                value={birthdate ? birthdate.toISOString().split('T')[0] : ''}
-                onChange={handleChangeBirthdate}
-                className="w-full rounded-lg border-2 border-gray-200 p-4 text-sm shadow-md shadow-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-200 hover:cursor-pointer text-gray-700"
+                name="birthdate"
+                value={userRegister.birthdate} 
+                onChange={handleChange}
               />
             </div>
 
@@ -180,37 +187,24 @@ export default function RegisterForm() {
               />
               {errors.password && <p className="text-red-500 text-sm">{errors.password}</p>}
             </div>
+
           </div>
 
-          {/* Enlace a Login y Botón de Envío */}
-          <div className="flex items-center justify-between">
-            <p className="text-sm text-gray-500">
-              ¿Ya tienes cuenta? 
-              <a className="underline hover:font-bold" href="/login"> Inicia sesión aquí</a>
-            </p>
-
-            <button
-              disabled={Object.keys(errors).length > 0}
-              type="submit"
-              className="inline-block rounded-lg bg-tertiary hover:bg-orange-400 px-5 py-3 text-sm font-medium text-white shadow-md shadow-gray-400"
+          {/* Enviar */}
+          <div>
+          <button
+               disabled={Object.keys(errors).length > 0}
+               type="submit"
+              className="inline-block rounded-lg bg-tertiary hover:bg-orange-400 px-5 py-3 text-sm font-medium text-white shadow-md shadow-gray-400 hover:cursor-pointer"
             >
               Registrarme
             </button>
           </div>
-          
-          {showNotification && (
-            <div className="absolute top-12 left-0 right-0 mx-auto w-max">
-              <NotifFormsUsers message={notificationMessage} />
-            </div>
-          )}
-
-          {showErrorNotification && (
-            <div className="absolute top-20 left-0 right-0 mx-auto w-max bg-red-500 text-white py-2 px-4 rounded">
-              {errorMessage}
-            </div>
-          )}
         </form>
       </div>
+
+      {showNotification && <NotifFormsUsers message={notificationMessage} />}
+      {showErrorNotification && <NotifFormsUsers message={errorMessage} />}
     </div>
   );
 }

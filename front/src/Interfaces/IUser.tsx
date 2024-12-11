@@ -2,12 +2,29 @@ export interface IUserRegister {
     name: string;
     email:string;
     password:string;
-    birthdate: Date;
+    birthdate:string;
     phone: string;
     address:string;
     country: string;
     city: string;
 }
+
+// interfaces/user.interface.ts
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  password: string; 
+  birthdate: Date;
+  phone: string;
+  address: string;
+  city: string;
+  country: string;
+  role: 'admin' | 'seller' | 'client'; 
+  isActive: boolean;
+}
+
 
 export enum UserRole {
     ADMIN = 'admin',
@@ -29,23 +46,27 @@ export enum UserRole {
   }
   
   export interface ILoginResponse {
-    message: string;
-    token: string;
-    role: Role;
+    access_token: string;
+    user: IUser;  
   }
 
   export interface IUserResponse {
-    message: string;
-    token: string;
-    role: Role;
+    access_token: string;
+    user: {
+      id: string;
+      name: string;
+      email: string;
+      birthdate: Date;
+      phone: string;
+      address: string;
+      city: string;
+      country: string;
+      role: string;
+      isActive: boolean;
+    };
   }
-
-  export enum Role {
-    Admin = "admin",
-    Recep = "receptionist",
-    Emplo = "employee",
-  }
-
+  
+ 
   export interface IUserContextType {
     user: IUserResponse | null;
     setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
@@ -53,7 +74,7 @@ export enum UserRole {
     isAdmin: boolean;
     setIsAdmin: (isAdmin: boolean) => void;
     setIsLogged: (isLogged: boolean) => void;
-    signIn: (credentials: ILoginUser) => Promise<boolean>;
+    signIn: (credentials: ILoginUser) => Promise<ILoginResponse | null>; 
     signUp: (user: IUserRegister) => Promise<boolean>;
     logOut: () => void;
     token: string | null;
