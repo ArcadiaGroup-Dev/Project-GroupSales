@@ -15,7 +15,8 @@ const CreateProduct: React.FC = () => {
     stock: 0,
     imageUrl:"",
     categoryId:"",
-    seller:""
+    seller:"",
+    quantity: 0
 
   });
 
