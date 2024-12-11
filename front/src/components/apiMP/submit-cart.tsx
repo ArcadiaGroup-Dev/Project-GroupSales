@@ -16,6 +16,7 @@ export default async function handler(
       name: item.name,
       quantity: item.quantity,
       price: item.price,
+      currency_id: item.currency,
     }));
 
     try {
