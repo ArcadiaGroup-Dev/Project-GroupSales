@@ -2,12 +2,12 @@ import React, { useState } from "react";
 
 interface EditProfileProps {
   onCancel: () => void;
-  onSave: (data: { address: string; phone: number }) => void;
+  onSave: (data: { address: string; phone: string }) => void;
 }
 
 const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
   const [address, setAddress] = useState<string>("");
-  const [phone, setPhone] = useState<number>(0);
+  const [phone, setPhone] = useState<string>("");
 
   const handleSave = () => {
     onSave({ address, phone }); // Llama a onSave para guardar los datos
@@ -29,7 +29,7 @@ const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
         <input
           type="number"
           value={phone}
-          onChange={(e) => setPhone(parseInt(e.target.value, 10) || 0)} // Convertimos el valor a número
+          onChange={(e) => setPhone(e.target.value)}
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
       </div>

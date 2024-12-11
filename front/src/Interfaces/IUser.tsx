@@ -9,7 +9,7 @@ export interface IUserRegister {
     city: string;
 }
 
-// interfaces/user.interface.ts
+
 
 export interface IUser {
   id: string;
@@ -74,7 +74,7 @@ export enum UserRole {
     isAdmin: boolean;
     setIsAdmin: (isAdmin: boolean) => void;
     setIsLogged: (isLogged: boolean) => void;
-    signIn: (credentials: ILoginUser) => Promise<ILoginResponse | null>; 
+    signIn: (credentials: ILoginUser) => Promise<IUserResponse | null>; 
     signUp: (user: IUserRegister) => Promise<boolean>;
     logOut: () => void;
     token: string | null;

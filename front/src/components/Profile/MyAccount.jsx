@@ -1,22 +1,20 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { mocksUser } from "../mockUser";
-import LogOut from "./LogOut";
+import React, { useState, useEffect, useContext } from "react";
 import DeleteAccount from "./DeleteAccount";
 import EditProfile from "./EditProfile"; 
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
+import { IUser, IUserResponse } from "@/Interfaces/IUser";
+import { UserContext } from "@/context/userContext";
+import LogOut from "./LogOut";
 
 export default function MyAccount() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState({
-    address: "",
-    phone: 0,
-  });
+  const { user }: { user: IUserResponse | null } = useContext(UserContext);
+  const [userData, setUserData] = useState<{ address: string; phone: string } | undefined>(undefined);
 
-  const user = mocksUser[0];
 
   useEffect(() => {
     const storedUserData = localStorage.getItem("userData");
@@ -31,54 +29,57 @@ export default function MyAccount() {
   const handleCloseDeleteAccount = () => setIsDeleteModalOpen(false);
   const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
-  const handleSaveEdit = (data: { address: string; phone: number }) => {
+  const handleSaveEdit = (data: { address: string; phone: string }) => {
     setUserData(data); // Guarda los datos editados
     localStorage.setItem("userData", JSON.stringify(data)); // Guarda los nuevos datos en el localStorage
     setIsEditing(false); // Cierra el formulario de edición
   };
-
+  
+  if (!user) {
+    return <p className="mt-32">No hay información del usuario.</p>;
+  }
   const sections = [
     {
       title: "Mi Cuenta",
       content: (
-        <div className="flex flex-col sm:flex-col md:flex-row md:space-x-4 items-center sm:items-start">
+        <div className=" flex flex-col sm:flex-col md:flex-row md:space-x-4 items-center sm:items-start">
           <div className="w-full sm:w-auto p-2 shadow-md shadow-gray-400">
             {/* Detalles del usuario */}
             <div >
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaUser className="text-gray-600" />
                 <span className="font-medium text-gray-600">Nombre:</span>
-                <p className="text-gray-700">{user.name}</p>
+                <p className="text-gray-700">{user.user.name}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaEnvelope className="text-gray-600" />
                 <span className="font-medium text-gray-600">Correo Electrónico:</span>
-                <p className="text-gray-700">{user.email}</p>
+                <p className="text-gray-700">{user.user.email}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaPhone className="text-gray-600" />
                 <span className="font-medium text-gray-600">Teléfono:</span>
-                <p className="text-gray-700">{user.phone}</p>
+                <p className="text-gray-700">{user.user.phone}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaHome className="text-gray-600" />
                 <span className="font-medium text-gray-600">Dirección:</span>
-                <p className="text-gray-700">{user.address}</p>
+                <p className="text-gray-700">{user.user.address}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaFlag className="text-gray-600" />
                 <span className="font-medium text-gray-600">País:</span>
-                <p className="text-gray-700">{user.country}</p>
+                <p className="text-gray-700">{user.user.country}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaCity className="text-gray-600" />
                 <span className="font-medium text-gray-600">Ciudad:</span>
-                <p className="text-gray-700">{user.city}</p>
+                <p className="text-gray-700">{user.user.city}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaBirthdayCake className="text-gray-600" />
                 <span className="font-medium text-gray-600">Fecha de Nacimiento:</span>
-                <p className="text-gray-700">{user.birthdate.toLocaleDateString()}</p>
+                <p className="text-gray-700">{user.user.birthdate.toLocaleDateString()}</p>
               </div>
             </div>
 
@@ -152,7 +153,7 @@ export default function MyAccount() {
 
       {isLogoutModalOpen && <LogOut handleCloseLogout={handleCloseLogout} />}
       {isDeleteModalOpen && (
-        <DeleteAccount userId={user.id} handleCloseDeleteAccount={handleCloseDeleteAccount} />
+        <DeleteAccount userId={user.user.id} handleCloseDeleteAccount={handleCloseDeleteAccount} />
       )}
     </div>
   );
