@@ -30,6 +30,7 @@ export const fetchLoginUser = async (credentials: ILoginUser) => {
 };
 
 
+
 export const fetchRegisterUser = async (user: IUserRegister) => {
    const response = await fetch(`${apiUrl}/users`, {
     method: "POST",
