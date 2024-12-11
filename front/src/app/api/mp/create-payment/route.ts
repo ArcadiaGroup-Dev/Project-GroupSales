@@ -6,8 +6,6 @@ export async function POST(request: Request) {
   try {
     const { items } = await request.json();
 
-    // Aquí deberías implementar la lógica para crear el pago con MercadoPago
-    // Simulamos una respuesta exitosa
     const response = {
       init_point:
         "https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=123456",
