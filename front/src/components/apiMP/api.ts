@@ -20,9 +20,9 @@ const api = {
               unit_price: item.price,
             })),
             back_urls: {
-              success: "http://localhost:3001/",
-              failure: "http://localhost:3001/",
-              pending: "http://localhost:3001/",
+              success: "https://xyz123.ngrok.io/success",
+              failure: "https://xyz123.ngrok.io/failure",
+              pending: "https://xyz123.ngrok.io/pending",
             },
           },
         });

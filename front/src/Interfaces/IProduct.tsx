@@ -7,6 +7,7 @@ export interface IProduct {
   imageUrl: string;
   seller: string;
   categoryId: string;
+  currency: string;
   quantity: number;
 }
 
@@ -20,4 +21,5 @@ export interface ICartItem {
   name: string;
   quantity: number;
   price: number;
+  currency_id: string;
 }
