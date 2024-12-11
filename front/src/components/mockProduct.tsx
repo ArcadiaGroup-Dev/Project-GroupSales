@@ -10,6 +10,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "SweetClothes",
     categoryId: "Ropa",
+    currency: ".",
     description:
       "Camiseta de algodón suave y cómoda, ideal para el día a día. Disponible en varios colores y tamaños. Perfecta para combinar con jeans o shorts durante el verano. Material de alta calidad que garantiza durabilidad y confort.",
   },
@@ -22,6 +23,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "MegaSport",
     categoryId: "Ropa",
+    currency: ".",
     description:
       "Pantalones deportivos de tela elástica y transpirable, diseñados para la comodidad en actividades físicas o para un look casual. Cintura ajustable y fit moderno, disponibles en varios colores. Perfectos para entrenamientos o salidas informales.",
   },
@@ -34,6 +36,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "Shoozing",
     categoryId: "Calzado",
+    currency: ".",
     description:
       "Zapatillas deportivas con tecnología de amortiguación para mayor confort durante carreras y entrenamientos. Suela antideslizante para mayor seguridad. Perfectas para corredores y personas que buscan rendimiento y estilo.",
   },
@@ -46,6 +49,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "TecnoTodo",
     categoryId: "Tecnología",
+    currency: ".",
     description:
       "Smartwatch de última generación con monitoreo de actividad física, seguimiento del sueño y notificaciones inteligentes. Con pantalla táctil HD, batería de larga duración y resistencia al agua. Compatible con iOS y Android.",
   },
@@ -58,6 +62,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "MegaVenta",
     categoryId: "Tecnología",
+    currency: ".",
     description:
       "Auriculares Bluetooth de calidad premium con cancelación de ruido activa. Sonido de alta fidelidad y micrófono integrado para llamadas claras. Conectividad rápida y compatible con dispositivos móviles, tablets y ordenadores.",
   },
@@ -70,6 +75,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "MegaVenta",
     categoryId: "Accesorios",
+    currency: ".",
     description:
       "Mochila ergonómica de gran capacidad, ideal para viajes largos o aventuras al aire libre. Con múltiples compartimentos y materiales resistentes al agua, garantiza un viaje cómodo y seguro. Diseño moderno y práctico.",
   },
@@ -82,6 +88,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "MegaVenta",
     categoryId: "Muebles",
+    currency: ".",
     description:
       "Silla gaming ergonómica con soporte lumbar ajustable y reposabrazos 3D. Diseño moderno, perfecta para largas sesiones de juego o trabajo. Con materiales de alta calidad y facilidad de ajuste para mayor confort.",
   },
@@ -94,6 +101,7 @@ export const mocksProducts: IProduct[] = [
     quantity: 1,
     seller: "MegaVenta",
     categoryId: "Tecnología",
+    currency: ".",
     description:
       "Teclado mecánico con switches de alta velocidad y retroiluminación RGB personalizable. Ideal para gamers y profesionales que buscan precisión y durabilidad en cada pulsación. Compatible con Windows y Mac.",
   },
