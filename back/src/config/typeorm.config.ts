@@ -4,6 +4,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
 
 dotenvConfig({ path: '.env.production.local' });
 
+
 const config: DataSourceOptions = {
   type: 'postgres',
   database: process.env.DB_NAME,
@@ -14,7 +15,7 @@ const config: DataSourceOptions = {
   ssl: {
     rejectUnauthorized: false, 
   },
-  dropSchema: false,
+  dropSchema: true,
   logging: true,
   synchronize: true,
   /*     entities: [Product,Category], */

@@ -33,8 +33,9 @@ export class AuthService {
       username: validatedUser.name,
       sub: validatedUser.id,
     };
+    const { password: _, ...userNoPassword } = validatedUser;
     return {
-      access_token: this.jwtService.sign(payload),
+      access_token: this.jwtService.sign(payload), user:userNoPassword
     };
   }
 }
