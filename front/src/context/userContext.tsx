@@ -19,10 +19,7 @@ export const UserContext = createContext<IUserContextType>({
   isAdmin: false,
   setIsAdmin: () => {},
   setIsLogged: () => {},
-  signIn:  async (credentials) => { 
-   
-    return null;  
-  },
+  signIn: async () => false,
   signUp: async () => false,
   logOut: () => {},
   token: null,
@@ -32,48 +29,62 @@ export const UserContext = createContext<IUserContextType>({
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<IUserResponse | null>(null);
+  const [user, setUser] = useState<IUserResponse['user'] | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
-  const [token, setToken] = useState<string | null>(null);
 
-  const signIn = async (credentials: ILoginUser): Promise<ILoginResponse | null> => {
+  const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
-      // Llamar a la función fetchLoginUser que ya se encarga de la solicitud
-      const data = await fetchLoginUser(credentials);
+      // Intentamos autenticar al usuario
+      const response: IUserResponse = await fetchLoginUser(credentials);
   
-      // Verificar si los datos tienen el access_token
-      if (data?.access_token) {
-        return data;
+      // Verificamos si la respuesta contiene el token y los detalles del usuario
+      if (response.access_token) {
+        return true;  // La autenticación fue exitosa
       } else {
-        console.error("Error: No se recibió el token");
-        return null;
+        console.error('Error: Respuesta incompleta del servidor');
+        return false;
       }
     } catch (error) {
-      console.error("Error al autenticar:", error);
-      return null;
+      console.error('Error al autenticar:', error);
+      return false;
     }
   };
   
-
+  const signUp = async (user: IUserRegister): Promise<boolean> => {
+    console.log("Entrando a signUp con los datos:", user);  // Este log debería aparecer si la función es llamada
   
-const signUp = async (user: IUserRegister): Promise<boolean> => {
-  console.log("Entrando a signUp con los datos:", user);  // Este log debería aparecer si la función es llamada
-
-  try {
-    console.log("Datos enviados al backend:", user);
-    const data = await fetchRegisterUser(user);
-    console.log("Respuesta del servidor:", data);
-    if (data) {
-      return true;
+    try {
+      console.log("Datos enviados al backend:", user);
+      const data = await fetchRegisterUser(user);
+      console.log("Respuesta del servidor:", data);
+  
+      if (data) {
+        // Suponiendo que la respuesta del servidor tiene la estructura que muestras
+        const { access_token, ...userDetails } = data;
+        
+        // Guardamos tanto el access_token como los detalles del usuario en localStorage
+        localStorage.setItem('user', JSON.stringify({ user: userDetails, token: access_token, role: userDetails.role }));
+  
+        // Actualizamos el estado
+        setUser(userDetails);  // Establecer el usuario en el estado
+        setToken(access_token); // Establecer el token en el estado
+        setIsLogged(true);
+        setIsAdmin(userDetails.role === 'admin');  // Establecer si es administrador
+  
+        return true;
+      }
+  
+      console.error("Registration failed:", data);
+      return false;
+    } catch (error) {
+      console.error("Error durante sign up:", error instanceof Error ? error.message : "Unknown error");
+      throw error;  // Re-throw para que el catch de onSubmit lo maneje
     }
-    console.error("Registration failed:", data);
-    return false;
-  } catch (error) {
-    console.error("Error durante sign up:", error instanceof Error ? error.message : "Unknown error");
-    throw error;  // Re-throw para que el catch de onSubmit lo maneje
-  }
-};
+  };
+  
+  
 
   useEffect(() => {
     if (typeof window !== "undefined") {

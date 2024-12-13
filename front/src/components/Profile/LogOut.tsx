@@ -10,10 +10,11 @@ export default function LogOut({ handleCloseLogout }: LogOutProps) {
     // Lógica de cerrar sesión
     console.log("Usuario ha cerrado sesión");
 
-    // Ejemplo: eliminar token del localStorage
+    // Eliminar el token y los datos del usuario del localStorage
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
 
-    // Redirigir al usuario (puedes usar useNavigate si estás usando react-router)
+    // Redirigir al usuario a la página de login
     window.location.href = "/login";
   };
 

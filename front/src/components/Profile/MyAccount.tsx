@@ -1,9 +1,9 @@
-"use client";
+"use client"
 import React, { useState, useEffect, useContext } from "react";
 import DeleteAccount from "./DeleteAccount";
-import EditProfile from "./EditProfile"; 
+import EditProfile from "./EditProfile";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
-import { IUser, IUserResponse } from "@/Interfaces/IUser";
+import { IUserResponse } from "@/Interfaces/IUser";
 import { UserContext } from "@/context/userContext";
 import LogOut from "./LogOut";
 
@@ -12,17 +12,27 @@ export default function MyAccount() {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const { user }: { user: IUserResponse | null } = useContext(UserContext);
-  const [userData, setUserData] = useState<{ address: string; phone: string } | undefined>(undefined);
-
+  const [userData, setUserData] = useState<IUserResponse | null>(null); // Estado para los datos del usuario
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem("userData");
+    // Intentamos obtener los datos desde el localStorage
+    const storedUserData = localStorage.getItem("user");
+    
     if (storedUserData) {
-      setUserData(JSON.parse(storedUserData));
+      try {
+        const parsedUserData = JSON.parse(storedUserData);
+        setUserData(parsedUserData); // Actualizamos el estado con los datos del usuario
+      } catch (error) {
+        console.error("Error al parsear los datos del usuario:", error);
+      }
     }
-  }, []);
+  }, []); // Solo se ejecuta una vez al montar el componente
 
+  if (!userData) {
+    return <p className="mt-32">Cargando datos del usuario...</p>;
+  }
+
+  // Funciones para manejar acciones
   const handleOpenLogout = () => setIsLogoutModalOpen(true);
   const handleCloseLogout = () => setIsLogoutModalOpen(false);
   const handleOpenDeleteAccount = () => setIsDeleteModalOpen(true);
@@ -30,84 +40,80 @@ export default function MyAccount() {
   const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
   const handleSaveEdit = (data: { address: string; phone: string }) => {
-    setUserData(data); // Guarda los datos editados
-    localStorage.setItem("userData", JSON.stringify(data)); // Guarda los nuevos datos en el localStorage
-    setIsEditing(false); // Cierra el formulario de edición
+    setUserData((prev) => (prev ? { ...prev, user: { ...prev.user, ...data } } : null));
+    setIsEditing(false);
   };
-  
-  if (!user) {
-    return <p className="mt-32">No hay información del usuario.</p>;
-  }
+
   const sections = [
     {
       title: "Mi Cuenta",
       content: (
-        <div className=" flex flex-col sm:flex-col md:flex-row md:space-x-4 items-center sm:items-start">
+        <div className="flex flex-col sm:flex-col md:flex-row md:space-x-4 items-center sm:items-start">
           <div className="w-full sm:w-auto p-2 shadow-md shadow-gray-400">
             {/* Detalles del usuario */}
-            <div >
+            <div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaUser className="text-gray-600" />
                 <span className="font-medium text-gray-600">Nombre:</span>
-                <p className="text-gray-700">{user.user.name}</p>
+                <p className="text-gray-700">{userData.user.name}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaEnvelope className="text-gray-600" />
                 <span className="font-medium text-gray-600">Correo Electrónico:</span>
-                <p className="text-gray-700">{user.user.email}</p>
+                <p className="text-gray-700">{userData.user.email}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaPhone className="text-gray-600" />
                 <span className="font-medium text-gray-600">Teléfono:</span>
-                <p className="text-gray-700">{user.user.phone}</p>
+                <p className="text-gray-700">{userData.user.phone}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
-                <FaHome className="text-gray-600" />
-                <span className="font-medium text-gray-600">Dirección:</span>
-                <p className="text-gray-700">{user.user.address}</p>
-              </div>
+              <FaHome className="text-gray-600" />
+              <span className="font-medium text-gray-600">Dirección:</span>
+              <p className="text-gray-700">{userData.user.address}</p>
+            </div> 
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaFlag className="text-gray-600" />
                 <span className="font-medium text-gray-600">País:</span>
-                <p className="text-gray-700">{user.user.country}</p>
+                <p className="text-gray-700">{userData.user.country}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaCity className="text-gray-600" />
                 <span className="font-medium text-gray-600">Ciudad:</span>
-                <p className="text-gray-700">{user.user.city}</p>
+                <p className="text-gray-700">{userData.user.city}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaBirthdayCake className="text-gray-600" />
                 <span className="font-medium text-gray-600">Fecha de Nacimiento:</span>
-                <p className="text-gray-700">{user.user.birthdate.toLocaleDateString()}</p>
+               <p className="text-gray-700">
+               {new Date(userData.user.birthdate).toLocaleDateString()}
+              </p>
               </div>
             </div>
 
-            {/* Botones debajo de la información del usuario */}
             <div className="mt-8 sm:mt-4">
               {!isEditing ? (
                 <div className="space-y-4 mr-2">
                   <button
                     onClick={handleEditClick}
-                    className=" mr-2 sm:w-auto shadow-md shadow-gray-400 bg-orange-400 text-white py-2 px-4 rounded-md hover:bg-orange-300 transition"
+                    className="mr-2 sm:w-auto shadow-md shadow-gray-400 bg-orange-400 text-white py-2 px-4 rounded-md hover:bg-orange-300 transition"
                   >
                     Modificar datos
                   </button>
                   <button
                     onClick={handleOpenLogout}
-                    className=" sm:w-auto shadow-md shadow-gray-400 bg-teal-700 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition"
+                    className="sm:w-auto shadow-md shadow-gray-400 bg-teal-700 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition"
                   >
                     Cerrar Sesión
                   </button>
                   <div className="mt-6 flex justify-end">
-        <button
-          onClick={handleOpenDeleteAccount}
-          className=" border border-red-400 text-red-700 py-2 px-4 rounded-md hover:border-red-700 hover:border-2 hover:shadow-md hover:shadow-gray-400 transition"
-        >
-          Eliminar Cuenta
-        </button>
-      </div>
-
+                    <button
+                      onClick={handleOpenDeleteAccount}
+                      className="border border-red-400 text-red-700 py-2 px-4 rounded-md hover:border-red-700 hover:border-2 hover:shadow-md hover:shadow-gray-400 transition"
+                    >
+                      Eliminar Cuenta
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <EditProfile
@@ -137,11 +143,10 @@ export default function MyAccount() {
         {sections.map((section, index) => (
           <button
             key={index}
-            className={`px-4 py-2 ${
-              activeIndex === index
+            className={`px-4 py-2 ${activeIndex === index
                 ? "border-b-2 border-teal-700 text-teal-700 font-semibold"
                 : "text-gray-600 hover:text-teal-700"
-            }`}
+              }`}
             onClick={() => setActiveIndex(index)}
           >
             {section.title}
@@ -153,7 +158,7 @@ export default function MyAccount() {
 
       {isLogoutModalOpen && <LogOut handleCloseLogout={handleCloseLogout} />}
       {isDeleteModalOpen && (
-        <DeleteAccount userId={user.user.id} handleCloseDeleteAccount={handleCloseDeleteAccount} />
+        <DeleteAccount userId={userData.user.id} handleCloseDeleteAccount={handleCloseDeleteAccount} />
       )}
     </div>
   );

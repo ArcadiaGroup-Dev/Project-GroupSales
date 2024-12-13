@@ -66,17 +66,17 @@ export enum UserRole {
     };
   }
   
- 
   export interface IUserContextType {
-    user: IUserResponse | null;
-    setUser: React.Dispatch<React.SetStateAction<IUserResponse | null>>;
+    user: IUserResponse['user'] | null; // Solo datos del usuario
+    setUser: React.Dispatch<React.SetStateAction<IUserResponse['user'] | null>>;
     isLogged: boolean;
     isAdmin: boolean;
     setIsAdmin: (isAdmin: boolean) => void;
     setIsLogged: (isLogged: boolean) => void;
-    signIn: (credentials: ILoginUser) => Promise<IUserResponse | null>; 
+    signIn: (credentials: ILoginUser) => Promise<boolean>; 
     signUp: (user: IUserRegister) => Promise<boolean>;
     logOut: () => void;
-    token: string | null;
+    token: string | null; // Token separado
     setToken: React.Dispatch<React.SetStateAction<string | null>>;
   }
+  

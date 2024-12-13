@@ -2,14 +2,14 @@
 import { fetchLoginUser } from '@/components/Fetchs/FetchsUser';
 import { NotifFormsUsers } from '@/components/Notifications/NotifiFormsUsers';
 import { UserContext } from '@/context/userContext';
-import { ILoginClientProps, ILoginUser } from '@/Interfaces/IUser';
+import { ILoginClientProps, ILoginUser, IUserResponse } from '@/Interfaces/IUser';
 import { validationLogin } from '@/utils/validateLogin';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
 
 export default function LoginForm() {
-const { setToken } = useContext(UserContext); 
+const { setToken, setUser, setIsLogged, setIsAdmin } = useContext(UserContext); 
 const { signIn } = useContext(UserContext);
 const router = useRouter();
 const [userData, setUserData] = useState({
@@ -28,6 +28,7 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   setErrors(errors);
 };
 
+
 const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
@@ -41,19 +42,35 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   const credentials: ILoginUser = { email: userData.email, password: userData.password };
 
   try {
-    const data = await signIn(credentials);
+    // Intentar iniciar sesión
+    const isLoggedIn = await signIn(credentials);
 
-    if (data?.access_token) {
-      localStorage.setItem('access_token', data.access_token);
-      setToken(data.access_token);  // Usar setToken desde el contexto
+    if (isLoggedIn) {
+      // Si login es exitoso, obtenemos los datos completos del usuario
+      const response: IUserResponse = await fetchLoginUser(credentials);
 
-      setNotificationMessage("Has ingresado correctamente");
-      setShowNotification(true);
-      setTimeout(() => setShowNotification(false), 3000);
+      if (response.access_token) {
+        // Guardamos el token y el usuario en localStorage
+        localStorage.setItem('access_token', response.access_token);
 
-      router.push("/"); 
+        // Actualizamos los estados correspondientes
+        setToken(response.access_token);
+      
+
+        // Mostrar mensaje de éxito
+        setNotificationMessage("Has ingresado correctamente");
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+
+        // Redirigir al usuario a la página principal
+        router.push("/"); 
+      } else {
+        setNotificationMessage("Error al obtener los datos del usuario");
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+      }
     } else {
-      setNotificationMessage("Error al obtener el token");
+      setNotificationMessage("Credenciales incorrectas");
       setShowNotification(true);
       setTimeout(() => setShowNotification(false), 3000);
     }
@@ -64,7 +81,6 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setTimeout(() => setShowNotification(false), 3000);
   }
 };
-
 
   return (
     <div className="mx-auto mt-28 max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8">
