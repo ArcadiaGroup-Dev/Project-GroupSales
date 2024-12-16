@@ -1,10 +1,7 @@
-"use client"; // Indica que este archivo es un componente de cliente en Next.js
+"use client"; 
 
 import React, { useEffect, useState } from "react";
-import { IUserResponse } from "@/Interfaces/IUser";
-import EditProduct from "./EditProduct";
-import DeleteProduct from "./DeleteProduct"; // Importamos el componente DeleteProduct
-import Link from "next/link";
+import DeleteProduct from "./DeleteProduct"; 
 import Image from "next/image";
 
 

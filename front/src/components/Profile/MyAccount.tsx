@@ -1,10 +1,9 @@
 "use client"
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import DeleteAccount from "./DeleteAccount";
 import EditProfile from "./EditProfile";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
 import { IUserResponse } from "@/Interfaces/IUser";
-import { UserContext } from "@/context/userContext";
 import LogOut from "./LogOut";
 import Link from "next/link";
 

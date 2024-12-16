@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { fetchUploadProduct } from "../Fetchs/FetchProducts";
-import { ICreateProduct, IProduct } from "@/Interfaces/IProduct";
+import { ICreateProduct } from "@/Interfaces/IProduct";
 import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
 
 const CreateProduct: React.FC = () => {

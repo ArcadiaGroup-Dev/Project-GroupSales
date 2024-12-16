@@ -3,7 +3,7 @@ import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { UserContext } from "@/context/userContext";
 
 export default function TopNavbar() {

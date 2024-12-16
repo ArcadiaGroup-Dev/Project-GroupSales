@@ -2,14 +2,14 @@
 import { fetchLoginUser } from '@/components/Fetchs/FetchsUser';
 import { NotifFormsUsers } from '@/components/Notifications/NotifiFormsUsers';
 import { UserContext } from '@/context/userContext';
-import { ILoginClientProps, ILoginUser, IUserResponse } from '@/Interfaces/IUser';
+import {  ILoginUser, IUserResponse } from '@/Interfaces/IUser';
 import { validationLogin } from '@/utils/validateLogin';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
 
 export default function LoginForm() {
-const { setToken, setUser, setIsActive, setIsAdmin } = useContext(UserContext); 
+const { setToken } = useContext(UserContext); 
 const { signIn } = useContext(UserContext);
 const router = useRouter();
 const [userData, setUserData] = useState({
