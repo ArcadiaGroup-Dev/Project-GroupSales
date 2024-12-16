@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import React, { useContext, useState } from 'react'
 
 export default function LoginForm() {
-const { setToken, setUser, setIsLogged, setIsAdmin } = useContext(UserContext); 
+const { setToken, setUser, setIsActive, setIsAdmin } = useContext(UserContext); 
 const { signIn } = useContext(UserContext);
 const router = useRouter();
 const [userData, setUserData] = useState({

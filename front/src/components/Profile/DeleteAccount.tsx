@@ -1,31 +1,43 @@
-import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
 
 interface DeleteAccountProps {
   userId: string;
-  handleCloseDeleteAccount: () => void; // Esta es la función para cerrar el modal
+  handleCloseDeleteAccount: () => void;
 }
+
+const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DeleteAccount({ userId, handleCloseDeleteAccount }: DeleteAccountProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+ const router = useRouter();
+ const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
 
   const handleConfirmDelete = async () => {
     setIsProcessing(true);
     try {
-      const response = await fetch(`/api/users/${userId}`, { method: "DELETE" });
+      const response = await fetch(`${apiUrl}/users/${userId}`, { method: "DELETE" });
+
       if (response.ok) {
-        console.log("Cuenta eliminada con éxito");
-        // Redirigir o actualizar el estado global de la app aquí
+        setNotificationMessage("Cuenta eliminada con éxito");
+        setTimeout(() => {
+          router.push("/"); 
+        }, 2000);
       } else {
-        console.error("Error al eliminar la cuenta");
+        const errorText = await response.text();
+        setNotificationMessage(`Error al eliminar la cuenta: ${errorText}`);
       }
     } catch (error) {
-      console.error("Error al eliminar:", error);
+      setNotificationMessage("Error al procesar la solicitud de eliminación");
+      console.error("Error en la solicitud de eliminación:", error);
     } finally {
       setIsProcessing(false);
     }
   };
-
   return (
+    <>
+    {notificationMessage && <NotifFormsUsers message={notificationMessage} />}
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
       <div className="rounded-2xl border border-blue-100 bg-white p-4 shadow-lg sm:p-6 lg:p-8">
         <p className="mt-4 text-gray-500">
@@ -42,7 +54,7 @@ export default function DeleteAccount({ userId, handleCloseDeleteAccount }: Dele
             {isProcessing ? "Procesando..." : "Sí, Eliminar"}
           </button>
           <button
-            onClick={handleCloseDeleteAccount} // Cierra el modal al cancelar
+            onClick={handleCloseDeleteAccount}
             className="mt-2 inline-block w-full rounded-lg bg-gray-50 px-5 py-3 text-center text-sm font-semibold text-gray-500 sm:mt-0 sm:w-auto"
           >
             Cancelar
@@ -50,5 +62,6 @@ export default function DeleteAccount({ userId, handleCloseDeleteAccount }: Dele
         </div>
       </div>
     </div>
+    </>
   );
 }

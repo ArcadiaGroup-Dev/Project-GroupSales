@@ -24,3 +24,16 @@ body {
 #country, #birthdate {
   color: #939497 !important;  /* Asegura que se aplique el color específico */
 }
+
+
+/* Deshabilitar las flechas en WebKit browsers (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Deshabilitar las flechas en Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

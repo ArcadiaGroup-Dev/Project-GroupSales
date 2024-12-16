@@ -6,27 +6,28 @@ import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } f
 import { IUserResponse } from "@/Interfaces/IUser";
 import { UserContext } from "@/context/userContext";
 import LogOut from "./LogOut";
+import Link from "next/link";
 
 export default function MyAccount() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [userData, setUserData] = useState<IUserResponse | null>(null); // Estado para los datos del usuario
+  const [userData, setUserData] = useState<IUserResponse | null>(null); 
 
   useEffect(() => {
-    // Intentamos obtener los datos desde el localStorage
+  
     const storedUserData = localStorage.getItem("user");
     
     if (storedUserData) {
       try {
         const parsedUserData = JSON.parse(storedUserData);
-        setUserData(parsedUserData); // Actualizamos el estado con los datos del usuario
+        setUserData(parsedUserData); 
       } catch (error) {
         console.error("Error al parsear los datos del usuario:", error);
       }
     }
-  }, []); // Solo se ejecuta una vez al montar el componente
+  }, []);
 
   if (!userData) {
     return <p className="mt-32">Cargando datos del usuario...</p>;
@@ -132,6 +133,21 @@ export default function MyAccount() {
         <div className="space-y-4">
           <h2 className="text-lg font-semibold text-gray-700">Tus Órdenes</h2>
           <p>Aquí aparecerán las órdenes realizadas por el usuario.</p>
+        </div>
+      ),
+    },
+    {
+      title: "Publicar",
+      content: (
+        <div className="space-y-4">
+          
+          <Link href={"/myAccount/create/product"}>
+          <button className="bg-secondary rounded-lg text-white w-auto p-4 shadow-md shadow-gray-400  hover:bg-white hover:border-secondary hover:border-2 hover:text-secondary">
+          Crear Productos / Servicios</button></Link>
+          <h2 className="text-lg text-gray-700 pb-8">Selecciona para crear productos o servicios.</h2>
+          
+          <Link href={"/myAccount/view"}><button className="bg-secondary rounded-lg text-white w-auto p-4 shadow-md shadow-gray-400  hover:bg-white hover:border-secondary hover:border-2 hover:text-secondary">Ver mis productos/servicios publicados</button></Link>
+          <h2 className="text-lg text-gray-700">Selecciona para ver, modificar o eliminar productos o servicios.</h2>
         </div>
       ),
     },

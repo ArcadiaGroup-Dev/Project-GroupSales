@@ -69,10 +69,10 @@ export enum UserRole {
   export interface IUserContextType {
     user: IUserResponse['user'] | null; // Solo datos del usuario
     setUser: React.Dispatch<React.SetStateAction<IUserResponse['user'] | null>>;
-    isLogged: boolean;
+    isActive: boolean;
     isAdmin: boolean;
     setIsAdmin: (isAdmin: boolean) => void;
-    setIsLogged: (isLogged: boolean) => void;
+    setIsActive: (isLogged: boolean) => void;
     signIn: (credentials: ILoginUser) => Promise<boolean>; 
     signUp: (user: IUserRegister) => Promise<boolean>;
     logOut: () => void;

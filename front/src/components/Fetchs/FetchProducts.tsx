@@ -1,4 +1,4 @@
-import { IProduct } from "@/Interfaces/IProduct";
+import { ICreateProduct, IProduct } from "@/Interfaces/IProduct";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -52,7 +52,7 @@ export const fetchProductById = async (id:string) => {
 
   //Crear productos
 
-export const fetchUploadProduct = async (product:IProduct) => {
+export const fetchUploadProduct = async (product:ICreateProduct) => {
     const response = await fetch(`${apiUrl}/products`, {
         method: "POST",
         headers: {

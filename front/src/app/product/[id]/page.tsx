@@ -5,6 +5,9 @@ import { useEffect, useState } from "react";
 import { mocksProducts } from "@/components/mockProduct";
 import { notFound } from "next/navigation";
 import Image from "next/image";
+import Swal from "sweetalert2";
+import { IProduct } from "@/Interfaces/IProduct";
+import { useCart } from "@/context/cartContext";
 
 interface ProductPageProps {
   params: Promise<{
@@ -14,6 +17,18 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const [product, setProduct] = useState<any>(null);
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (product: IProduct) => {
+    addToCart(product);
+    Swal.fire({
+      icon: "success",
+      title: "Producto agregado",
+      text: `${product.name} ha sido agregado al carrito.`,
+      confirmButtonText: "¡Genial!",
+      timer: 2000, // Desaparece después de 2 segundos
+    });
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -64,7 +79,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <button
-            type="submit"
+             onClick={() => handleAddToCart(product)}
             className="mt-6 w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white py-3 px-6 rounded-lg text-lg transition"
           >
             Comprar

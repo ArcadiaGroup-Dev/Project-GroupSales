@@ -3,8 +3,11 @@ import { FaUser, FaShoppingCart } from "react-icons/fa";
 import { FaMessage } from "react-icons/fa6";
 import Link from "next/link";
 import Image from "next/image";
+import { useContext, useState } from "react";
+import { UserContext } from "@/context/userContext";
 
 export default function TopNavbar() {
+  const { isActive } = useContext(UserContext);
   return (
     <nav className="fixed top-0 left-0 w-full bg-teal-800 p-4 text-white z-50 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
@@ -21,11 +24,11 @@ export default function TopNavbar() {
         </Link>
 
         <div className="flex items-center space-x-6">
-          <Link href={"/login"}>
+        <Link href={isActive ? "/myAccount" : "/login"}>
             <FaUser className="text-xl cursor-pointer hover:text-tertiary transition-colors duration-300" />
           </Link>
 
-          <Link href={"/Cart"} className="relative">
+         <Link href={isActive ? "/Cart" : "/login"} className="relative">
             <FaShoppingCart className="text-xl cursor-pointer hover:text-tertiary transition-colors duration-300" />
           </Link>
           <Link href={"/contacto"}>
