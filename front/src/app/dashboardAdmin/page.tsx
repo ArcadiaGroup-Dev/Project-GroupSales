@@ -1,7 +1,12 @@
+import AdminUsers from '@/components/Admin/AdminUsers'
+import PrivateRouteAdmin from '@/components/PrivateRoutAdmin'
 import React from 'react'
 
 export default function page() {
   return (
-    <div>Aqui habra funciones de administrador</div>
+
+    <PrivateRouteAdmin>
+    <AdminUsers/>
+      </PrivateRouteAdmin>
   )
 }

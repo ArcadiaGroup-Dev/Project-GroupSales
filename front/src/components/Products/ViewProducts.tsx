@@ -7,6 +7,7 @@ import DeleteProduct from "./DeleteProduct"; // Importamos el componente DeleteP
 import Link from "next/link";
 import Image from "next/image";
 
+
 interface IProductPropsProps {
   id: string;
   name: string;
@@ -21,9 +22,9 @@ interface IProductPropsProps {
 
 export default function ViewProducts() {
   const [products, setProducts] = useState<IProductPropsProps[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<IProductPropsProps | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [productToDelete, setProductToDelete] = useState<string | null>(null); // Estado para manejar el producto a eliminar
+  const [editingProductId, setEditingProductId] = useState<string | null>(null);
+  const [editForm, setEditForm] = useState<IProductPropsProps | null>(null);
+  const [productToDelete, setProductToDelete] = useState<string | null>(null);
 
   // Simular productos desde un mock
   useEffect(() => {
@@ -122,19 +123,35 @@ export default function ViewProducts() {
     setProducts(mockProducts);
   }, []);
 
-  // Función para manejar la edición de un producto
-  const handleEdit = (product: IProductPropsProps) => {
-    setSelectedProduct(product);
-    setIsEditing(true);
+  const handleEdit = (productId: string) => {
+    setEditingProductId(productId);
   };
 
-  // Función para manejar la guardado después de la edición
-  const handleSave = (updatedProduct: IProductPropsProps) => {
-    setProducts((prev) =>
-      prev.map((prod) => (prod.id === updatedProduct.id ? updatedProduct : prod))
-    );
-    setIsEditing(false);
-    setSelectedProduct(null);
+ 
+  // Manejar cambios en los inputs del formulario de edición
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (editForm) {
+      setEditForm({ ...editForm, [e.target.name]: e.target.value });
+    }
+  };
+
+  // Guardar cambios al producto editado
+  const handleSave = () => {
+    if (editForm) {
+      setProducts((prev) =>
+        prev.map((prod) =>
+          prod.id === editForm.id ? { ...editForm } : prod
+        )
+      );
+      setEditingProductId(null);
+      setEditForm(null);
+    }
+  };
+
+  // Cancelar edición
+  const handleCancel = () => {
+    setEditingProductId(null);
+    setEditForm(null);
   };
 
   // Función para manejar la apertura del modal de eliminación
@@ -146,6 +163,7 @@ export default function ViewProducts() {
   const handleCloseDeleteProduct = () => {
     setProductToDelete(null); // Cerrar el modal
   };
+
 
   return (
     <div className="text-center">
@@ -174,59 +192,103 @@ export default function ViewProducts() {
                 priority
               />
 
-              <div className="relative bg-white p-6">
-                <p className="text-gray-700">
-                  ${product.price}
-                  <span className="p-4 text-tertiary">{product.seller}</span>
-                </p>
+              <div className="relative p-6">
+                {editingProductId === product.id ? (
+                  // Modo edición: Mostrar inputs en lugar del texto
+                  <>
+                    <input
+                      name="name"
+                      value={editForm?.name || ""}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-2 py-1 mb-2"
+                      placeholder="Nombre del producto"
+                    />
+                    <textarea
+                      name="description"
+                      value={editForm?.description || ""}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-2 py-1 mb-2"
+                      placeholder="Descripción"
+                    />
+                    <input
+                      name="price"
+                      type="number"
+                      value={editForm?.price || ""}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-2 py-1 mb-2"
+                      placeholder="Precio"
+                    />
+                    <input
+                      name="stock"
+                      type="number"
+                      value={editForm?.stock || ""}
+                      onChange={handleInputChange}
+                      className="w-full border rounded px-2 py-1 mb-2"
+                      placeholder="Stock"
+                    />
 
-                <h3 className="mt-1.5 text-lg font-medium text-gray-900">
-                  {product.name}
-                </h3>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleSave}
+                        className="block w-full rounded bg-green-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-green-400"
+                      >
+                        Guardar
+                      </button>
+                      <button
+                        onClick={handleCancel}
+                        className="block w-full rounded bg-gray-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-gray-400"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  // Vista normal: Mostrar texto
+                  <>
+                    <p className="text-gray-700">
+                      ${product.price}
+                      <span className="p-4 text-tertiary">{product.seller}</span>
+                    </p>
+                    <p className="text-gray-600 font-bold">Stock: {product.stock}</p>
+                    <h3 className="mt-1.5 text-lg font-medium text-gray-900">
+                      {product.name}
+                    </h3>
 
-                {/* Mostrar los botones de edición y eliminación siempre */}
-                <div className="mt-4 flex gap-4">
-                  <button
-                    onClick={() => handleEdit(product)}
-                    className="block w-full rounded bg-gray-100 px-4 py-3 text-sm font-medium text-gray-900 transition hover:bg-orange-300 hover:text-primary"
-                  >
-                    Editar
-                  </button>
+                    <p className="text-gray-600">{product.description}</p>
+                   
 
-                  <button
+                    <div className="mt-4 flex gap-4">
+                      <button
+                        onClick={() => {
+                          setEditingProductId(product.id);
+                          setEditForm(product);
+                        }}
+                        className="block w-full rounded bg-secondary px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-600 hover:text-primary"
+                      >
+                        Editar
+                      </button>
+                      <button
                     onClick={() => handleDelete(product.id)}
                     className="block w-full rounded bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-400"
                   >
                     Eliminar
                   </button>
-                </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           ))}
         </div>
+       
       )}
-
-      {/* Mostrar el modal de eliminación si se ha seleccionado un producto */}
-      {productToDelete && (
-        <DeleteProduct
-          productId={productToDelete}
-          handleCloseDeleteProduct={handleCloseDeleteProduct}
-        />
-      )}
-
-      {/* Componente de edición si está en modo edición */}
-      {isEditing && selectedProduct && (
-        <EditProduct
-          product={selectedProduct}
-          onSave={(updatedProduct) =>
-            handleSave({
-              ...selectedProduct,
-              ...updatedProduct,
-            })
-          }
-          onCancel={() => setIsEditing(false)}
-        />
-      )}
+          {/* Mostrar el modal de eliminación si se ha seleccionado un producto */}
+          {productToDelete && (
+             <DeleteProduct
+               productId={productToDelete}
+               handleCloseDeleteProduct={handleCloseDeleteProduct}
+             />
+           )}
     </div>
   );
 }
