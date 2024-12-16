@@ -120,9 +120,7 @@ export default function ViewProducts() {
     setProducts(mockProducts);
   }, []);
 
-  const handleEdit = (productId: string) => {
-    setEditingProductId(productId);
-  };
+
 
  
   // Manejar cambios en los inputs del formulario de edición

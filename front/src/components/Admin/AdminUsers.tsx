@@ -1,5 +1,6 @@
 "use client"
 import { UserContext } from '@/context/userContext'
+import Image from 'next/image'
 import React, { useContext } from 'react'
 
 export default function AdminUsers() {
@@ -13,7 +14,9 @@ export default function AdminUsers() {
   </div>
 
   <div className="hidden sm:block sm:basis-56">
-    <img
+    <Image
+    width={50}
+    height={50}
       alt=""
       src="https://images.unsplash.com/photo-1609557927087-f9cf8e88de18?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80"
       className="aspect-square h-full w-full object-cover"
