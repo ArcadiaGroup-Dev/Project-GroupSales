@@ -104,9 +104,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   };
   
   
-
-  const [setLoading] = useState(true);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedAuthData = localStorage.getItem("user");
