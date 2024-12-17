@@ -11,9 +11,6 @@ const config: DataSourceOptions = {
   port: +process.env.DB_PORT || 5432,
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  ssl: {
-    rejectUnauthorized: false, 
-  },
   dropSchema: false,
   logging: true,
   synchronize: true,
