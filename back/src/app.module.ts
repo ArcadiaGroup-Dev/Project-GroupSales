@@ -7,9 +7,14 @@ import { CategoriesModule } from './modules/Categories/categories.module';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './config/auth/auth.module';
 import { OrderModule } from './modules/Orders/order.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailConfig } from './config/mail.config';
+import { PaymentsController } from './modules/Payments/payment.controller';
+import { EmailService } from './modules/Mailing/email.service';
 
 @Module({
   imports: [
+    MailerModule.forRoot(mailConfig),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeOrmConfig],
@@ -24,5 +29,7 @@ import { OrderModule } from './modules/Orders/order.module';
     AuthModule,
     OrderModule,
   ],
+  controllers: [PaymentsController],
+  providers: [EmailService],
 })
 export class AppModule {}
