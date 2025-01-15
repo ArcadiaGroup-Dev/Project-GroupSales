@@ -5,7 +5,7 @@ import { IProduct } from "@/Interfaces/IProduct";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import Link from "next/link";
-import Swal from "sweetalert2"; // Importar SweetAlert2
+import Swal from "sweetalert2";
 
 interface CardProductProps {
   product: IProduct;
@@ -14,7 +14,6 @@ interface CardProductProps {
 export default function CardProduct({ product }: CardProductProps) {
   const { addToCart } = useCart();
 
-  // Función para manejar el click de agregar al carrito
   const handleAddToCart = (product: IProduct) => {
     addToCart(product);
     Swal.fire({
@@ -22,7 +21,7 @@ export default function CardProduct({ product }: CardProductProps) {
       title: "Producto agregado",
       text: `${product.name} ha sido agregado al carrito.`,
       confirmButtonText: "¡Genial!",
-      timer: 2000, // Desaparece automáticamente después de 2 segundos
+      timer: 2000, // Desaparece después de 2 segundos
     });
   };
 
@@ -33,7 +32,7 @@ export default function CardProduct({ product }: CardProductProps) {
     >
       <Link href={`/product/${product.id}`} className="block">
         <Image
-          src={product.img}
+          src={product.imageUrl}
           alt={product.name}
           className="h-64 w-full object-cover transition duration-500 group-hover:scale-105 sm:h-72"
           width={300}
@@ -61,7 +60,7 @@ export default function CardProduct({ product }: CardProductProps) {
           </Link>
 
           <button
-            onClick={() => handleAddToCart(product)} // Usar la función para agregar al carrito y mostrar la alerta
+            onClick={() => handleAddToCart(product)}
             className="block w-full rounded bg-secondary px-4 py-3 text-sm font-medium text-white transition hover:bg-teal-700"
           >
             Comprar

@@ -1,10 +1,35 @@
 export interface IProduct {
-    id: string;
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock?: number;
+  imageUrl: string;
+  seller: string;
+  categoryId: string;
+  currency: string;
+  quantity: number;
+}
+
+export interface ICreateProduct {
     name: string;
-    img: string;
-    price: string;
-    seller: string;
-    category: string;
     description: string;
-    quantity?: number; 
+    price: number | null; 
+    stock: number | null;
+    imageUrl: string;
+    categoryId: string;
+    userId:string;
   }
+
+export interface ICategory {
+  name: string;
+  description?: string;
+}
+
+export interface ICartItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: number;
+  currency_id: string;
+}

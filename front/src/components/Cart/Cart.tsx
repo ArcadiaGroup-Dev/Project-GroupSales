@@ -1,13 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
+import Swal from "sweetalert2";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, getTotal } = useCart();
+  const [loading, setLoading] = useState(false);
 
-  console.log("Productos en el carrito:", cart); // Verificación en consola
+  // Función para manejar el proceso de pago
+  const handlePayment = async () => {
+    setLoading(true);
+
+    try {
+      const response = await fetch("/api/mp/create-payment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // Usar el estado `cart` directamente en lugar de `cartItems`
+        body: JSON.stringify({ items: cart }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al generar el pago");
+      }
+
+      const data = await response.json();
+      const { init_point } = data;
+      window.location.href = init_point;
+    } catch (error) {
+      console.error("Error al procesar el pago", error);
+
+      // Verificar si el error es un error de red o de solicitud
+      Swal.fire({
+        icon: "error",
+        title: "Error al procesar el pago",
+        text:
+          error instanceof Error
+            ? error.message
+            : "Hubo un error inesperado. Inténtalo nuevamente.",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen mt-24 bg-gray-100 p-8">
@@ -28,7 +64,7 @@ export default function CartPage() {
               >
                 <div className="flex items-center space-x-4">
                   <Image
-                    src={product.img}
+                    src={product.imageUrl}
                     alt={product.name}
                     width={100}
                     height={100}
@@ -64,6 +100,18 @@ export default function CartPage() {
               className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors duration-200"
             >
               Vaciar carrito
+            </button>
+          </div>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={handlePayment}
+              className={`${
+                loading ? "bg-gray-400" : "bg-green-600"
+              } text-white px-8 py-3 rounded-lg transition-colors duration-200 hover:bg-green-700`}
+              disabled={loading}
+            >
+              {loading ? "Procesando..." : "Pagar con MercadoPago"}
             </button>
           </div>
         </>

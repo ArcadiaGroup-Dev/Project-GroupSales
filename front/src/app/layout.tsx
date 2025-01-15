@@ -1,9 +1,10 @@
-import { CartProvider } from "@/context/cartContext"; // Asegúrate de que la ruta sea correcta
+import { CartProvider } from "@/context/cartContext"; 
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import Footer from "@/components/Footer/Footer";
 import Navbar from "@/components/Navbar/Navbar";
+import { UserProvider } from "@/context/userContext";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <UserProvider>
         <CartProvider>
           {" "}
           {/* Aquí envolvemos la aplicación con el CartProvider */}
@@ -38,6 +40,7 @@ export default function RootLayout({
           {children}
           <Footer />
         </CartProvider>
+        </UserProvider>
       </body>
     </html>
   );
