@@ -11,6 +11,8 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { mailConfig } from './config/mail.config';
 import { PaymentsController } from './modules/Payments/payment.controller';
 import { EmailService } from './modules/Mailing/email.service';
+/* import { MercadopagoModule } from './mercadopago/mercadopago.module';
+import { MercadopagoService } from './mercadopago/mercadopago.service'; */
 
 @Module({
   imports: [
@@ -28,8 +30,9 @@ import { EmailService } from './modules/Mailing/email.service';
     UsersModule,
     AuthModule,
     OrderModule,
+    /* MercadopagoModule, */
   ],
   controllers: [PaymentsController],
-  providers: [EmailService],
+  providers: [EmailService /* MercadopagoService */],
 })
 export class AppModule {}
