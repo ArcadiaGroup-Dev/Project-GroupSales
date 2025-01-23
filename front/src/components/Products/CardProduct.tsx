@@ -28,7 +28,7 @@ export default function CardProduct({ product }: CardProductProps) {
   return (
     <div
       key={product.id}
-      className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg transition-transform duration-300 hover:scale-105"
+      className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg transition-transform duration-300"
     >
       <Link href={`/product/${product.id}`} className="block">
         <Image

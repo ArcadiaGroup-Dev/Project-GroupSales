@@ -103,19 +103,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
   
-  
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedAuthData = localStorage.getItem("user");
-
+  
       if (storedAuthData) {
         try {
           const parsedSession = JSON.parse(storedAuthData);
-          const { token, role } = parsedSession;
-
+          const { token, role, ...userData } = parsedSession;
+  
+          setUser(userData); // Asegúrate de establecer el usuario
           setToken(token);
           setIsActive(Boolean(token));
-          setIsAdmin(role === "admin"); // Establece el rol correctamente
+          setIsAdmin(role === "admin");
         } catch (error) {
           console.error("Error al parsear authData:", error);
           setIsActive(false);
@@ -127,6 +127,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       }
     }
   }, []);
+  
   
 
   const logOut = () => {
