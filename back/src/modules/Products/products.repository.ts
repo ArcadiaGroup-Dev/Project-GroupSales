@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/productos.dto';
 import { UsersService } from '../users/users.service';
 import { UpdateProductDto } from './dto/productos.dto';
+import { Category } from '../Categories/entities/categories.entity';
 
 @Injectable()
 export class ProductsRepository {
@@ -15,24 +16,35 @@ export class ProductsRepository {
   ) {}
 
   async createProduct(createProductDto: CreateProductDto): Promise<Product> {
-    const { userId, ...productData } = createProductDto;
-
+    const { userId, categoryId, ...productData } = createProductDto;
+  
+   
     const user = await this.userService.findOneById(userId);
     if (!user) {
       throw new Error('Usuario no encontrado');
     }
-
+  
+  
+    const category = await this.productRepository.manager
+      .getRepository(Category)
+      .findOne({ where: { id: categoryId } });
+    if (!category) {
+      throw new Error('Categoría no encontrada');
+    }
+  
+  
     const product = this.productRepository.create({
       ...productData,
       user,
+      category, 
     });
-
+  
     return this.productRepository.save(product);
   }
 
   async findAllProducts(): Promise<Product[]> {
     try {
-      return await this.productRepository.find();
+      return await this.productRepository.find({ relations: ['user', 'category'] });
     } catch (error) {
       throw new Error(`Error al obtener todos los productos: ${error.message}`);
     }
