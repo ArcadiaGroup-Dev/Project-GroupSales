@@ -9,6 +9,7 @@ export interface IProduct {
   categoryId: string;
   currency: string;
   quantity: number;
+  userId:string;
 }
 
 export interface ICreateProduct {
@@ -22,6 +23,7 @@ export interface ICreateProduct {
   }
 
 export interface ICategory {
+  id?:string;
   name: string;
   description?: string;
 }

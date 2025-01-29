@@ -1,9 +1,9 @@
-"use client"; 
+"use client";
 
-import React, { useEffect, useState } from "react";
-import DeleteProduct from "./DeleteProduct"; 
+import React, { useContext, useEffect, useState } from "react";
+import DeleteProduct from "./DeleteProduct";
 import Image from "next/image";
-
+import { UserContext } from "@/context/userContext";
 
 interface IProductPropsProps {
   id: string;
@@ -23,106 +23,34 @@ export default function ViewProducts() {
   const [editForm, setEditForm] = useState<IProductPropsProps | null>(null);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
 
-  // Simular productos desde un mock
+  const { user } = useContext(UserContext)
+
   useEffect(() => {
-    const mockProducts = [
-      {
-        id: "1",
-        name: "Camiseta de Algodón",
-        imageUrl:
-          "https://http2.mlstatic.com/D_NQ_NP_860706-MLA42620357827_072020-O.webp",
-        price: 2000,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "SweetClothes",
-        categoryId: "Ropa",
-        currency: ".",
-        description:
-          "Camiseta de algodón suave y cómoda, ideal para el día a día. Disponible en varios colores y tamaños. Perfecta para combinar con jeans o shorts durante el verano. Material de alta calidad que garantiza durabilidad y confort.",
-      },
-      {
-        id: "2",
-        name: "Pantalones Deportivos",
-        imageUrl:
-          "https://http2.mlstatic.com/D_NQ_NP_937770-MLA72170096371_102023-O.webp",
-        price: 2500,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "MegaSport",
-        categoryId: "Ropa",
-        currency: ".",
-        description:
-          "Pantalones deportivos de tela elástica y transpirable, diseñados para la comodidad en actividades físicas o para un look casual. Cintura ajustable y fit moderno, disponibles en varios colores. Perfectos para entrenamientos o salidas informales.",
-      },
-      {
-        id: "3",
-        name: "Zapatillas Running",
-        imageUrl:
-          "https://http2.mlstatic.com/D_NQ_NP_892877-MLA76111224166_052024-O.webp",
-        price: 3500,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "Shoozing",
-        categoryId: "Calzado",
-        currency: ".",
-        description:
-          "Zapatillas deportivas con tecnología de amortiguación para mayor confort durante carreras y entrenamientos. Suela antideslizante para mayor seguridad. Perfectas para corredores y personas que buscan rendimiento y estilo.",
-      },
-      {
-        id: "4",
-        name: "Smartwatch 2024",
-        imageUrl:
-          "https://http2.mlstatic.com/D_NQ_NP_913865-MLU78327399902_082024-O.webp",
-        price: 4500,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "TecnoTodo",
-        categoryId: "Tecnología",
-        currency: ".",
-        description:
-          "Smartwatch de última generación con monitoreo de actividad física, seguimiento del sueño y notificaciones inteligentes. Con pantalla táctil HD, batería de larga duración y resistencia al agua. Compatible con iOS y Android.",
-      },
-      {
-        id: "5",
-        name: "Auriculares Bluetooth",
-        imageUrl:
-          "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
-        price: 3200,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "MegaVenta",
-        categoryId: "Tecnología",
-        currency: ".",
-        description:
-          "Auriculares Bluetooth de calidad premium con cancelación de ruido activa. Sonido de alta fidelidad y micrófono integrado para llamadas claras. Conectividad rápida y compatible con dispositivos móviles, tablets y ordenadores.",
-      },
-      {
-        id: "6",
-        name: "Mochila de Viaje",
-        imageUrl:
-          "https://res.cloudinary.com/dbtfna8ev/image/upload/v1731727672/mathilde-langevin-baKm-5z7ikk-unsplash_jxei5j.jpg",
-        price: 1800,
-        quantity: 1,
-        stock: 20,
-        userId: "asdsd",
-        seller: "MegaVenta",
-        categoryId: "Accesorios",
-        currency: ".",
-        description:
-          "Mochila ergonómica de gran capacidad, ideal para viajes largos o aventuras al aire libre. Con múltiples compartimentos y materiales resistentes al agua, garantiza un viaje cómodo y seguro. Diseño moderno y práctico.",
-      },
-    ];
-    setProducts(mockProducts);
-  }, []);
+    if (!user?.id) {
+      console.log("No hay userId disponible.");
+      return; // No hacer la solicitud si no hay un userId
+    }
+  
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(`/api/products?userId=${user.id}`);
+        const data = await response.json();
+        console.log("Productos obtenidos:", data);
+  
+        if (!response.ok) {
+          throw new Error("No se pudieron cargar los productos.");
+        }
+  
+        setProducts(data);
+      } catch (error) {
+        console.error("Error al obtener los productos:", error);
+      }
+    };
+  
+    fetchProducts();
+  }, [user?.id]); // Dependencia de user.id para asegurar que se ejecute después de tener el user
+  
 
-
-
- 
   // Manejar cambios en los inputs del formulario de edición
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (editForm) {
@@ -159,7 +87,6 @@ export default function ViewProducts() {
     setProductToDelete(null); // Cerrar el modal
   };
 
-
   return (
     <div className="text-center">
       <h1 className="text-lg font-semibold text-white bg-secondary mt-28 mb-4 p-2 rounded-lg shadow-lg shadow-gray-400 inline-block px-2">
@@ -169,6 +96,7 @@ export default function ViewProducts() {
       <h2 className="text-lg text-gray-700">
         Aquí puedes ver tus productos/servicios cargados, modificarlos y editarlos. Se actualizarán directamente en la página.
       </h2>
+
       {products.length === 0 ? (
         <p>No tienes productos disponibles.</p>
       ) : (
@@ -189,7 +117,6 @@ export default function ViewProducts() {
 
               <div className="relative p-6">
                 {editingProductId === product.id ? (
-                  // Modo edición: Mostrar inputs en lugar del texto
                   <>
                     <input
                       name="name"
@@ -238,7 +165,6 @@ export default function ViewProducts() {
                     </div>
                   </>
                 ) : (
-                  // Vista normal: Mostrar texto
                   <>
                     <p className="text-gray-700">
                       ${product.price}
@@ -250,7 +176,6 @@ export default function ViewProducts() {
                     </h3>
 
                     <p className="text-gray-600">{product.description}</p>
-                   
 
                     <div className="mt-4 flex gap-4">
                       <button
@@ -263,11 +188,11 @@ export default function ViewProducts() {
                         Editar
                       </button>
                       <button
-                    onClick={() => handleDelete(product.id)}
-                    className="block w-full rounded bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-400"
-                  >
-                    Eliminar
-                  </button>
+                        onClick={() => handleDelete(product.id)}
+                        className="block w-full rounded bg-red-500 px-4 py-3 text-sm font-medium text-white transition hover:bg-red-400"
+                      >
+                        Eliminar
+                      </button>
                     </div>
                   </>
                 )}
@@ -275,15 +200,15 @@ export default function ViewProducts() {
             </div>
           ))}
         </div>
-       
       )}
-          {/* Mostrar el modal de eliminación si se ha seleccionado un producto */}
-          {productToDelete && (
-             <DeleteProduct
-               productId={productToDelete}
-               handleCloseDeleteProduct={handleCloseDeleteProduct}
-             />
-           )}
+
+      {/* Mostrar el modal de eliminación si se ha seleccionado un producto */}
+      {productToDelete && (
+        <DeleteProduct
+          productId={productToDelete}
+          handleCloseDeleteProduct={handleCloseDeleteProduct}
+        />
+      )}
     </div>
   );
 }

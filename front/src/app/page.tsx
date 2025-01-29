@@ -1,15 +1,15 @@
-"use client";
-
+"use client"; 
 import TopNavbar from "../components/Navbar/Navbar"; // Importa TopNavbar
 import CategoryNavbar from "../components/Navbar/NavbarInferior"; // Importa CategoryNavbar
-import { mocksProducts } from "@/components/mockProduct";
 import CardProduct from "@/components/Products/CardProduct";
 import Image from "next/image";
 import WhatsApp from "@/components/WhatsApp/WhatsApp";
 import { useState, useEffect } from "react";
+import { fetchGetProducts } from "@/components/Fetchs/FetchProducts";
 
 export default function ProductList() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [products, setProducts] = useState<any[]>([]); // Estado para almacenar los productos
 
   const slides = [
     {
@@ -33,6 +33,20 @@ export default function ProductList() {
     }, 3000); // Aumento el tiempo de la transición
     return () => clearInterval(interval);
   }, [slides.length]);
+
+  // Llamar a fetchGetProducts y actualizar el estado
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const fetchedProducts = await fetchGetProducts();
+        setProducts(fetchedProducts); // Guardamos los productos en el estado
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+
+    loadProducts();
+  }, []); // Este useEffect solo se ejecuta una vez, al montar el componente
 
   return (
     <div className="mt-12 md:mt-24 lg:mt-24 bg-primary">
@@ -65,9 +79,13 @@ export default function ProductList() {
       </div>
       <CategoryNavbar /> {/* Barra de categorías */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto py-8 px-4">
-        {mocksProducts.map((product, index) => (
-          <CardProduct key={index} product={product} />
-        ))}
+        {products.length > 0 ? (
+          products.map((product, index) => (
+            <CardProduct key={index} product={product} />
+          ))
+        ) : (
+          <p>Cargando productos...</p> // Mensaje mientras se cargan los productos
+        )}
       </div>
       <div className="fixed bottom-6 right-6">
         <WhatsApp /> {/* Botón de WhatsApp */}

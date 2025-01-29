@@ -3,14 +3,30 @@ import React, { useState } from "react";
 interface EditProfileProps {
   onCancel: () => void;
   onSave: (data: { address: string; phone: string }) => void;
+  initialAddress: string; 
+  initialPhone: string;   
+  initialCity:string
 }
 
-const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
-  const [address, setAddress] = useState<string>("");
-  const [phone, setPhone] = useState<string>("");
+export const EditProfile: React.FC<EditProfileProps> = ({ 
+  onCancel, 
+  onSave, 
+  initialAddress, 
+  initialPhone,
+  initialCity 
+}) => {
+  const [address, setAddress] = useState<string>(initialAddress);
+  const [phone, setPhone] = useState<string>(initialPhone);
+  const [city, setCity] = useState<string>(initialCity);
 
   const handleSave = () => {
-    onSave({ address, phone }); // Llama a onSave para guardar los datos
+    
+    const updatedData = {
+      address: address || initialAddress, 
+      phone: phone || initialPhone,  
+      city:city || initialCity,
+    };
+    onSave(updatedData);
   };
 
   return (
@@ -25,6 +41,15 @@ const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
         />
       </div>
       <div>
+        <label className="font-medium text-gray-600">Ciudad:</label>
+        <input
+          type="text"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+      <div>
         <label className="font-medium text-gray-600">Teléfono:</label>
         <input
           type="number"
@@ -33,16 +58,16 @@ const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
         />
       </div>
-      <div className="mt-4 flex gap-4">
+      <div className="flex space-x-4">
         <button
           onClick={handleSave}
-          className="bg-tertiary text-white px-4 py-2 rounded-md hover:bg-orange-600"
+          className="bg-teal-700 text-white py-2 px-4 rounded-md hover:bg-teal-600 transition"
         >
           Guardar
         </button>
         <button
           onClick={onCancel}
-          className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-400"
+          className="bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition"
         >
           Cancelar
         </button>
@@ -50,5 +75,3 @@ const EditProfile: React.FC<EditProfileProps> = ({ onCancel, onSave }) => {
     </div>
   );
 };
-
-export default EditProfile;

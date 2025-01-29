@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import Swal from "sweetalert2";
+import { createPayment } from "../Fetchs/FetchMercadoPago";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, getTotal } = useCart();
@@ -12,38 +13,39 @@ export default function CartPage() {
   // Función para manejar el proceso de pago
   const handlePayment = async () => {
     setLoading(true);
-
+  
     try {
-      const response = await fetch("/api/mp/create-payment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        // Usar el estado `cart` directamente en lugar de `cartItems`
-        body: JSON.stringify({ items: cart }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al generar el pago");
-      }
-
-      const data = await response.json();
+      const data = await createPayment(cart);
       const { init_point } = data;
+  
+      if (!init_point) {
+        throw new Error("No se pudo generar el enlace de pago");
+      }
+  
       window.location.href = init_point;
-    } catch (error) {
-      console.error("Error al procesar el pago", error);
-
-      // Verificar si el error es un error de red o de solicitud
-      Swal.fire({
-        icon: "error",
-        title: "Error al procesar el pago",
-        text:
-          error instanceof Error
-            ? error.message
-            : "Hubo un error inesperado. Inténtalo nuevamente.",
-      });
+    } catch (error: unknown) {
+      console.error("Error al procesar el pago:", error);
+  
+      // Verificar si el error es una instancia de Error
+      if (error instanceof Error) {
+        Swal.fire({
+          icon: "error",
+          title: "Error al procesar el pago",
+          text: error.message || "Hubo un error inesperado. Inténtalo nuevamente.",
+        });
+      } else {
+        // Si el error no es un Error conocido, mostrar un mensaje genérico
+        Swal.fire({
+          icon: "error",
+          title: "Error al procesar el pago",
+          text: "Hubo un error inesperado. Inténtalo nuevamente.",
+        });
+      }
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   return (
     <div className="min-h-screen mt-24 bg-gray-100 p-8">

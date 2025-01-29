@@ -1,11 +1,12 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IProduct } from "@/Interfaces/IProduct";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
+import { fetchUserId } from "../Fetchs/FetchsUser";
 
 interface CardProductProps {
   product: IProduct;
@@ -13,7 +14,7 @@ interface CardProductProps {
 
 export default function CardProduct({ product }: CardProductProps) {
   const { addToCart } = useCart();
-
+  const [sellerName, setSellerName] = useState<string>("");
   const handleAddToCart = (product: IProduct) => {
     addToCart(product);
     Swal.fire({
@@ -24,6 +25,23 @@ export default function CardProduct({ product }: CardProductProps) {
       timer: 2000, // Desaparece después de 2 segundos
     });
   };
+
+  useEffect(() => {
+    const getUserName = async () => {
+      
+      if (product.userId) {
+        try {
+          const user = await fetchUserId(product.userId); 
+         
+          setSellerName(user.name);
+        } catch (error) {
+          console.error("Error al obtener el nombre del usuario:", error);
+        }
+      }
+    };
+
+    getUserName();
+  }, [product.userId]);
 
   return (
     <div
@@ -44,7 +62,7 @@ export default function CardProduct({ product }: CardProductProps) {
       <div className="relative bg-white p-6">
         <p className="text-gray-700">
           ${product.price}
-          <span className="p-4 text-tertiary">{product.seller}</span>
+          <span className="p-4 text-tertiary">{sellerName || "Cargando..."}</span>
         </p>
 
         <h3 className="mt-1.5 text-lg font-medium text-gray-900">

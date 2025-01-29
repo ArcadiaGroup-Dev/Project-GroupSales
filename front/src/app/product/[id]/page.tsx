@@ -1,22 +1,20 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-"use client";
-
+"use client"
 import { useEffect, useState } from "react";
-import { mocksProducts } from "@/components/mockProduct";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { IProduct } from "@/Interfaces/IProduct";
 import { useCart } from "@/context/cartContext";
+import { fetchProductById } from "@/components/Fetchs/FetchProducts";
 
 interface ProductPageProps {
-  params: Promise<{
+  params: {
     id: string;
-  }>;
+  };
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
-  const [product, setProduct] = useState<any>(null);
+  const [product, setProduct] = useState<IProduct | null>(null);
   const { addToCart } = useCart();
 
   const handleAddToCart = (product: IProduct) => {
@@ -32,21 +30,25 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const resolvedParams = await params; // Resuelve el Promise
-      const productData = mocksProducts.find((p) => p.id === resolvedParams.id);
+      try {
+        const productData = await fetchProductById(params.id); // Usamos tu función fetchProductById
 
-      if (!productData) {
-        notFound();
-        return;
+        if (!productData) {
+          notFound();
+          return;
+        }
+
+        setProduct(productData);
+      } catch (error) {
+        console.error("Error al obtener el producto:", error);
+        notFound(); // Si ocurre un error, muestra la página 404
       }
-
-      setProduct(productData);
     };
 
     fetchProduct();
-  }, [params]); // Solo se ejecuta cuando params cambia
+  }, [params.id]); // Solo se ejecuta cuando `params.id` cambia
 
-  if (!product) return <div>Loading...</div>; // O cualquier estado de carga que desees mostrar
+  if (!product) return <div className="mt-30">Loading...</div>;
 
   return (
     <div className="flex justify-center items-center px-4 mt-16">
@@ -79,7 +81,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </div>
 
           <button
-             onClick={() => handleAddToCart(product)}
+            onClick={() => handleAddToCart(product)}
             className="mt-6 w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white py-3 px-6 rounded-lg text-lg transition"
           >
             Comprar

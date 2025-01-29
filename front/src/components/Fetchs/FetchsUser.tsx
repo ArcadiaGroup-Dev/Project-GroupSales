@@ -48,3 +48,27 @@ export const fetchRegisterUser = async (user: IUserRegister) => {
   const data = await response.json();
   return data;
 };
+
+export const fetchUserId = async (userId: string) => {
+
+  try {
+    const response = await fetch(`${apiUrl}/users/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error desconocido");
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error al obtener el usuario:", error);
+    throw error;
+  }
+};
+

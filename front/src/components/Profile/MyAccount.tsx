@@ -1,11 +1,13 @@
 "use client"
 import React, { useState, useEffect } from "react";
 import DeleteAccount from "./DeleteAccount";
-import EditProfile from "./EditProfile";
+import { EditProfile } from "./EditProfile";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
 import { IUserResponse } from "@/Interfaces/IUser";
 import LogOut from "./LogOut";
 import Link from "next/link";
+import HistorySection from "./HistorySection";
+import PublishSection from "./PublishSection";
 
 export default function MyAccount() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -40,9 +42,17 @@ export default function MyAccount() {
   const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
   const handleSaveEdit = (data: { address: string; phone: string }) => {
-    setUserData((prev) => (prev ? { ...prev, user: { ...prev.user, ...data } } : null));
+    setUserData((prev) => {
+      if (prev) {
+        const updatedUserData = { ...prev, user: { ...prev.user, ...data } };
+        localStorage.setItem("user", JSON.stringify(updatedUserData)); 
+        return updatedUserData;
+      }
+      return null;
+    });
     setIsEditing(false);
   };
+  
 
   const sections = [
     {
@@ -117,6 +127,9 @@ export default function MyAccount() {
                 </div>
               ) : (
                 <EditProfile
+                initialAddress={userData.user.address} 
+                 initialPhone={userData.user.phone}  
+                 initialCity={userData.user.city}
                   onCancel={handleCancelEdit}
                   onSave={handleSaveEdit}
                 />
@@ -128,27 +141,11 @@ export default function MyAccount() {
     },
     {
       title: "Historial",
-      content: (
-        <div className="space-y-4">
-          <h2 className="text-lg font-semibold text-gray-700">Tus Órdenes</h2>
-          <p>Aquí aparecerán las órdenes realizadas por el usuario.</p>
-        </div>
-      ),
+      content: <HistorySection />, 
     },
     {
       title: "Publicar",
-      content: (
-        <div className="space-y-4">
-          
-          <Link href={"/myAccount/create/product"}>
-          <button className="bg-secondary rounded-lg text-white w-auto p-4 shadow-md shadow-gray-400  hover:bg-white hover:border-secondary hover:border-2 hover:text-secondary">
-          Crear Productos / Servicios</button></Link>
-          <h2 className="text-lg text-gray-700 pb-8">Selecciona para crear productos o servicios.</h2>
-          
-          <Link href={"/myAccount/view"}><button className="bg-secondary rounded-lg text-white w-auto p-4 shadow-md shadow-gray-400  hover:bg-white hover:border-secondary hover:border-2 hover:text-secondary">Ver mis productos/servicios publicados</button></Link>
-          <h2 className="text-lg text-gray-700">Selecciona para ver, modificar o eliminar productos o servicios.</h2>
-        </div>
-      ),
+      content: <PublishSection />, 
     },
   ];
 

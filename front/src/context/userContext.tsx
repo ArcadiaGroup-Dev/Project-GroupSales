@@ -37,36 +37,49 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   const signIn = async (credentials: ILoginUser): Promise<boolean> => {
     try {
       const data: ILoginResponse = await fetchLoginUser(credentials);
-
+  
       if (data && data.access_token) {
         console.log("Token set:", data.access_token);
-
+  
+        // Verifica si el usuario está activo antes de guardar la sesión
+        if (data.user.isActive === false) {
+          console.error("La cuenta está desactivada.");
+          localStorage.removeItem("user");  // Eliminar cualquier dato de usuario en localStorage
+          setIsActive(false);
+          setUser(null);  // Limpiar el estado de usuario
+          setToken(null);  // Limpiar el token
+          setIsAdmin(false);  // Limpiar el estado de admin
+  
+          return false;
+        }
+  
+        // Si está activo, guardar los datos del usuario y el token
         if (typeof window !== "undefined") {
           const user = {
             token: data.access_token,
             role: data.user.role,
-            user:data.user,
-            isActive: data.user.isActive 
+            user: data.user,
+            isActive: data.user.isActive,  // Asegurarse de que isActive esté correcto
           };
           localStorage.setItem("user", JSON.stringify(user));
-
+  
           setUser(data.user);
           setToken(data.access_token);
-          setIsActive(data.user.isActive);
+          setIsActive(data.user.isActive);  // Usar el estado real de isActive
           setIsAdmin(data.user.role === "admin");
-
+  
           console.log("Response data from login:", data);
           return true;
         }
       } else {
         console.error(
-          "Login failed. User data may be incomplete or user may not exist."
+          "Fallo el ingreso.Usuario puede estar incompleto o inexistente"
         );
       }
     } catch (error) {
-      console.error("Error during sign in:", error);
+      console.error("Error al ingresar:", error);
     }
-
+  
     return false;
   };
   
@@ -95,10 +108,10 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
         return true;
       }
   
-      console.error("Registration failed:", data);
+      console.error("Registro con error:", data);
       return false;
     } catch (error) {
-      console.error("Error durante sign up:", error instanceof Error ? error.message : "Unknown error");
+      console.error("Error al registrar:", error instanceof Error ? error.message : "Error");
       throw error;  // Re-throw para que el catch de onSubmit lo maneje
     }
   };
@@ -114,7 +127,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
   
           setUser(userData); // Asegúrate de establecer el usuario
           setToken(token);
-          setIsActive(Boolean(token));
+          setIsActive(true);
           setIsAdmin(role === "admin");
         } catch (error) {
           console.error("Error al parsear authData:", error);

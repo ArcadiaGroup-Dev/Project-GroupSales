@@ -1,26 +1,33 @@
-"use client"
+"use client";
+import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useContext,useEffect } from "react";
 import { UserContext } from "@/context/userContext";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { isActive } = useContext(UserContext);
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+  const { isActive, user } = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (!isActive) {
-      router.push("/"); // Redirige al usuario si no está logueado
+    if (user !== null) {
+      setLoading(false); // Espera que la información del usuario se cargue antes de verificar
     }
-  }, [isActive, router]);
+  }, [user]);
 
-  // Si el usuario no está logueado, no renderiza el contenido hasta que se realice la redirección
+  if (loading) {
+    return <p className="mt-32">Cargando...</p>;
+  }
+
   if (!isActive) {
+    router.replace("/"); // Redirige si no está activo
     return null;
   }
 
   return <>{children}</>;
-}
+};
+
+export default ProtectedRoute;

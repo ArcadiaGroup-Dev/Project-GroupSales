@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
+import { UserContext } from "@/context/userContext";
 
 interface DeleteAccountProps {
   userId: string;
@@ -11,30 +12,37 @@ const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DeleteAccount({ userId, handleCloseDeleteAccount }: DeleteAccountProps) {
   const [isProcessing, setIsProcessing] = useState(false);
+  const { logOut } = useContext(UserContext);
  const router = useRouter();
  const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
 
-  const handleConfirmDelete = async () => {
-    setIsProcessing(true);
-    try {
-      const response = await fetch(`${apiUrl}/users/${userId}`, { method: "DELETE" });
+ const handleConfirmDelete = async () => {
+  setIsProcessing(true);
+  try {
+    const response = await fetch(`${apiUrl}/users/${userId}`, { method: "DELETE" });
 
-      if (response.ok) {
-        setNotificationMessage("Cuenta eliminada con éxito");
-        setTimeout(() => {
-          router.push("/"); 
-        }, 2000);
-      } else {
-        const errorText = await response.text();
-        setNotificationMessage(`Error al eliminar la cuenta: ${errorText}`);
-      }
-    } catch (error) {
-      setNotificationMessage("Error al procesar la solicitud de eliminación");
-      console.error("Error en la solicitud de eliminación:", error);
-    } finally {
-      setIsProcessing(false);
+    if (response.ok) {
+      setNotificationMessage("Cuenta eliminada con éxito");
+
+      // Eliminar el token de sesión
+      localStorage.removeItem('token');  // O sessionStorage.removeItem('token');
+      
+      // Redirigir al login
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+    } else {
+      const errorText = await response.text();
+      setNotificationMessage(`Error al eliminar la cuenta: ${errorText}`);
     }
-  };
+  } catch (error) {
+    setNotificationMessage("Error al procesar la solicitud de eliminación");
+    console.error("Error en la solicitud de eliminación:", error);
+  } finally {
+    setIsProcessing(false);
+  }
+};
+
   return (
     <>
     {notificationMessage && <NotifFormsUsers message={notificationMessage} />}

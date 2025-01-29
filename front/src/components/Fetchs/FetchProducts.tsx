@@ -1,15 +1,13 @@
-import { ICreateProduct, IProduct } from "@/Interfaces/IProduct";
+import { ICategory, ICreateProduct, IProduct } from "@/Interfaces/IProduct";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 
 //Ver todos los productos
-export const fetchGetProducts = async (token:string) => {
+export const fetchGetProducts = async () => {
     const response = await fetch(`${apiUrl}/products`, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
+   
     });
     
     if (!response.ok) {
@@ -83,4 +81,22 @@ export const fetchToggleProductStatus = async (id: string) => {
 
   const data = await response.json(); 
   return data;
+};
+
+
+//Ver categorías
+
+export const fetchCategories = async (): Promise<ICategory[]> => {
+  try {
+    const response = await fetch(`${apiUrl}/categories`);
+     
+    if (!response.ok) {
+      throw new Error("Error al obtener las categorías");
+    }
+    const categories: ICategory[] = await response.json(); 
+    return categories;
+  } catch (error) {
+    console.error(error);
+    return []; 
+  }
 };
