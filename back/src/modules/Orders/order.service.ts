@@ -25,65 +25,72 @@ export class OrderService {
     private readonly orderDetailRepository: Repository<OrderDetails>,
   ) {}
 
+  // async create(
+  //   userId: string,
+  //   products: Array<{ id: string; quantity: number }>,
+  // ) {
+  //   let total = 0;
+
+  //   const user = await this.usersRepository.findOne({ where: { id: userId } });
+  //   if (!user)
+  //     throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
+
+  //   const order = new Orders();
+  //   order.date = new Date();
+  //   order.user = user;
+  //   const newOrder = await this.ordersRepository.save(order);
+
+  //   const productsArray = await Promise.all(
+  //     products.map(async (element) => {
+  //       const product = await this.productsRepository.findOne({
+  //         where: { id: element.id },
+  //       });
+  //       if (!product)
+  //         throw new NotFoundException(
+  //           `Producto con id ${element.id} no encontrado`,
+  //         );
+
+  //       if (product.stock < element.quantity) {
+  //         throw new BadRequestException(
+  //           `No hay suficiente stock para el producto ${product.name}`,
+  //         );
+  //       }
+
+  //       total += product.price * element.quantity;
+  //       await this.productsRepository.update(
+  //         { id: element.id },
+  //         { stock: product.stock - element.quantity },
+  //       );
+
+  //       return { product, quantity: element.quantity };
+  //     }),
+  //   );
+
+  //   const orderDetail = new OrderDetails();
+  //   orderDetail.price = Number(total.toFixed(2));
+  //   orderDetail.products = productsArray.map((item) => item.product);
+  //   orderDetail.quantity = productsArray.reduce(
+  //     (acc, item) => acc + item.quantity,
+  //     0,
+  //   );
+  //   orderDetail.order = newOrder;
+
+  //   await this.orderDetailRepository.save(orderDetail);
+
+  //   return {
+  //     order: await this.orderDetailRepository.find({
+  //       where: { id: orderDetail.id },
+  //       relations: { order: true, products: true },
+  //     }),
+  //     finalTotal: total,
+  //   };
+  // }
+
   async create(
     userId: string,
     products: Array<{ id: string; quantity: number }>,
   ) {
-    let total = 0;
-
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
-    if (!user)
-      throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
-
-    const order = new Orders();
-    order.date = new Date();
-    order.user = user;
-    const newOrder = await this.ordersRepository.save(order);
-
-    const productsArray = await Promise.all(
-      products.map(async (element) => {
-        const product = await this.productsRepository.findOne({
-          where: { id: element.id },
-        });
-        if (!product)
-          throw new NotFoundException(
-            `Producto con id ${element.id} no encontrado`,
-          );
-
-        if (product.stock < element.quantity) {
-          throw new BadRequestException(
-            `No hay suficiente stock para el producto ${product.name}`,
-          );
-        }
-
-        total += product.price * element.quantity;
-        await this.productsRepository.update(
-          { id: element.id },
-          { stock: product.stock - element.quantity },
-        );
-
-        return { product, quantity: element.quantity };
-      }),
-    );
-
-    const orderDetail = new OrderDetails();
-    orderDetail.price = Number(total.toFixed(2));
-    orderDetail.products = productsArray.map((item) => item.product);
-    orderDetail.quantity = productsArray.reduce(
-      (acc, item) => acc + item.quantity,
-      0,
-    );
-    orderDetail.order = newOrder;
-
-    await this.orderDetailRepository.save(orderDetail);
-
-    return {
-      order: await this.orderDetailRepository.find({
-        where: { id: orderDetail.id },
-        relations: { order: true, products: true },
-      }),
-      finalTotal: total,
-    };
+    return await this.orderRepository.addOrder(userId, products);
   }
 
   async findAll() {

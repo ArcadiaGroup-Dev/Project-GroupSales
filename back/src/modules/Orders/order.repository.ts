@@ -39,7 +39,6 @@ export class OrdersRepository {
         const product = await this.productsRepository.findOneBy({
           id: element.id,
         });
-
         if (!product)
           throw new NotFoundException(
             `Producto con id ${element.id} no encontrado`,
@@ -78,6 +77,7 @@ export class OrdersRepository {
       }),
     };
   }
+
 
   async getOrder(id: string) {
     const order = await this.ordersRepository.findOne({

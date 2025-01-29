@@ -2,6 +2,8 @@ import { ApiProperty, PickType } from '@nestjs/swagger';
 import { ArrayMinSize, IsArray, IsNotEmpty, IsUUID } from 'class-validator';
 
 export class CreateOrderDto {
+
+  @ApiProperty({})
   @IsNotEmpty()
   @IsUUID()
   userId: string;
