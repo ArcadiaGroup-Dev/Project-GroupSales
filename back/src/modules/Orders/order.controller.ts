@@ -8,6 +8,7 @@ import {
   Delete,
   UseGuards,
   Req,
+  BadRequestException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { UpdateOrderDto } from './dto/updateorder.dto';
@@ -23,11 +24,12 @@ export class OrderController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  async create(@Req() request: any, @Body() createOrderDto: CreateOrderDto) {
-    console.log('Datos de la solicitud:', createOrderDto);
-
-    const userId = request.user.id;
-    const { products } = createOrderDto;
+  async create(@Body() createOrderDto: CreateOrderDto) {
+    const { userId, products } = createOrderDto;
+    
+    if (!userId || typeof userId !== 'string') {
+      throw new BadRequestException('El userId no es válido');
+    }
 
     return await this.orderService.create(userId, products);
   }
