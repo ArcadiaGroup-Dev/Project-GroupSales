@@ -83,7 +83,9 @@ export class OrdersRepository {
     const order = await this.ordersRepository.findOne({
       where: { id },
       relations: {
-        orderDetails: true,
+        orderDetails: {
+          products: true,
+        },
         user: true,
       },
     });
