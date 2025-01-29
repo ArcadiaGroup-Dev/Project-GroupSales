@@ -2,14 +2,17 @@ export interface IProduct {
   id: string;
   name: string;
   description: string;
-  price: number;
+  price: string;
   stock?: number;
   imageUrl: string;
   seller: string;
   categoryId: string;
   currency: string;
   quantity: number;
-  userId:string;
+  user: {
+    id:string;
+    name: string;
+  }
 }
 
 export interface ICreateProduct {

@@ -1,16 +1,15 @@
 import { UserContext } from "@/context/userContext";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useContext } from "react";
+import React from "react";
 
 export default function AdminDashboard() {
-  const { user } = useContext(UserContext);
 
   const articles = [
     {
       title: "USUARIOS",
       description:
-        "Administra la información de tus usuarios. Consulta datos como registros, bajas, clientes activos y vendedores asignados.",
+        "Administra la información de tus usuarios. Consulta datos como clientes, venderores, ordenes de compras. Otorga permisos para vender",
       imageSrc: "/persona.webp",
       link: "dashboardAdmin/users",
       linkText: "Ir a usuarios",
@@ -26,9 +25,9 @@ export default function AdminDashboard() {
     {
       title: "PRODUCTOS",
       description:
-        "Modifica o elimina productos que no cumplan con las normas o que deban ser actualizados en tu catálogo.",
+        "Aqui puedes ver todos los productos/servicios publicados y eliminar aquellos no cumplan con las normas.",
       imageSrc: "/productos.webp",
-      link: "#",
+      link: "dashboardAdmin/product",
       linkText: "Ir a productos",
     },
   ];
@@ -53,7 +52,7 @@ export default function AdminDashboard() {
                   <h3 className="font-bold uppercase text-gray-900 text-lg mb-2">
                     {article.title}
                   </h3>
-                  <p className="text-sm text-gray-700 leading-relaxed">
+                  <p className="text-sm text-gray-700 leading-relaxed p-4 mb-4">
                     {article.description}
                   </p>
                 </div>

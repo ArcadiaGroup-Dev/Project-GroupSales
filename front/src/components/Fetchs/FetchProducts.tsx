@@ -66,21 +66,22 @@ export const fetchUploadProduct = async (product:ICreateProduct) => {
   return response.json();
 };
 
-export const fetchDeleteProduct = async (id:string) => {
-console.log(id)
-}
+
 // Cambiar el estado de un producto (usando DELETE)
-export const fetchToggleProductStatus = async (id: string) => {
+export const fetchDeleteProduct = async (id: string) => {
   const response = await fetch(`${apiUrl}/products/${id}`, {
     method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    },
   });
 
   if (!response.ok) {
-    throw new Error('Error al cambiar el estado del producto');
+    throw new Error('Error al eliminar el producto');
   }
 
-  const data = await response.json(); 
-  return data;
+  return response; 
 };
 
 

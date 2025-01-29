@@ -14,7 +14,6 @@ interface CardProductProps {
 
 export default function CardProduct({ product }: CardProductProps) {
   const { addToCart } = useCart();
-  const [sellerName, setSellerName] = useState<string>("");
   const handleAddToCart = (product: IProduct) => {
     addToCart(product);
     Swal.fire({
@@ -22,26 +21,13 @@ export default function CardProduct({ product }: CardProductProps) {
       title: "Producto agregado",
       text: `${product.name} ha sido agregado al carrito.`,
       confirmButtonText: "¡Genial!",
-      timer: 2000, // Desaparece después de 2 segundos
+      timer: 2000,
     });
   };
 
-  useEffect(() => {
-    const getUserName = async () => {
-      
-      if (product.userId) {
-        try {
-          const user = await fetchUserId(product.userId); 
-         
-          setSellerName(user.name);
-        } catch (error) {
-          console.error("Error al obtener el nombre del usuario:", error);
-        }
-      }
-    };
+ 
 
-    getUserName();
-  }, [product.userId]);
+  
 
   return (
     <div
@@ -59,10 +45,10 @@ export default function CardProduct({ product }: CardProductProps) {
         />
       </Link>
 
-      <div className="relative bg-white p-6">
+      <div className="relative bg-white p-6 hover:cursor-pointer">
         <p className="text-gray-700">
           ${product.price}
-          <span className="p-4 text-tertiary">{sellerName || "Cargando..."}</span>
+          <span className="p-4 text-tertiary">Vendido por {product.user.name|| "Cargando..."}</span>
         </p>
 
         <h3 className="mt-1.5 text-lg font-medium text-gray-900">

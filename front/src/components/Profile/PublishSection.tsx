@@ -38,7 +38,7 @@ const PublishSection: React.FC = () => {
         }
       }
     }
-  }, []); // Se ejecuta solo al montar el componente
+  }, []); 
 
   const handleRequestPermission = () => {
     console.log("User ID: ", userId);

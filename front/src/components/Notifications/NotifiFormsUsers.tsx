@@ -4,7 +4,7 @@ import { INotificationProps } from '../../Interfaces/IUser';
 import { CiUser } from "react-icons/ci";
 
 export const NotifFormsUsers: React.FC<INotificationProps> = ({ message }) => {
- 
+
   const [isVisible, setIsVisible] = useState(true);
 
   const handleClose = () => {
@@ -12,19 +12,16 @@ export const NotifFormsUsers: React.FC<INotificationProps> = ({ message }) => {
   };
 
   return (
-
     isVisible && (
       <div 
         role="alert" 
-        className="fixed top-24 right-4 rounded-xl shadow-md shadow-gray-400 bg-tertiary text-white p-4"
+        className="fixed top-24 right-4 z-50 rounded-xl shadow-md shadow-gray-400 bg-tertiary text-white p-4"
       >
         <div className="flex items-start gap-4">
-        <div className="flex items-center gap-2"> 
-          <CiUser  />
-          <p className="mt-1 text-sm text-white">{message}</p>
-        </div>
-
-
+          <div className="flex items-center gap-2"> 
+            <CiUser />
+            <p className="mt-1 text-sm text-white">{message}</p>
+          </div>
 
           <button 
             onClick={handleClose} 

@@ -26,10 +26,10 @@ export default function DeleteAccount({ userId, handleCloseDeleteAccount }: Dele
 
       // Eliminar el token de sesión
       localStorage.removeItem('token');  // O sessionStorage.removeItem('token');
-      
+      logOut();
       // Redirigir al login
       setTimeout(() => {
-        router.push("/login");
+        router.push("/");
       }, 2000);
     } else {
       const errorText = await response.text();
