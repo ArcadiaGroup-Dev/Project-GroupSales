@@ -149,16 +149,16 @@ const handleDeleteCancel = () => {
     <>
       {notificationMessage && <NotifFormsUsers message={notificationMessage} />}
       <div className="text-center">
-        <h1 className="text-lg font-semibold text-white bg-secondary mt-28 mb-4 p-2 rounded-lg shadow-lg shadow-gray-400 inline-block px-2">
+      <h1 className="text-secondary bg-gray-300 font-bold border-b border-gray-300 text-center p-2 mt-24">
           Productos / Servicios
         </h1>
 
-        <h2 className="text-lg text-gray-700">
+        <h5 className="text-lg text-gray-700 mt-4">
           Aquí puedes ver tus productos/servicios cargados, modificarlos y editarlos. Se actualizarán directamente en la página.
-        </h2>
+        </h5>
 
        {/* Filtro por nombre */}
-          <div className="mb-4 mt-20">
+          <div className="mb-4 mt-8">
             <input
               type="text"
               placeholder="Buscar por nombre"
@@ -174,7 +174,7 @@ const handleDeleteCancel = () => {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto py-8 px-4">
             {filteredProducts.map((product: IProduct) => (
-              <div key={product.id} className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer">
+              <div key={product.id} className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer bg-white">
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
@@ -240,17 +240,14 @@ const handleDeleteCancel = () => {
                     </>
                   ) : (
                     <>
-                      <h3 className="text-2xl font-semibold text-gray-800 mb-2">
-                        {product.name}
-                      </h3>
-                      <p className="text-gray-600 mb-4">{product.description}</p>
-                      <div className="flex justify-between items-center mb-4">
-                        <span>Stock: {product.stock}</span>
-                        <p className="text-xl font-bold text-gray-900">${product.price}</p>
-                      </div>
-                      <p className="text-md text-gray-700">
-                        <span className="text-sm text-gray-500 italic">Vendido por: {product.user.name}</span>
-                      </p>
+                    <h3 className="text-2xl font-semibold text-gray-800 mb-2">{product.name}</h3>
+                  <p className="text-gray-600 mb-4">{product.description}</p>
+                    <p className="text-xl font-bold text-gray-900">${product.price}</p>
+                    <p className="text-gray-600 mt-2" >Stock: {product.stock}</p>
+                 
+                  <p className="text-md text-gray-700">
+                    <span className="text-sm mt-2 text-tertiary italic">Vendido por: {product.user.name}</span>
+                  </p>
 
                       <div className="mt-4 flex gap-4">
                         <button

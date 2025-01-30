@@ -76,7 +76,7 @@ export enum UserRole {
     signIn: (credentials: ILoginUser) => Promise<boolean>; 
     signUp: (user: IUserRegister) => Promise<boolean>;
     logOut: () => void;
-    token: string | null; // Token separado
+    token: string | null; 
     setToken: React.Dispatch<React.SetStateAction<string | null>>;
   }
   

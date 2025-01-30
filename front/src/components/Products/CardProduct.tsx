@@ -1,6 +1,4 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { IProduct } from "@/Interfaces/IProduct";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
@@ -13,6 +11,15 @@ interface CardProductProps {
 
 export default function CardProduct({ product }: CardProductProps) {
   const { addToCart } = useCart();
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+
+  useEffect(() => {
+    // Suponiendo que el producto es cargado desde una API o similar
+    if (product) {
+      setIsDataLoaded(true);
+    }
+  }, [product]);
+
   const handleAddToCart = (product: IProduct) => {
     addToCart(product);
     Swal.fire({
@@ -24,9 +31,9 @@ export default function CardProduct({ product }: CardProductProps) {
     });
   };
 
- 
-
-  
+  if (!isDataLoaded) {
+    return <div>Loading...</div>; // Placeholder mientras se cargan los datos
+  }
 
   return (
     <div
@@ -47,7 +54,7 @@ export default function CardProduct({ product }: CardProductProps) {
       <div className="relative bg-white p-6 hover:cursor-pointer">
         <p className="text-gray-700">
           ${product.price}
-          <span className="p-4 text-tertiary">Vendido por {product.user.name|| "Cargando..."}</span>
+          <span className="p-4 text-tertiary">Vendido por {product.user?.name || "Cargando..."}</span>
         </p>
 
         <h3 className="mt-1.5 text-lg font-medium text-gray-900">

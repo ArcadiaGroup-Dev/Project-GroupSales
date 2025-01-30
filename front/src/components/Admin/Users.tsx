@@ -128,9 +128,9 @@ export default function Users() {
           />
         </div>
       )}
-
+<h1 className="text-secondary bg-gray-300 font-bold border-b border-gray-300 text-center p-2 mt-24">Administrar usuarios</h1>
       {/* Barra de búsqueda */}
-      <div className="flex justify-center mt-24">
+      <div className="flex justify-center mt-2">
         <input
           type="text"
           value={searchQuery}
@@ -175,9 +175,6 @@ export default function Users() {
             </h2>
 
             <div className="flex flex-col gap-4 mt-4">
-              <button className="group inline-flex items-center gap-1 text-sm font-medium text-blue-600 p-1 hover:bg-blue-100">
-                Ver órdenes de usuario
-              </button>
               <button onClick={() => handleRoleChange(user.id, 'admin')} className="group inline-flex items-center gap-1 text-sm font-medium text-blue-600 p-1 hover:bg-blue-100">
                 Convertir usuario a administrador
               </button>

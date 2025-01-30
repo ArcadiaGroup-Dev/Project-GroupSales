@@ -1,9 +1,12 @@
+
+import { IProduct } from "./IProduct";
 import { IUser } from "./IUser";
 
   export interface IOrderDetails {
     id: string;
     price: string;
     quantity: number;
+    products: IProduct[]; 
   }
   
  export interface IOrder {
@@ -12,6 +15,7 @@ import { IUser } from "./IUser";
     user: IUser;
     orderDetails: IOrderDetails;
   }
+ 
 
   export interface ICreateOrder {
     userId: string;

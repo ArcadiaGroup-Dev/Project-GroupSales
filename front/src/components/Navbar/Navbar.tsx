@@ -31,7 +31,7 @@ export default function TopNavbar() {
          <Link href={isActive ? "/Cart" : "/login"} className="relative">
             <FaShoppingCart className="text-xl cursor-pointer hover:text-tertiary transition-colors duration-300" />
           </Link>
-          <Link href={"/contacto"}>
+          <Link href={"/message"}>
             <FaMessage className="text-xl cursor-pointer hover:text-tertiary transition-colors duration-300" />
           </Link>
         </div>

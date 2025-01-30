@@ -24,6 +24,14 @@ export const getOrders = async (): Promise<IOrder[]> => {
     }
   };
   
+  
+export const fetchOrdersById = async (id:string) => {
+  const response = await fetch(`${apiUrl}/orders/${id}`);
+  if (!response.ok) {
+    throw new Error(`Error al obtener el producto: ${response.statusText}`);
+  }
+  return await response.json();
+};
 
   export const fetchCreateOrder = async (order:ICreateOrder, token:string) => {
     const response = await fetch(`${apiUrl}/orders`, {

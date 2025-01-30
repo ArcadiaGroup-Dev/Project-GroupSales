@@ -28,26 +28,6 @@ export const fetchProductById = async (id:string) => {
     return await response.json();
   };
   
-const fetchUserEmailByProductId = async (productId: string) => {
-  try {
-    const response = await fetch(`${apiUrl}/products/${productId}`);
-
-    if (!response.ok) {
-      throw new Error("Error al obtener el producto.");
-    }
-
-    const productData = await response.json();
-    const userEmail = productData.user.email;
-
-    console.log("Email obtenido:", userEmail);
-
-    return userEmail;
-  } catch (error) {
-    console.error("Error al obtener el email:", error);
-    return null;
-  }
-};
-
   
   //Modificar producto
   export const fetchUpdateProduct = async(id:string, product:IProduct) => {

@@ -93,15 +93,13 @@ const handleDeleteCancel = () => {
       {notificationMessage && <NotifFormsUsers message={notificationMessage} />}
   
       <div className="text-center">
-        <h1 className="text-lg font-semibold text-white bg-secondary mt-28 mb-4 p-2 rounded-lg shadow-lg shadow-gray-400 inline-block px-2">
+        <h1 className="text-secondary bg-gray-300 font-bold border-b border-gray-300 text-center p-2 mt-24">
           Productos / Servicios
         </h1>
-        <h2 className="text-lg text-gray-700">
-          Aquí puedes encontrar productos/servicios por nombre y eliminar los que consideres inadecuados
-        </h2>
+     
   
         {/* Search filter */}
-        <div className="mb-4 mt-20">
+        <div className="mb-4 mt-8 md:justify-end">
           <input
             type="text"
             placeholder="Buscar por nombre"
@@ -110,14 +108,16 @@ const handleDeleteCancel = () => {
             className="p-2 border border-gray-300 rounded-lg focus:outline-none"
           />
         </div>
-  
+        <h5 className="text-lg text-gray-700">
+          Aquí puedes encontrar productos/servicios por nombre y eliminar los que consideres inadecuados
+        </h5>
         {/* Product grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto py-8 px-4">
           {filteredProducts.length === 0 ? (
             <p>No hay productos disponibles.</p>
           ) : (
             filteredProducts.map((product: IProduct) => (
-              <div key={product.id} className="group  relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer">
+              <div key={product.id} className="group bg-white relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer">
                 <Image
                   src={product.imageUrl}
                   alt={product.name}
@@ -129,12 +129,11 @@ const handleDeleteCancel = () => {
                 <div className="p-2">
                   <h3 className="text-2xl font-semibold text-gray-800 mb-2">{product.name}</h3>
                   <p className="text-gray-600 mb-4">{product.description}</p>
-                  <div className="flex justify-between items-center mb-4">
-                    <span>Stock: {product.stock}</span>
                     <p className="text-xl font-bold text-gray-900">${product.price}</p>
-                  </div>
+                    <p className="text-gray-600 mt-2" >Stock: {product.stock}</p>
+                 
                   <p className="text-md text-gray-700">
-                    <span className="text-sm text-gray-500 italic">Vendido por: {product.user.name}</span>
+                    <span className="text-sm mt-2 text-tertiary italic">Vendido por: {product.user.name}</span>
                   </p>
                 </div>
                 {/* Delete button */}

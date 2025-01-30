@@ -14,6 +14,8 @@ import { EmailService } from './modules/Mailing/email.service';
 /* import { MercadopagoModule } from './mercadopago/mercadopago.module';
 import { MercadopagoService } from './mercadopago/mercadopago.service'; */
 
+import { AdsModule } from './modules/Ads/ads.module';
+
 @Module({
   imports: [
     MailerModule.forRoot(mailConfig),
@@ -30,7 +32,10 @@ import { MercadopagoService } from './mercadopago/mercadopago.service'; */
     UsersModule,
     AuthModule,
     OrderModule,
+
     /* MercadopagoModule, */
+
+    AdsModule,
   ],
   controllers: [PaymentsController],
   providers: [EmailService /* MercadopagoService */],
