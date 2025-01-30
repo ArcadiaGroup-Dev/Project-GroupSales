@@ -115,7 +115,7 @@ export default function AdminOrders() {
               <th className="border px-4 py-2">Teléfono</th>
               <th className="border px-4 py-2">Precio</th>
               <th className="border px-4 py-2">Cantidad</th>
-              <th className="border px-4 py-2">Acciones</th> {/* Columna para el botón */}
+              <th className="border px-4 py-2">Acciones</th> 
             </tr>
           </thead>
           <tbody>
