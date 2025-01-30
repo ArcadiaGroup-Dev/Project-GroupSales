@@ -6,7 +6,6 @@ import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import Link from "next/link";
 import Swal from "sweetalert2";
-import { fetchUserId } from "../Fetchs/FetchsUser";
 
 interface CardProductProps {
   product: IProduct;
@@ -32,7 +31,7 @@ export default function CardProduct({ product }: CardProductProps) {
   return (
     <div
       key={product.id}
-      className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg transition-transform duration-300"
+      className="group relative block  overflow-hidden rounded-lg border border-gray-300 shadow-lg transition-transform duration-300"
     >
       <Link href={`/product/${product.id}`} className="block">
         <Image

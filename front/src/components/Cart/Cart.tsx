@@ -3,49 +3,11 @@
 import React, { useState } from "react";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
-import Swal from "sweetalert2";
-import { createPayment } from "../Fetchs/FetchMercadoPago";
+import PaymentModal from "./PaymentModal";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, getTotal } = useCart();
-  const [loading, setLoading] = useState(false);
-
-  // Función para manejar el proceso de pago
-  const handlePayment = async () => {
-    setLoading(true);
-  
-    try {
-      const data = await createPayment(cart);
-      const { init_point } = data;
-  
-      if (!init_point) {
-        throw new Error("No se pudo generar el enlace de pago");
-      }
-  
-      window.location.href = init_point;
-    } catch (error: unknown) {
-      console.error("Error al procesar el pago:", error);
-  
-      // Verificar si el error es una instancia de Error
-      if (error instanceof Error) {
-        Swal.fire({
-          icon: "error",
-          title: "Error al procesar el pago",
-          text: error.message || "Hubo un error inesperado. Inténtalo nuevamente.",
-        });
-      } else {
-        // Si el error no es un Error conocido, mostrar un mensaje genérico
-        Swal.fire({
-          icon: "error",
-          title: "Error al procesar el pago",
-          text: "Hubo un error inesperado. Inténtalo nuevamente.",
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-  
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <div className="min-h-screen mt-24 bg-gray-100 p-8">
@@ -107,17 +69,15 @@ export default function CartPage() {
 
           <div className="mt-6 text-center">
             <button
-              onClick={handlePayment}
-              className={`${
-                loading ? "bg-gray-400" : "bg-green-600"
-              } text-white px-8 py-3 rounded-lg transition-colors duration-200 hover:bg-green-700`}
-              disabled={loading}
+              onClick={() => setIsModalOpen(true)}
+              className="bg-blue-600 text-white px-8 py-3 rounded-lg transition-colors duration-200 hover:bg-blue-700"
             >
-              {loading ? "Procesando..." : "Pagar con MercadoPago"}
+              Seleccionar método de pago
             </button>
           </div>
         </>
       )}
+      {isModalOpen && <PaymentModal onClose={() => setIsModalOpen(false)} cart={cart} />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { IProduct } from "../Interfaces/IProduct";
 
 interface CartContextType {
@@ -15,7 +15,20 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [cart, setCart] = useState<IProduct[]>([]);
+  const [cart, setCart] = useState<IProduct[]>(() => {
+    if (typeof window !== "undefined") {
+      const savedCart = localStorage.getItem("cart");
+      return savedCart ? JSON.parse(savedCart) : [];
+    }
+    return [];
+  });
+
+  // Guardar en localStorage cuando el carrito cambie
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  }, [cart]);
 
   const addToCart = (product: IProduct) => {
     setCart((prevCart) => {
@@ -49,7 +62,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const getTotal = () => {
     return cart.reduce(
-      (total, product) => total + product.price * (product.quantity || 1),
+      (total: number, product) => total + Number(product.price) * (product.quantity ?? 1),
       0
     );
   };

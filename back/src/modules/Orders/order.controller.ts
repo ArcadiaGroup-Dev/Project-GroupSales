@@ -26,7 +26,7 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   async create(@Body() createOrderDto: CreateOrderDto) {
     const { userId, products } = createOrderDto;
-    
+
     if (!userId || typeof userId !== 'string') {
       throw new BadRequestException('El userId no es válido');
     }

@@ -1,12 +1,11 @@
-import Users from '@/components/Admin/Users'
+import AdminOrders from '@/components/Admin/AdminOrders'
 import PrivateRouteAdmin from '@/components/PrivateRoutAdmin'
 import React from 'react'
 
 export default function page() {
   return (
-    <PrivateRouteAdmin>
-      <Users/>
-      </PrivateRouteAdmin>
- 
+   <PrivateRouteAdmin>
+      <AdminOrders/> 
+   </PrivateRouteAdmin>
   )
 }

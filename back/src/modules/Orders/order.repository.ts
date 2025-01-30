@@ -78,7 +78,6 @@ export class OrdersRepository {
     };
   }
 
-
   async getOrder(id: string) {
     const order = await this.ordersRepository.findOne({
       where: { id },

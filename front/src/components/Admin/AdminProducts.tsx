@@ -117,7 +117,7 @@ const handleDeleteCancel = () => {
             <p>No hay productos disponibles.</p>
           ) : (
             filteredProducts.map((product: IProduct) => (
-              <div key={product.id} className="group relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer">
+              <div key={product.id} className="group  relative block overflow-hidden rounded-lg border border-gray-300 shadow-lg hover:cursor-pointer">
                 <Image
                   src={product.imageUrl}
                   alt={product.name}

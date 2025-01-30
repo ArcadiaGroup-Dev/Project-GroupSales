@@ -19,7 +19,7 @@ export default function AdminDashboard() {
       description:
         "Gestiona las órdenes de compra realizadas por los clientes. Filtra por vendedor, categoría o estado para un análisis detallado.",
       imageSrc: "/orders.webp",
-      link: "#",
+      link: "dashboardAdmin/orders",
       linkText: "Ir a órdenes",
     },
     {
