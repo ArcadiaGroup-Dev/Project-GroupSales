@@ -72,3 +72,32 @@ export const fetchUserId = async (userId: string) => {
   }
 };
 
+export const resetPassword = async (token: string, password: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/reset-password`, {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    return { success: res.ok, message: data.message };
+  } catch (error) {
+    return { success: false, message: "Error al conectar con el servidor." };
+  }
+};
+
+export const forgotPassword = async (email: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/auth/forgot-password`, {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json();
+    return { success: res.ok, message: data.message };
+  } catch (error) {
+    return { success: false, message: "Error al conectar con el servidor." };
+  }
+};

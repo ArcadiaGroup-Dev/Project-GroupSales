@@ -166,10 +166,15 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         </div>
 
         <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-500">
-            ¿No tienes cuenta?
-            <Link className="underline hover:font-bold" href="/register"> Registrate aquí</Link>
-          </p>
+        <div className="flex flex-col gap-2">
+  <p className="text-sm text-gray-500">
+    ¿No tienes cuenta?
+    <Link className="underline hover:font-bold" href="/register"> Regístrate aquí</Link>
+  </p>
+  <p className="text-sm text-gray-500">
+    <Link className="underline hover:font-bold" href="/forgotPassword"> Olvidé mi contraseña</Link>
+  </p>
+</div>
 
           <button
              disabled={Object.keys(errors).length > 0}
