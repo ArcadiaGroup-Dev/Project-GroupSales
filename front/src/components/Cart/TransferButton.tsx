@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 import { fetchCreateOrder } from "../Fetchs/FetchsOrders";
 import { IProduct } from "@/Interfaces/IProduct";
@@ -11,13 +11,11 @@ interface TransferButtonProps {
 }
 
 export function TransferButton({ cart, onClose }: TransferButtonProps) {
-  const { user, token } = useAuth(); 
+  const { user, token } = useAuth();
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-  console.log("user antes de llamar a handle", user);
-
-  const handleTransferenciaConfirmada = async () => {
-    if (!user|| !token) {
-      console.error("Faltan datos: usuario o token");
+  const handleConfirmTransfer = async () => {
+    if (!user || !token) {
       Swal.fire({
         icon: "error",
         title: "Datos faltantes",
@@ -28,8 +26,6 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
 
     const cartItems = cart.map((item) => ({ id: item.id, quantity: item.quantity }));
 
-    console.log("cartItems:", cartItems);
-
     if (cartItems.length === 0) {
       Swal.fire({
         icon: "warning",
@@ -39,10 +35,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
       return;
     }
 
-    
-    const orderData: ICreateOrder = { userId: user?.id, products: cartItems };
-
-    console.log("orderData:", orderData);
+    const orderData: ICreateOrder = { userId: user.id, products: cartItems };
 
     try {
       const orderResponse = await fetchCreateOrder(orderData, token);
@@ -53,8 +46,9 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
         title: "Orden creada con éxito",
         text: "Tu orden ha sido procesada. ¡Gracias por tu compra!",
       });
+
+      onClose();
     } catch (error) {
-      console.error("Error al crear la orden:", error);
       Swal.fire({
         icon: "error",
         title: "Error al crear la orden",
@@ -64,11 +58,33 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
   };
 
   return (
-    <button
-      onClick={handleTransferenciaConfirmada}
-      className="bg-green-600 text-white px-6 py-2 rounded-lg w-full"
-    >
-      Pagar con Transferencia Bancaria
-    </button>
+    <>
+      {!showConfirmation ? (
+        <button
+          onClick={() => setShowConfirmation(true)}
+          className="bg-green-600 text-white px-6 py-2 rounded-lg w-full"
+        >
+          Pagar con Transferencia Bancaria
+        </button>
+      ) : (
+        <div className="bg-white p-4 rounded-md shadow-md text-center">
+          <h3 className="text-lg font-semibold">Detalles de la Cuenta Bancaria</h3>
+          <p><strong>Banco:</strong> Banco XYZ</p>
+          <p><strong>Cuenta:</strong> 123-456789-00</p>
+          <p><strong>Titular:</strong> Juan Pérez</p>
+          <p className="text-sm text-gray-600">Realiza la transferencia y confirma la operación.</p>
+
+          <div className="flex justify-between mt-4">
+            <button
+              onClick={handleConfirmTransfer}
+              className="bg-green-600 text-white px-4 py-2 rounded-lg justify-center"
+            >
+              Confirmar Transferencia
+            </button>
+           
+          </div>
+        </div>
+      )}
+    </>
   );
 }

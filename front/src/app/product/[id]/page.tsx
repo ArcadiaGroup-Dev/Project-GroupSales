@@ -1,19 +1,15 @@
-"use client"
+"use client";
+
 import { useEffect, useState } from "react";
-import { notFound } from "next/navigation";
+import { useParams, notFound } from "next/navigation";
 import Image from "next/image";
 import Swal from "sweetalert2";
 import { IProduct } from "@/Interfaces/IProduct";
 import { useCart } from "@/context/cartContext";
 import { fetchProductById } from "@/components/Fetchs/FetchProducts";
 
-interface ProductPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ProductPage({ params }: ProductPageProps) {
+export default function ProductPage() {
+  const { id } = useParams(); // Obtener el id de la URL
   const [product, setProduct] = useState<IProduct | null>(null);
   const { addToCart } = useCart();
 
@@ -31,7 +27,12 @@ export default function ProductPage({ params }: ProductPageProps) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const productData = await fetchProductById(params.id); // Usamos tu función fetchProductById
+        if (!id || typeof id !== "string") {
+          notFound();
+          return;
+        }
+
+        const productData = await fetchProductById(id);
 
         if (!productData) {
           notFound();
@@ -41,12 +42,12 @@ export default function ProductPage({ params }: ProductPageProps) {
         setProduct(productData);
       } catch (error) {
         console.error("Error al obtener el producto:", error);
-        notFound(); // Si ocurre un error, muestra la página 404
+        notFound();
       }
     };
 
     fetchProduct();
-  }, [params.id]); // Solo se ejecuta cuando `params.id` cambia
+  }, [id]);
 
   if (!product) return <div className="mt-30">Loading...</div>;
 
@@ -75,7 +76,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <p className="text-sm text-gray-500">
               Vendedor:{" "}
               <a href="#" className="text-tertiary underline">
-                {product.seller}
+                {product.user.name}
               </a>
             </p>
           </div>
