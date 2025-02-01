@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User, UserRole } from './entities/user.entity';
@@ -105,4 +105,15 @@ export class UsersService {
       throw new Error(`Error al eliminar usuario: ${error.message}`);
     }
   }
+
+  async updatePassword(userId: string, newPassword: string): Promise<void> {
+    const user = await this.findOneById(userId);
+    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    }
+  
+    user.password = await bcrypt.hash(newPassword, 10);
+    await this.userRepository.save(user);
+  }
+  
 }
