@@ -30,17 +30,22 @@ export class AuthService {
 
   async login(user: { email: string; password: string }) {
     const validatedUser = await this.validateUser(user.email, user.password);
-
+    if (!validatedUser) {
+      throw new UnauthorizedException('Credenciales inválidas');
+    }
+  
     const payload: JwtPayload = {
       username: validatedUser.name,
       sub: validatedUser.id,
     };
+  
     const { password: _, ...userNoPassword } = validatedUser;
     return {
       access_token: this.jwtService.sign(payload),
       user: userNoPassword,
     };
   }
+  
   async requestPasswordReset(email: string) {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
@@ -60,19 +65,25 @@ export class AuthService {
   async resetPassword(token: string, newPassword: string) {
     try {
       const decoded = this.jwtService.verify(token);
+      if (!decoded || !decoded.sub) {
+        throw new BadRequestException('Token inválido o expirado');
+      }
+  
       const user = await this.usersService.findOneById(decoded.sub);
-
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');
       }
-
-    
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      await this.usersService.updatePassword(user.id, hashedPassword);
-
+        
+      await this.usersService.updatePassword(user.id, newPassword);
+  
       return { message: 'Contraseña actualizada con éxito' };
     } catch (error) {
-      throw new BadRequestException('Token inválido o expirado');
+      throw new BadRequestException(
+        error.message.includes('invalid signature')
+          ? 'Token inválido'
+          : 'Token expirado o incorrecto',
+      );
     }
   }
+  
 }

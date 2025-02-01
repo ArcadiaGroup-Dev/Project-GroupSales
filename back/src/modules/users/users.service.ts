@@ -111,9 +111,9 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
+  
+    user.password = await bcrypt.hash(newPassword, 10);
     await this.userRepository.save(user);
   }
+  
 }
