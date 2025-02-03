@@ -15,7 +15,9 @@ export default function ResetPassword() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const urlParams = new URLSearchParams(window.location.search);
-      setToken(urlParams.get("token"));
+      const tokenFromUrl = urlParams.get("token");
+      setToken(tokenFromUrl);
+      console.log(tokenFromUrl);   
     }
   }, []);
 

@@ -73,11 +73,14 @@ export const fetchUserId = async (userId: string) => {
 };
 
 export const resetPassword = async (token: string, password: string) => {
+  console.log("Token desde fetch", { token, password });
   try {
     const res = await fetch(`${apiUrl}/auth/reset-password`, {
       method: "POST",
-      body: JSON.stringify({ token, password }),
-      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token, newPassword: password }),  // Enviar tanto el token como la nueva contraseña en el cuerpo
+      headers: { 
+        "Content-Type": "application/json",
+      },
     });
 
     const data = await res.json();
@@ -86,6 +89,7 @@ export const resetPassword = async (token: string, password: string) => {
     return { success: false, message: "Error al conectar con el servidor." };
   }
 };
+
 
 export const forgotPassword = async (email: string) => {
   try {
