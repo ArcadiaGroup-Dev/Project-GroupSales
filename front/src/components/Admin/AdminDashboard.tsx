@@ -25,26 +25,35 @@ export default function AdminDashboard() {
     {
       title: "PRODUCTOS",
       description:
-        "Aqui puedes ver todos los productos/servicios publicados y eliminar aquellos no cumplan con las normas.",
+        "Aqui puedes ver todos los productos o servicios publicados. También puedes eliminar aquellos que no cumplan con las normas requeridas.",
       imageSrc: "/productos.webp",
       link: "dashboardAdmin/product",
       linkText: "Ir a productos",
+    },
+    {
+      title: "PUBLICIDADES",
+      description:
+        "Aqui puedes administrar publicidades, encontrarás un formulario para crear nuevas y otro para editar. En ver todas , podrás eliminarlas",
+      imageSrc: "/adds.jpg",
+      link: "dashboardAdmin/ads",
+      linkText: "Ir a publicidades",
     },
   ];
 
   return (
     <div className="mx-auto max-w-6xl p-4 bg-gray-50 font-bold">
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
         {articles.map((article, index) => (
           <Link className="hover:shadow-lg hover:shadow-gray-400" key={index} href={article.link} passHref>
             <article className="flex flex-col rounded-lg shadow-lg bg-white transition hover:shadow-xl">
               <div className="relative h-40 sm:h-48 lg:h-56">
-                <Image
-                  fill
-                  alt={article.title}
-                  src={article.imageSrc}
-                  className="rounded-t-lg object-cover"
-                />
+              <Image
+                    fill
+                    alt={article.title}
+                    src={article.imageSrc}
+                    className="rounded-t-lg object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
               </div>
 
               <div className="flex flex-1 flex-col justify-between p-6">

@@ -54,13 +54,7 @@ export default function ForgotPassword() {
           >
             Solicitar restablecer contraseña
           </button>
-          <Link href="/resetPassword"
-            
-              className="inline-block mt-4 shadow-md shadow-gray-400 rounded-lg bg-pink-400 hover:bg-pink-600 px-5 py-3 text-sm font-medium text-white"
-            >
-              Para mi nachito a reestablecer contraseña
-            
-          </Link>
+          
         </form>
       </div>
     </div>

@@ -1,20 +1,23 @@
-"use client"; 
-import TopNavbar from "../components/Navbar/Navbar"; // Importa TopNavbar
-import CategoryNavbar from "../components/Navbar/NavbarInferior"; // Importa CategoryNavbar
+"use client";
+import TopNavbar from "../components/Navbar/Navbar";
+import CategoryNavbar from "../components/Navbar/NavbarInferior";
 import CardProduct from "@/components/Products/CardProduct";
 import Image from "next/image";
 import WhatsApp from "@/components/WhatsApp/WhatsApp";
 import { useState, useEffect } from "react";
 import { fetchGetProducts } from "@/components/Fetchs/FetchProducts";
+import IntercalatedAdsB from "@/components/Ads/SlideTypeB";
 
 export default function ProductList() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [products, setProducts] = useState<any[]>([]); // Estado para almacenar los productos
+  const [products, setProducts] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState(""); // Estado para la barra de búsqueda
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
 
   const slides = [
     {
       text: "¡Bienvenido a MiPyme Mutual!",
-      bgColor: "bg-gradient-to-r from-[#ee8100] to-[#26676b]", // Color degradado con tertiary y secondary
+      bgColor: "bg-gradient-to-r from-[#ee8100] to-[#26676b]",
       textColor: "text-white",
       imgSrc: "",
     },
@@ -30,27 +33,35 @@ export default function ProductList() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 3000); // Aumento el tiempo de la transición
+    }, 3000);
     return () => clearInterval(interval);
   }, [slides.length]);
 
-  // Llamar a fetchGetProducts y actualizar el estado
   useEffect(() => {
     const loadProducts = async () => {
       try {
         const fetchedProducts = await fetchGetProducts();
-        setProducts(fetchedProducts); // Guardamos los productos en el estado
+        setProducts(fetchedProducts);
+        setFilteredProducts(fetchedProducts); // Inicialmente mostrar todos
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
 
     loadProducts();
-  }, []); // Este useEffect solo se ejecuta una vez, al montar el componente
+  }, []);
+
+  // Filtrar productos cuando searchTerm cambie
+  useEffect(() => {
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  }, [searchTerm, products]);
 
   return (
     <div className="mt-12 md:mt-24 lg:mt-24 bg-primary">
-      <TopNavbar /> {/* Barra superior */}
+      <TopNavbar />
       <div className="relative w-full h-96 mb-10 overflow-hidden rounded-lg shadow-xl">
         {slides.map((slide, index) => (
           <div
@@ -77,18 +88,32 @@ export default function ProductList() {
           </div>
         ))}
       </div>
-      <CategoryNavbar /> {/* Barra de categorías */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-7xl mx-auto py-8 px-4">
-        {products.length > 0 ? (
-          products.map((product, index) => (
-            <CardProduct key={index} product={product} />
-          ))
-        ) : (
-          <p>Cargando productos...</p> // Mensaje mientras se cargan los productos
-        )}
+      <CategoryNavbar />
+
+      {/* Barra de búsqueda */}
+      <div className="max-w-7xl mx-auto py-4 px-4">
+        <input
+          type="text"
+          placeholder="Buscar productos por nombre..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-secondary"
+        />
       </div>
+
+     
+      <div className="max-w-7xl mx-auto py-8 px-4">
+  {filteredProducts.length > 0 ? (
+    <IntercalatedAdsB products={filteredProducts} />
+  ) : (
+    <p>No se encontraron productos.</p>
+  )}
+</div>
+
+
+      
       <div className="fixed bottom-6 right-6">
-        <WhatsApp /> {/* Botón de WhatsApp */}
+        <WhatsApp />
       </div>
     </div>
   );

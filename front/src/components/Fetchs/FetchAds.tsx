@@ -44,7 +44,7 @@ export const fetchAdsById = async (id:string) => {
   //Modificar producto
   export const fetchUpdateAds = async(id:string, ads:ICreateAds) => {
     const response = await fetch(`${apiUrl}/ads/${id}`, {
-      method: "PUT",
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
