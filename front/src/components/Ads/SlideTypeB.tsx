@@ -5,6 +5,7 @@ import { ICreateAds, AdType } from "@/Interfaces/IAds";
 import { fetchGetAds } from "../Fetchs/FetchAds";
 import CardProduct from "@/components/Products/CardProduct";
 import RectangularSliderTypeA from "./SliderTypeA";
+import Link from "next/link";
 
 interface IntercalatedAdsBProps {
   products: any[]; // Tipa correctamente si tienes una interfaz
@@ -70,7 +71,7 @@ const IntercalatedAdsB: React.FC<IntercalatedAdsBProps> = ({ products }) => {
           const ad = item.data;
           return (
             <div key={index} className="bg-gray-100 p-4 rounded shadow relative">
-             
+             <Link href={ad.link} target="_blank" rel="noopener noreferrer">
               <div className="relative w-full h-80 mt-2">
                 <Image
                   src={ad.img}
@@ -80,6 +81,7 @@ const IntercalatedAdsB: React.FC<IntercalatedAdsBProps> = ({ products }) => {
                   className="rounded-lg"
                 />
               </div>
+              </Link>
             </div>
           );
         } else if (item.type === "adA") {

@@ -13,7 +13,7 @@ export default function Page() {
 
   useEffect(() => {
     if (user !== null) {
-      setLoading(false); // Cuando la información del usuario esté disponible, detén la carga
+      setLoading(false); 
     }
   }, [user]);
 

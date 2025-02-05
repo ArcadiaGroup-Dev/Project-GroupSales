@@ -74,15 +74,14 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
           <p><strong>Titular:</strong> Juan Pérez</p>
           <p className="text-sm text-gray-600">Realiza la transferencia y confirma la operación.</p>
 
-          <div className="flex justify-between mt-4">
             <button
               onClick={handleConfirmTransfer}
-              className="bg-green-600 text-white px-4 py-2 rounded-lg justify-center"
+              className="bg-green-600 text-white px-4 py-2 mt-4 rounded-lg justify-center"
             >
               Confirmar Transferencia
             </button>
            
-          </div>
+        
         </div>
       )}
     </>

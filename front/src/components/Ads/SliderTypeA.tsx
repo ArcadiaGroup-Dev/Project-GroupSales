@@ -3,10 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ICreateAds, AdType } from "@/Interfaces/IAds";
 import { fetchGetAds } from "../Fetchs/FetchAds";
+import Link from "next/link";
 
-interface RectangularSliderTypeAProps {}
-
-const RectangularSliderTypeA: React.FC<RectangularSliderTypeAProps> = () => {
+const RectangularSliderTypeA: React.FC = () => {
   const [ads, setAds] = useState<ICreateAds[]>([]);
   const [current, setCurrent] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -16,7 +15,6 @@ const RectangularSliderTypeA: React.FC<RectangularSliderTypeAProps> = () => {
       try {
         const data = await fetchGetAds();
         setAds(data.filter((ad: ICreateAds) => ad.type === AdType.A));
-
       } catch (error) {
         console.error("Error al cargar las publicidades");
       }
@@ -34,7 +32,7 @@ const RectangularSliderTypeA: React.FC<RectangularSliderTypeAProps> = () => {
   const startSlider = () => {
     intervalRef.current = setInterval(() => {
       setCurrent((prev) => (prev + 1) % ads.length);
-    }, 2000);
+    }, 3000); // Cambia de publicidad cada 3 segundos
   };
 
   const stopSlider = () => {
@@ -52,22 +50,23 @@ const RectangularSliderTypeA: React.FC<RectangularSliderTypeAProps> = () => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <div
-        className="flex transition-transform duration-500 ease-in-out"
-        style={{ transform: `translateX(-${current * 100}%)` }}
-      >
-        {ads.map((ad) => (
-          <div key={ad.id || ad.name} className="w-full flex-shrink-0">
+      {ads.length > 0 && (
+        <Link
+          href={ads[current].link || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div className="w-full h-48 flex-shrink-0">
             <Image
-              src={ad.img}
-              alt={ad.name}
+              src={ads[current].img}
+              alt={ads[current].name}
               width={800}
               height={200}
               className="rounded-md object-cover w-full h-48"
             />
           </div>
-        ))}
-      </div>
+        </Link>
+      )}
     </div>
   );
 };

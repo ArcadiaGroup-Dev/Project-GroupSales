@@ -7,7 +7,6 @@ const ViewAds = () => {
   const [ads, setAds] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [filter, setFilter] = useState({ name: '', type: '' });
 
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
   const [adToDelete, setAdToDelete] = useState<any | null>(null);
@@ -16,6 +15,7 @@ const ViewAds = () => {
   const [name, setName] = useState<string>('');
   const [img, setImg] = useState<string>('');
   const [type, setType] = useState<string>('');
+  const [link, setLink] = useState<string>('');
 
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -69,6 +69,7 @@ const ViewAds = () => {
       setName(adToEdit.name);
       setImg(adToEdit.img);
       setType(adToEdit.type);
+      setLink(adToEdit.link);
     } catch (error) {
       setNotification({ message: "Error al cargar la publicidad para editar.", type: "error" });
     }
@@ -76,7 +77,7 @@ const ViewAds = () => {
 
   const handleUpdate = async () => {
     try {
-      const updatedAd = { ...editAd, name, img, type };
+      const updatedAd = { ...editAd, name, img, type, link };
       await fetchUpdateAds(editAd.id, updatedAd);
       setNotification({ message: "Publicidad modificada con éxito.", type: "success" });
       loadAds();
@@ -102,9 +103,10 @@ const ViewAds = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {ads.map((ad) => (
             <div key={ad.id} className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h2 className="text-xl font-bold">{ad.name}</h2>
+              <h2 className="text-xl font-bold text-gray-700">{ad.name}</h2>
               <img src={ad.img} alt={ad.name} className="w-full h-48 object-cover rounded mt-2" />
               <p className="mt-2 text-gray-600">Tipo: {ad.type}</p>
+              <p className="mt-2 text-gray-600">Link: {ad.link}</p>
               <div className="mt-4 flex justify-between">
                 <button onClick={() => handleEdit(ad.id)} className="text-blue-500 hover:text-blue-700">
                   <FiEdit className="h-6 w-6" />
@@ -151,6 +153,15 @@ const ViewAds = () => {
                   type="text"
                   value={img}
                   onChange={(e) => setImg(e.target.value)}
+                  className="border p-2 w-full"
+                />
+              </div>
+              <div>
+                <label className="block">Link a publicidad</label>
+                <input
+                  type="text"
+                  value={link}
+                  onChange={(e) => setLink(e.target.value)}
                   className="border p-2 w-full"
                 />
               </div>

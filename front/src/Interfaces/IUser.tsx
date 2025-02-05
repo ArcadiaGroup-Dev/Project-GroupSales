@@ -1,3 +1,5 @@
+import { ICartItem, IProduct } from "./IProduct";
+
 export interface IUserRegister {
     name: string;
     email:string;

@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { IProduct } from "../Interfaces/IProduct";
+import { UserContext } from "./userContext";
 
 interface CartContextType {
   cart: IProduct[];
@@ -16,23 +17,28 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<IProduct[]>([]);
+  const { user } = useContext(UserContext)
 
-  // Solo acceder a localStorage en el cliente
+  // Cargar carrito desde localStorage al montar el componente
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedCart = localStorage.getItem("cart");
+    if (user && typeof window !== "undefined") {
+      const savedCart = localStorage.getItem(`cart_${user.id}`);
       if (savedCart) {
-        setCart(JSON.parse(savedCart));
+        try {
+          setCart(JSON.parse(savedCart));
+        } catch (error) {
+          console.error("Error parsing cart from localStorage:", error);
+        }
       }
     }
-  }, []);
+  }, [user]);
 
-  // Guardar en localStorage cuando el carrito cambie
+  // Guardar carrito en localStorage cada vez que cambie
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("cart", JSON.stringify(cart));
+    if (user && typeof window !== "undefined") {
+      localStorage.setItem(`cart_${user.id}`, JSON.stringify(cart));
     }
-  }, [cart]);
+  }, [cart, user]);
 
   const addToCart = (product: IProduct) => {
     setCart((prevCart) => {
@@ -45,7 +51,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       return [...prevCart, { ...product, quantity: 1 }];
     });
 
-    console.log("Producto agregado:", product); // Verificación
+    console.log("Producto agregado:", product);
   };
 
   const removeFromCart = (id: string) => {

@@ -2,6 +2,7 @@ export interface ICreateAds {
     name: string;
     img:string;
     type: AdType;
+    link:string;
     id?:string;
 }
 

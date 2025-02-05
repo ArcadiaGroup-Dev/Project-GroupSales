@@ -13,7 +13,7 @@ export default function LogOut({ handleCloseLogout }: LogOutProps) {
     // Eliminar el token y los datos del usuario del localStorage
     localStorage.removeItem("token");
     localStorage.removeItem("user");
-
+  
     // Redirigir al usuario a la página de login
     window.location.href = "/login";
   };

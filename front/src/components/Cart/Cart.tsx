@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import { useCart } from "@/context/cartContext";
 import Image from "next/image";
 import PaymentModal from "./PaymentModal";
-import IntercalatedAdsB from "../Ads/SlideTypeB";
 import RectangularSliderTypeA from "../Ads/SliderTypeA";
+import { FiTrash } from "react-icons/fi";
 
 export default function CartPage() {
   const { cart, removeFromCart, clearCart, getTotal, updateQuantity } = useCart();
@@ -72,11 +72,11 @@ export default function CartPage() {
                   </div>
                 </div>
                 <button
-                  onClick={() => removeFromCart(product.id)}
-                  className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                >
-                  Eliminar
-                </button>
+        onClick={() => removeFromCart(product.id)}
+        className="text-red-600 hover:text-red-800 transition-colors duration-200"
+      >
+        <FiTrash size={24} /> 
+      </button>
               </li>
             ))}
           </ul>

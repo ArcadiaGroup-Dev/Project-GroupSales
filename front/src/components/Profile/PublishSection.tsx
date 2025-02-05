@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchUserId } from "../Fetchs/FetchsUser";
+import { sendPermissionRequestEmail } from "../Fetchs/FetchsEmail";
+import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
 
 const PublishSection: React.FC = () => {
   const [role, setRole] = useState<string | undefined>(undefined);
   const [hasRequestedPermission, setHasRequestedPermission] = useState<boolean>(false);
-  const [userId, setUserId] = useState<string | undefined>(undefined); // Guardar el ID del usuario
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [notificationVisible, setNotificationVisible] = useState(false);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -14,18 +18,14 @@ const PublishSection: React.FC = () => {
       if (storedAuthData) {
         try {
           const parsedSession = JSON.parse(storedAuthData);
-          console.log(parsedSession); // Verifica la estructura del objeto
-
           const { user } = parsedSession;
-          setUserId(user.id); // Establece el ID correctamente desde el objeto 'user'
+          setUserId(user.id);
 
-          // Llamada a la función fetchUser para obtener el rol del usuario
           fetchUserId(user.id).then((data) => {
             if (data) {
-              setRole(data.role); // Establecer el rol desde la respuesta
-              // Actualizar el localStorage con el rol más reciente
+              setRole(data.role);
               parsedSession.role = data.role;
-              localStorage.setItem("user", JSON.stringify(parsedSession)); // Actualiza el localStorage
+              localStorage.setItem("user", JSON.stringify(parsedSession));
             }
           });
 
@@ -38,18 +38,47 @@ const PublishSection: React.FC = () => {
         }
       }
     }
-  }, []); 
+  }, []);
 
-  const handleRequestPermission = () => {
+
+  const handleRequestPermission = async () => {
     console.log("User ID: ", userId);
     if (userId) {
-      setHasRequestedPermission(true);
-      localStorage.setItem(`permissionRequested_${userId}`, "true");
+      try {
+        const storedAuthData = localStorage.getItem("user");
+        if (storedAuthData) {
+          const parsedSession = JSON.parse(storedAuthData);
+          const sellerEmail = parsedSession.user.email;
+          console.log("Correo del vendedor (sellerEmail):", sellerEmail);
+  
+          const adminEmail = "gimenapascuale@gmai.com";
+          console.log("Correo del administrador (adminEmail):", adminEmail);
+  
+          const data = await sendPermissionRequestEmail(adminEmail, sellerEmail);
+  
+          localStorage.setItem(`permissionRequested_${userId}`, "true");
+          setHasRequestedPermission(true);
+  
+          setNotificationMessage('Solicitud de permiso enviada correctamente.');
+          setNotificationVisible(true);
+          console.log(data); 
+        }
+      } catch (error) {
+        console.error("Error al procesar la solicitud de permiso:", error);
+        
+      
+        setNotificationMessage('Error al enviar la solicitud de permiso.');
+        setNotificationVisible(true);
+      }
     }
   };
+  
+  
+  
+  
 
   if (role === undefined) {
-    return <p>Cargando...</p>; // Mostrar mientras se carga el rol
+    return <p>Cargando...</p>;
   }
 
   return (
@@ -93,6 +122,9 @@ const PublishSection: React.FC = () => {
       ) : (
         <p className="text-red-500">Rol desconocido</p>
       )}
+       {notificationVisible && (
+      <NotifFormsUsers message={notificationMessage} />
+    )}
     </div>
   );
 };

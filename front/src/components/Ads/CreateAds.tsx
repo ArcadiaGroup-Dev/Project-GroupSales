@@ -8,6 +8,7 @@ const CreateAds = () => {
     name: "",
     img: "",
     type: AdType.A,
+    link:""
   });
 
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -19,16 +20,17 @@ const CreateAds = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setNotification(null); // Reiniciar notificación al enviar
-
+    setNotification(null);
+  
     try {
       await fetchCreateAds(formData);
       setNotification({ message: "Publicidad creada con éxito.", type: "success" });
-      setFormData({ name: "", img: "", type: AdType.A }); // Resetear el formulario
+      setFormData({ name: "", img: "", type: AdType.A, link: "" });  
     } catch (error) {
       setNotification({ message: "Error al crear la publicidad.", type: "error" });
     }
   };
+  
 
   return (
     <div className="flex justify-center ">
@@ -44,23 +46,36 @@ const CreateAds = () => {
               name="name"
               value={formData.name}
               onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:outline-none hover:cursor-pointer"
-              placeholder="Escribe el nombre de la marca"
+              className="mt-1 block w-full border-gray-300 p-2 border-2 rounded-md shadow-sm focus:outline-none hover:cursor-pointer"
+             
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Imagen (URL)</label>
+            <label className="block text-sm font-medium text-gray-700">Imagen ( URL / JPG / PNG / WEBP )</label>
             <input
               type="text"
               name="img"
               value={formData.img}
               onChange={handleChange}
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm hover:cursor-pointer focus:outline-none"
-              placeholder="Escribe la URL de la imagen"
+              className="mt-1 block w-full border-gray-300 border-2 p-2 rounded-md shadow-sm hover:cursor-pointer focus:outline-none"
+             
               required
             />
           </div>
+          <div>
+        <label className="block text-sm font-medium text-gray-700">Link a publicidad (URL)</label>
+        <input
+          type="text"
+          name="link"
+          value={formData.link}
+          onChange={handleChange}
+          className="mt-1 block w-full border-gray-300 border-2 p-2 rounded-md shadow-sm hover:cursor-pointer focus:outline-none"
+        
+          required
+        />
+      </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700">Tipo de Publicidad</label>
             <select
