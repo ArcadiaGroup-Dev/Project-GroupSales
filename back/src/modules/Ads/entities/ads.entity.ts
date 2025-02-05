@@ -23,4 +23,8 @@ export class Ad {
   @ApiProperty({ example: 'A', description: 'Tipo de publicidad (A o B)', enum: AdType })
   @Column({ type: 'enum', enum: AdType })
   type: AdType;
+
+  @ApiProperty({example:'https://linkexample.com', description:'El link lo redirige'})
+  @Column({type: 'text'})
+  link:string;
 }
