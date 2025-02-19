@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { createPayment } from "../Fetchs/FetchMercadoPago";
 import { IProduct } from "@/Interfaces/IProduct";
-import { useAuth } from "./useAuth"; // Asegúrate de importar useAuth
+import { UserContext } from "@/context/userContext";
 
 interface PaymentButtonProps {
   cart: IProduct[];
@@ -10,7 +10,7 @@ interface PaymentButtonProps {
 }
 
 export function PaymentButton({ cart, onClose }: PaymentButtonProps) {
-  const { token } = useAuth(); // Obtienes token desde el contexto
+  const { token } = useContext(UserContext)
   const [loading, setLoading] = useState(false);
 
   const handleMercadoPago = async () => {
