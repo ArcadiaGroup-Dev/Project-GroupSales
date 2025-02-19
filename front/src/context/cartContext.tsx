@@ -17,23 +17,31 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<IProduct[]>([]);
-  const { user } = useContext(UserContext)
+  const { user } = useContext(UserContext);
 
-  // Cargar carrito desde localStorage al montar el componente
+  // Cargar carrito cuando el usuario cambia
   useEffect(() => {
-    if (user && typeof window !== "undefined") {
+    if (!user) {
+      setCart([]); // Limpiar el carrito si no hay usuario autenticado
+      return;
+    }
+
+    if (typeof window !== "undefined") {
       const savedCart = localStorage.getItem(`cart_${user.id}`);
       if (savedCart) {
         try {
           setCart(JSON.parse(savedCart));
         } catch (error) {
           console.error("Error parsing cart from localStorage:", error);
+          setCart([]);
         }
+      } else {
+        setCart([]); // Si no hay carrito guardado, inicializar vacío
       }
     }
   }, [user]);
 
-  // Guardar carrito en localStorage cada vez que cambie
+  // Guardar carrito en localStorage cuando cambia
   useEffect(() => {
     if (user && typeof window !== "undefined") {
       localStorage.setItem(`cart_${user.id}`, JSON.stringify(cart));
@@ -45,13 +53,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const existingProduct = prevCart.find((p) => p.id === product.id);
       if (existingProduct) {
         return prevCart.map((p) =>
-          p.id === product.id ? { ...p, quantity: (p.quantity || 1) + 1 } : p
+          p.id === product.id ? { ...p, quantity: (p.quantity ?? 1) + 1 } : p
         );
       }
       return [...prevCart, { ...product, quantity: 1 }];
     });
-
-    console.log("Producto agregado:", product);
   };
 
   const removeFromCart = (id: string) => {
@@ -63,16 +69,20 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateQuantity = (id: string, quantity: number) => {
-    setCart((prevCart) =>
-      prevCart.map((product) =>
-        product.id === id ? { ...product, quantity } : product
-      )
-    );
+    if (quantity <= 0) {
+      removeFromCart(id);
+    } else {
+      setCart((prevCart) =>
+        prevCart.map((product) =>
+          product.id === id ? { ...product, quantity } : product
+        )
+      );
+    }
   };
 
   const getTotal = () => {
     return cart.reduce(
-      (total: number, product) => total + Number(product.price) * (product.quantity ?? 1),
+      (total, product) => total + Number(product.price) * (product.quantity ?? 1),
       0
     );
   };

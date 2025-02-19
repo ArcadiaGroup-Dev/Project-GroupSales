@@ -105,3 +105,45 @@ export const forgotPassword = async (email: string) => {
     return { success: false, message: "Error al conectar con el servidor." };
   }
 };
+
+
+
+export const fetchAllOrders = async () => {
+  try {
+    const response = await fetch(`${apiUrl}/orders`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al obtener las órdenes");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error al obtener órdenes:", error);
+    return null;
+  }
+};
+
+export const fetchUserOrdersById = async (userId:string) => {
+  try {
+    const response = await fetch(`${apiUrl}/orders/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al obtener las órdenes");
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error al obtener órdenes:", error);
+    return null;
+  }
+};

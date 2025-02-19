@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import { fetchCreateOrder } from "../Fetchs/FetchsOrders";
 import { IProduct } from "@/Interfaces/IProduct";
 import { ICreateOrder } from "@/Interfaces/IOrders";
-import { useAuth } from "./useAuth";
+import { UserContext } from "@/context/userContext";
+import { useCart } from "@/context/cartContext";
 
 interface TransferButtonProps {
   cart: IProduct[];
@@ -11,7 +12,8 @@ interface TransferButtonProps {
 }
 
 export function TransferButton({ cart, onClose }: TransferButtonProps) {
-  const { user, token } = useAuth();
+  const { user, token } = useContext(UserContext)
+  const {clearCart} = useCart();
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const handleConfirmTransfer = async () => {
@@ -23,7 +25,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
       });
       return;
     }
-
+  console.log("Datos faltantes: ", user , "token", token )
     const cartItems = cart.map((item) => ({ id: item.id, quantity: item.quantity }));
 
     if (cartItems.length === 0) {
@@ -36,7 +38,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
     }
 
     const orderData: ICreateOrder = { userId: user.id, products: cartItems };
-
+console.log("Esto se envia a fetch", orderData)
     try {
       const orderResponse = await fetchCreateOrder(orderData, token);
       console.log("Orden creada exitosamente:", orderResponse);
@@ -46,7 +48,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
         title: "Orden creada con éxito",
         text: "Tu orden ha sido procesada. ¡Gracias por tu compra!",
       });
-
+      clearCart(); 
       onClose();
     } catch (error) {
       Swal.fire({

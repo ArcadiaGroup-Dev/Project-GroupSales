@@ -59,9 +59,11 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
             token: data.access_token,
             role: data.user.role,
             user: data.user,
-            isActive: data.user.isActive,  // Asegurarse de que isActive esté correcto
+            isActive: data.user.isActive,
           };
           localStorage.setItem("user", JSON.stringify(user));
+          console.log("Sesión guardada en localStorage:", user);
+             
   
           setUser(data.user);
           setToken(data.access_token);
@@ -123,20 +125,21 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({
       if (storedAuthData) {
         try {
           const parsedSession = JSON.parse(storedAuthData);
-          const { token, role, ...userData } = parsedSession;
+          console.log("Datos recuperados del localStorage:", parsedSession);
   
-          setUser(userData); // Asegúrate de establecer el usuario
-          setToken(token);
-          setIsActive(true);
-          setIsAdmin(role === "admin");
+          if (parsedSession.token && parsedSession.user) {
+            setUser(parsedSession.user);
+            setToken(parsedSession.token);
+            setIsActive(parsedSession.isActive);
+            setIsAdmin(parsedSession.role === "admin");
+          } else {
+            console.warn("Sesión no válida. Eliminando datos corruptos.");
+            localStorage.removeItem("user");
+          }
         } catch (error) {
           console.error("Error al parsear authData:", error);
-          setIsActive(false);
-          setIsAdmin(false);
+          localStorage.removeItem("user");
         }
-      } else {
-        setIsActive(false);
-        setIsAdmin(false);
       }
     }
   }, []);

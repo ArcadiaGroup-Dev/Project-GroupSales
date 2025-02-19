@@ -1,13 +1,13 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import DeleteAccount from "./DeleteAccount";
 import { EditProfile } from "./EditProfile";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
 import { IUserResponse } from "@/Interfaces/IUser";
 import LogOut from "./LogOut";
-import Link from "next/link";
-import HistorySection from "./HistorySection";
+import { HistorySection } from "./HistorySection";
 import PublishSection from "./PublishSection";
+import { UserContext } from "@/context/userContext";
 
 export default function MyAccount() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -15,7 +15,7 @@ export default function MyAccount() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<IUserResponse | null>(null); 
-
+  const {user} = useContext(UserContext)
   useEffect(() => {
   
     const storedUserData = localStorage.getItem("user");
@@ -34,6 +34,11 @@ export default function MyAccount() {
     return <p className="mt-32">Cargando datos del usuario...</p>;
   }
 
+  if (!user) {
+    return <p className="mt-32">Cargando datos del usuario...</p>;
+  }
+
+  
   // Funciones para manejar acciones
   const handleOpenLogout = () => setIsLogoutModalOpen(true);
   const handleCloseLogout = () => setIsLogoutModalOpen(false);
@@ -147,8 +152,11 @@ export default function MyAccount() {
       title: "Publicar",
       content: <PublishSection />, 
     },
+    ...(user.role === "seller" ? [{
+      title: "Mis Ventas",
+      content: <div>Contenido de Mis Ventas</div>, 
+    }] : []),
   ];
-
   return (
     <div className="mt-28 p-8 bg-white shadow-lg rounded-lg">
       <nav className="mb-8 flex space-x-4 border-b pb-2">
