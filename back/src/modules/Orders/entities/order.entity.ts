@@ -31,4 +31,8 @@ export class Orders {
   @ManyToOne(() => User, (user) => user.orders)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @ManyToOne(() => User, (user) => user.soldOrders) 
+  @JoinColumn({ name: 'seller_id' })
+  seller: User;
 }

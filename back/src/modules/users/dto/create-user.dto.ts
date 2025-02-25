@@ -32,4 +32,20 @@ export class CreateUserDto {
   @IsString()
   @IsNotEmpty()
   country: string;
+
+  @IsString()
+  bank?: string;
+
+  @IsString()
+  account?:string;
+
+  @IsString()
+  cardHolder?:string;
+
+  @IsString()
+  alias: string;
+
+  @IsString()
+  cbu: string;
+
 }

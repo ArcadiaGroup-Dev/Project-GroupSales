@@ -43,6 +43,22 @@ export class User {
   @Column()
   country: string;
 
+  @Column()
+  bank: string;
+
+  @Column()
+  account:string;
+
+  @Column()
+  cardHolder:string;
+
+  @Column()
+  alias: string;
+
+  @Column()
+  cbu: string;
+
+
   @OneToMany(() => Product, (products) => products.user, { nullable: true })
   products: Product[];
 
@@ -55,4 +71,7 @@ export class User {
   @OneToMany(() => Orders, (order) => order.user)
   @JoinColumn({ name: 'orders_id' })
   orders: Orders[];
+
+  @OneToMany(() => Orders, (order) => order.seller)
+  soldOrders: Orders[];
 }
