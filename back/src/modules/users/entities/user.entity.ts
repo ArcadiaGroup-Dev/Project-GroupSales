@@ -31,7 +31,7 @@ export class User {
   @Column()
   birthdate: Date;
 
-  @Column()
+  @Column({nullable: true})
   phone: string;
 
   @Column()
@@ -43,19 +43,19 @@ export class User {
   @Column()
   country: string;
 
-  @Column()
+  @Column({nullable: true})
   bank: string;
 
-  @Column()
+  @Column({nullable:true})
   account:string;
 
-  @Column()
+  @Column({nullable: true})
   cardHolder:string;
 
-  @Column()
+  @Column({nullable: true})
   alias: string;
 
-  @Column()
+  @Column({nullable: true})
   cbu: string;
 
 

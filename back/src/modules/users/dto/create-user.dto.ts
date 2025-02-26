@@ -43,9 +43,9 @@ export class CreateUserDto {
   cardHolder?:string;
 
   @IsString()
-  alias: string;
+  alias?: string;
 
   @IsString()
-  cbu: string;
+  cbu?: string;
 
 }
