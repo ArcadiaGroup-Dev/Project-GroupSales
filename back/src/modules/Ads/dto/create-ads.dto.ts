@@ -1,5 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEnum, IsNotEmpty, IsString, IsUrl, MaxLength } from 'class-validator';
+import {
+  IsEnum,
+  IsNotEmpty,
+  IsString,
+  IsUrl,
+  MaxLength,
+} from 'class-validator';
 import { AdType } from '../entities/ads.entity';
 
 export class CreateAdDto {
@@ -25,7 +31,7 @@ export class CreateAdDto {
   @IsEnum(AdType)
   type: AdType;
 
-  @ApiProperty({example: 'https://link.com', description: 'Link imagen'})
+  @ApiProperty({ example: 'https://link.com', description: 'Link imagen' })
   @IsUrl()
   link: string;
 }

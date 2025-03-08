@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsOptional, IsString } from 'class-validator';
 import { Orders } from 'src/modules/Orders/entities/order.entity';
 import { Product } from 'src/modules/Products/entities/products.entity';
 import {
@@ -43,21 +45,20 @@ export class User {
   @Column()
   country: string;
 
-  @Column()
-  bank: string;
+  @Column({ nullable: true })
+  bank?: string;
 
-  @Column()
-  account:string;
+  @Column({ nullable: true })
+  account?: string;
 
-  @Column()
-  cardHolder:string;
+  @Column({ nullable: true })
+  cardHolder?: string;
 
-  @Column()
+  @Column({ nullable: true })
   alias: string;
 
-  @Column()
+  @Column({ nullable: true })
   cbu: string;
-
 
   @OneToMany(() => Product, (products) => products.user, { nullable: true })
   products: Product[];

@@ -51,7 +51,7 @@ const PublishSection: React.FC = () => {
           const sellerEmail = parsedSession.user.email;
           console.log("Correo del vendedor (sellerEmail):", sellerEmail);
   
-          const adminEmail = "gimenapascuale@gmai.com";
+          const adminEmail = "gimenapascuale@gmail.com";
           console.log("Correo del administrador (adminEmail):", adminEmail);
   
           const data = await sendPermissionRequestEmail(adminEmail, sellerEmail);

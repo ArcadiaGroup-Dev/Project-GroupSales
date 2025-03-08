@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { fetchUserOrdersById, fetchAllOrders } from "../Fetchs/FetchsUser";
 import { UserContext } from "@/context/userContext";
 import { IOrder } from "@/Interfaces/IOrders";
+import Image from "next/image";
 
 export function HistorySection() {
   const { user } = useContext(UserContext);
@@ -45,16 +46,26 @@ export function HistorySection() {
             >
             
               <p className="text-gray-600">📅 Fecha: {new Date(order.date).toLocaleDateString()}</p>
-  
               <h4 className="mt-4 font-semibold text-gray-800">🛍️ Productos:</h4>
               <ul className="mt-2 space-y-2 text-gray-700">
-                {order.orderDetails.products.map((product) => (
-                  <li key={product.id} className="flex justify-between">
-                    <span className="font-medium">{product.name}</span>
-                    <span>${product.price} x {order.orderDetails.quantity}</span>
-                  </li>
-                ))}
-              </ul>
+  {order.orderDetails.products.map((product) => (
+    <li key={product.id} className="flex items-center p-4 bg-white  rounded-lg border border-gray-200">
+      <div className="flex-shrink-0 w-16 h-16 mr-4 relative">
+        <Image
+          src={product.imageUrl} 
+          alt={product.name} 
+          layout="fill" 
+          objectFit="cover" 
+          className="rounded-md"
+        />
+      </div>
+      <div className="flex-grow">
+        <span className="font-medium text-gray-800">{product.name}</span>
+        <div className="text-sm text-gray-600">${product.price} x {order.orderDetails.quantity}</div>
+      </div>
+    </li>
+  ))}
+</ul>
   
               <p className="mt-4 text-lg font-bold text-gray-900">
                 💰 Total: ${order.orderDetails.price}

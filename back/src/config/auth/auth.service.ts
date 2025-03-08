@@ -1,4 +1,9 @@
-import { BadRequestException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { UsersService } from 'src/modules/users/users.service';
@@ -10,7 +15,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly usersService: UsersService,
-    private readonly mailerService: EmailService
+    private readonly mailerService: EmailService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -33,29 +38,27 @@ export class AuthService {
     if (!validatedUser) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-  
+
     const payload: JwtPayload = {
       username: validatedUser.name,
       sub: validatedUser.id,
     };
-  
+
     const { password: _, ...userNoPassword } = validatedUser;
     return {
       access_token: this.jwtService.sign(payload),
       user: userNoPassword,
     };
   }
-  
+
   async requestPasswordReset(email: string) {
     const user = await this.usersService.findOneByEmail(email);
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
 
-
     const payload = { sub: user.id, email: user.email };
     const resetToken = this.jwtService.sign(payload, { expiresIn: '1h' });
-
 
     await this.mailerService.sendPasswordResetEmail(user.email, resetToken);
 
@@ -68,14 +71,14 @@ export class AuthService {
       if (!decoded || !decoded.sub) {
         throw new BadRequestException('Token inválido o expirado');
       }
-  
+
       const user = await this.usersService.findOneById(decoded.sub);
       if (!user) {
         throw new NotFoundException('Usuario no encontrado');
       }
-        
+
       await this.usersService.updatePassword(user.id, newPassword);
-  
+
       return { message: 'Contraseña actualizada con éxito' };
     } catch (error) {
       throw new BadRequestException(
@@ -85,5 +88,4 @@ export class AuthService {
       );
     }
   }
-  
 }

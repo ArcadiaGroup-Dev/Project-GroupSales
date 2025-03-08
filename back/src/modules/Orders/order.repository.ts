@@ -86,7 +86,7 @@ export class OrdersRepository {
           products: true,
         },
         user: true,
-        seller:true
+        seller: true,
       },
     });
 
@@ -99,7 +99,7 @@ export class OrdersRepository {
     return await this.ordersRepository.find({
       relations: {
         user: true,
-        seller:true,
+        seller: true,
         orderDetails: true,
       },
     });

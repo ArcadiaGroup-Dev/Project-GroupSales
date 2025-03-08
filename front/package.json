@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mercadopago/sdk-react": "^0.0.24",
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "jwt-decode": "^4.0.0",

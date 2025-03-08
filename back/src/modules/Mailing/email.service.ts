@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 
-
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
@@ -64,7 +63,7 @@ export class EmailService {
       await this.mailerService.sendMail({
         to: email,
         subject: 'Recuperación de Contraseña',
-        template: './password-reset', 
+        template: './password-reset',
         context: {
           resetUrl,
         },

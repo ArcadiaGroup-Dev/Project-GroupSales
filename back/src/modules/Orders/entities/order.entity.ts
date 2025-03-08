@@ -32,7 +32,7 @@ export class Orders {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @ManyToOne(() => User, (user) => user.soldOrders) 
+  @ManyToOne(() => User, (user) => user.soldOrders)
   @JoinColumn({ name: 'seller_id' })
   seller: User;
 }

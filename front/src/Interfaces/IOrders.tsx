@@ -22,6 +22,7 @@ import { IUser } from "./IUser";
     products: {
       id: string;
       quantity: number;
+      seller:string;
     }[];
   }
   

@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsEmail, IsDate } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsDate,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -33,19 +40,48 @@ export class CreateUserDto {
   @IsNotEmpty()
   country: string;
 
+  @ApiProperty({
+    description: 'Banco (opcional)',
+    example: 'BBVA',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
   bank?: string;
 
+  @ApiProperty({
+    description: 'Cuenta bancaria (opcional)',
+    example: '123456789',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
-  account?:string;
+  account?: string;
 
+  @ApiProperty({
+    description: 'Titular de la cuenta (opcional)',
+    example: 'Juan Pérez',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
-  cardHolder?:string;
+  cardHolder?: string;
 
+  @ApiProperty({
+    description: 'Titular de la cuenta (opcional)',
+    example: 'Juan Pérez',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
   alias: string;
 
+  @ApiProperty({
+    description: 'Titular de la cuenta (opcional)',
+    example: 'Juan Pérez',
+    required: false,
+  })
+  @IsOptional()
   @IsString()
   cbu: string;
-
 }

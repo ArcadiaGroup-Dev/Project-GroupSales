@@ -111,9 +111,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('Usuario no encontrado');
     }
-  
+
     user.password = await bcrypt.hash(newPassword, 10);
     await this.userRepository.save(user);
   }
-  
 }
