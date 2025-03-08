@@ -33,7 +33,7 @@ export class User {
   @Column()
   birthdate: Date;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
   @Column()

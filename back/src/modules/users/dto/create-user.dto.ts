@@ -74,7 +74,7 @@ export class CreateUserDto {
   })
   @IsOptional()
   @IsString()
-  alias: string;
+  alias?: string;
 
   @ApiProperty({
     description: 'Titular de la cuenta (opcional)',
@@ -83,5 +83,5 @@ export class CreateUserDto {
   })
   @IsOptional()
   @IsString()
-  cbu: string;
+  cbu?: string;
 }
