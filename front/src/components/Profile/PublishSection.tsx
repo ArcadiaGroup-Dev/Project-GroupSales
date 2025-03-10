@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { fetchUserId } from "../Fetchs/FetchsUser";
-import { sendPermissionRequestEmail } from "../Fetchs/FetchsEmail";
 import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
+import { sendPermissionRequestEmail } from "../Fetchs/FetchsEmail";
 
 const PublishSection: React.FC = () => {
   const [role, setRole] = useState<string | undefined>(undefined);
@@ -43,31 +43,37 @@ const PublishSection: React.FC = () => {
 
   const handleRequestPermission = async () => {
     console.log("User ID: ", userId);
+  
+    // Verifica si el userId existe
     if (userId) {
       try {
+        // Obtener datos del usuario desde el localStorage
         const storedAuthData = localStorage.getItem("user");
+        
         if (storedAuthData) {
           const parsedSession = JSON.parse(storedAuthData);
-          const sellerEmail = parsedSession.user.email;
+          const sellerEmail = parsedSession.user.email; // Correo del vendedor
           console.log("Correo del vendedor (sellerEmail):", sellerEmail);
   
-          const adminEmail = "gimenapascuale@gmail.com";
+          const adminEmail = "gimenapascuale@gmail.com"; // Correo del administrador
           console.log("Correo del administrador (adminEmail):", adminEmail);
   
-          const data = await sendPermissionRequestEmail(adminEmail, sellerEmail);
+          // Aquí se llama a la función que envía el correo
+          await sendPermissionRequestEmail(adminEmail, sellerEmail);
   
+          // Guardamos en localStorage que se ha solicitado el permiso
           localStorage.setItem(`permissionRequested_${userId}`, "true");
-          setHasRequestedPermission(true);
   
+          // Cambiamos el estado para mostrar una notificación de éxito
+          setHasRequestedPermission(true);
           setNotificationMessage('Solicitud de permiso enviada correctamente.');
           setNotificationVisible(true);
-          console.log(data); 
+  
         }
       } catch (error) {
         console.error("Error al procesar la solicitud de permiso:", error);
-        
-      
-        setNotificationMessage('Error al enviar la solicitud de permiso.');
+        // Puedes agregar aquí un mensaje de error si es necesario
+        setNotificationMessage('Hubo un error al procesar la solicitud de permiso.');
         setNotificationVisible(true);
       }
     }
@@ -105,19 +111,41 @@ const PublishSection: React.FC = () => {
         </div>
       ) : role === "seller" ? (
         <>
-          <Link href="/myAccount/create/product">
-            <button className="bg-secondary text-white rounded-lg w-full sm:w-auto px-6 py-3 transition-all duration-300 transform hover:bg-white hover:border-secondary hover:text-secondary hover:scale-105 shadow-lg hover:shadow-xl">
-              Crear Productos / Servicios
-            </button>
-          </Link>
-          <h2 className="text-lg text-gray-700 pb-4 font-medium sm:text-xl">Selecciona para crear productos o servicios.</h2>
+  <div className="space-y-6">
+   <div className="flex flex-col items-center sm:items-start space-y-4">
+    <Link href="/myAccount/dataTransfer">
+      <button className="bg-secondary text-white rounded-md px-6 py-3 w-full sm:w-[250px] transition-all duration-300 transform hover:bg-white hover:border-secondary hover:text-secondary hover:scale-105 shadow-lg">
+        Datos para pagos por transferencia
+      </button>
+    </Link>
+    <p className="text-sm text-gray-600 text-center sm:text-left sm:w-1/2">
+      Agrega o modifica tus datos para pagos por transferencia
+    </p>
+  </div>
 
-          <Link href="/myAccount/view">
-            <button className="bg-secondary text-white rounded-lg w-full sm:w-auto px-6 py-3 transition-all duration-300 transform hover:bg-white hover:border-secondary hover:text-secondary hover:scale-105 shadow-lg hover:shadow-xl">
-              Ver mis productos/servicios publicados
-            </button>
-          </Link>
-          <h2 className="text-lg text-gray-700 font-medium sm:text-xl">Selecciona para ver, modificar o eliminar productos o servicios.</h2>
+  <div className="flex flex-col items-center sm:items-start space-y-4">
+    <Link href="/myAccount/create/product">
+      <button className="bg-secondary text-white rounded-md px-6 py-3 w-full sm:w-[250px] transition-all duration-300 transform hover:bg-white hover:border-secondary hover:text-secondary hover:scale-105 shadow-lg">
+        Crear productos / servicios
+      </button>
+    </Link>
+    <p className="text-sm text-gray-600 text-center sm:text-left sm:w-1/2">
+      Crea o modifica tus productos o servicios
+    </p>
+  </div>
+
+  <div className="flex flex-col items-center sm:items-start space-y-4">
+    <Link href="/myAccount/view">
+      <button className="bg-secondary text-white rounded-md px-6 py-3 w-full sm:w-[250px] transition-all duration-300 transform hover:bg-white hover:border-secondary hover:text-secondary hover:scale-105 shadow-lg">
+        Ver productos / servicios
+      </button>
+    </Link>
+    <p className="text-sm text-gray-600 text-center sm:text-left sm:w-1/2">
+      Visualiza y gestiona tus productos y servicios
+    </p>
+  </div>
+</div>
+
         </>
       ) : (
         <p className="text-red-500">Rol desconocido</p>

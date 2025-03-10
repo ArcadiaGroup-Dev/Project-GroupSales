@@ -1,0 +1,10 @@
+<h1>Una compra ha sido realizada</h1>
+<p><strong>Detalles de los productos:</strong></p>
+<ul>
+  {{#each productDetails}}
+    <li>Nombre: {{name}}</li>
+    <li>Descripción: {{description}}</li>
+    <li>Precio: {{price}}</li>
+    <li>Cantidad: {{quantity}}</li>
+  {{/each}}
+</ul>

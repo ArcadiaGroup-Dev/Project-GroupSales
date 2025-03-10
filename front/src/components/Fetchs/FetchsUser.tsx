@@ -147,3 +147,43 @@ export const fetchUserOrdersById = async (userId:string) => {
     return null;
   }
 };
+
+export const fetchEditUser = async (userId: string, updatedData: Record<string, any>) => {
+  try {
+    const response = await fetch(`${apiUrl}/users/${userId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Error desconocido");
+    }
+
+    const data = await response.json();
+    console.log("Usuario actualizado exitosamente:", data);
+    return data;
+  } catch (error) {
+    console.error("Error al actualizar el usuario:", error);
+    throw error;
+  }
+};
+
+export const deleteUserAccount = async (userId: string): Promise<boolean> => {
+  try {
+    const response = await fetch(`${apiUrl}/users/${userId}`, { method: "DELETE" });
+    if (response.ok) {
+      return true; 
+    } else {
+      const errorText = await response.text();
+      console.error("Error al eliminar la cuenta:", errorText);
+      return false; 
+    }
+  } catch (error) {
+    console.error("Error en la solicitud de eliminación:", error);
+    return false;
+  }
+};

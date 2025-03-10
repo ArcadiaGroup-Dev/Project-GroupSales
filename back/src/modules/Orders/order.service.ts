@@ -88,7 +88,7 @@ export class OrderService {
 
   async create(
     userId: string,
-    products: Array<{ id: string; quantity: number }>,
+    products: Array<{ id: string; quantity: number; seller: string }>,
   ) {
     return await this.orderRepository.addOrder(userId, products);
   }

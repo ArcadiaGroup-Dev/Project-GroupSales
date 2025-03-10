@@ -13,6 +13,9 @@ import { IUser } from "./IUser";
     id: string;
     date: string;
     user: IUser;
+    seller: {
+      id:string;
+    }
     orderDetails: IOrderDetails;
   }
  
@@ -22,7 +25,7 @@ import { IUser } from "./IUser";
     products: {
       id: string;
       quantity: number;
-      seller:string;
+    
     }[];
   }
   

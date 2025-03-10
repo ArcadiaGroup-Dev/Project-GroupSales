@@ -5,6 +5,7 @@ import { fetchDeleteUser, fetchToAdmin, fetchToSeller, getUsers } from '../Fetch
 import { IUser } from '@/Interfaces/IUser';
 import { ConfirmationMessage } from '../Notifications/NotificationAdmin';
 import { NotifFormsUsers } from '../Notifications/NotifiFormsUsers';
+import { sendApprovalAdmin, sendApprovalRequestEmail } from '../Fetchs/FetchsEmail';
 
 export default function Users() {
   const [users, setUsers] = useState<IUser[]>([]);
@@ -43,12 +44,26 @@ export default function Users() {
   const confirmToSeller = async () => {
     if (selectedUserId) {
       try {
+        // Primero, cambiamos el rol del usuario a 'seller'
         await fetchToSeller(selectedUserId);
+  
+        // Luego, obtenemos los correos de administrador y vendedor
+        const selectedUser = users.find(user => user.id === selectedUserId);
+        if (selectedUser) {
+          const adminEmail = 'gimenapascuale@gmail.com'; // Debes obtener el correo del administrador
+          const sellerEmail = selectedUser.email; // El correo del vendedor seleccionado
+  
+          // Llamamos a la función que envía el correo de aprobación
+          await sendApprovalRequestEmail(adminEmail, sellerEmail);
+        }
+  
+        // Actualizamos el estado de la lista de usuarios
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
             user.id === selectedUserId ? { ...user, role: 'seller' } : user
           )
         );
+        
         setNotificationMessage('El usuario ahora puede vender');
         setSelectedUserId(null);
         setRoleToAssign(null);
@@ -58,25 +73,41 @@ export default function Users() {
       }
     }
   };
-
+  
   const confirmAdmin = async () => {
     if (selectedUserId) {
       try {
+        // Actualizar el rol del usuario a administrador
         await fetchToAdmin(selectedUserId);
-        setUsers((prevUsers) =>
-          prevUsers.map((user) =>
-            user.id === selectedUserId ? { ...user, role: 'admin' } : user
-          )
-        );
-        setNotificationMessage('El usuario ahora es administrador');
-        setSelectedUserId(null);
-        setRoleToAssign(null);
-        setIsConfirmationVisible(false);
+  
+        // Obtener los datos del usuario actualizado (el que será promovido)
+        const updatedUser = users.find(user => user.id === selectedUserId);
+        if (updatedUser) {
+          // Obtener el correo del usuario que está siendo promovido (el seller)
+          const sellerEmail = updatedUser.email;
+  
+          // Llamar a la función para enviar el correo de notificación al admin
+          await sendApprovalAdmin('gimenapascuale@gmail.com', sellerEmail);  // El correo del admin y del vendedor
+  
+          // Actualizar la lista de usuarios con el nuevo rol de administrador
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              user.id === selectedUserId ? { ...user, role: 'admin' } : user
+            )
+          );
+  
+          setNotificationMessage('El usuario ahora es administrador y se le notificó por correo');
+          setSelectedUserId(null);
+          setRoleToAssign(null);
+          setIsConfirmationVisible(false);
+        }
       } catch (error) {
         console.error('Error:', error);
       }
     }
   };
+  
+  
 
   const confirmDeleteUser = async () => {
     if (selectedUserId) {

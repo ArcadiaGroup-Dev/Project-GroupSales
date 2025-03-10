@@ -10,7 +10,7 @@ const PrivateRouteAdmin: React.FC<{ children: React.ReactNode }> = ({ children }
 
   useEffect(() => {
     if (user !== null) {
-      setLoading(false); // Espera que la información del usuario se cargue antes de verificar
+      setLoading(false); 
     }
   }, [user]);
 
@@ -19,7 +19,7 @@ const PrivateRouteAdmin: React.FC<{ children: React.ReactNode }> = ({ children }
   }
 
   if (!isActive || !isAdmin) {
-    router.replace("/login"); // Usar replace para no agregar al historial
+    router.replace("/login"); 
     return null;
   }
 

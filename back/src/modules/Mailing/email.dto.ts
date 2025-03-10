@@ -1,7 +1,59 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEmail, IsString, MinLength } from 'class-validator';
+
+export class IProducto {
+  name: string;
+  quantity: number;
+  price: number;
+}
+
+export class PurchaseNotificationDto {
+  @IsEmail()
+  adminEmail: string;
+
+  @IsEmail()
+  sellerEmail: string;
+
+  @IsEmail()
+  userEmail: string;
+
+  @IsArray()
+  productDetails: IProducto[];  
+}
 
 export class SendSellRequestDto {
+  @ApiProperty({
+    example: 'admin@example.com',
+    description: 'Correo del administrador',
+  })
+  @IsEmail()
+  adminEmail: string;
+
+  @ApiProperty({
+    example: 'seller@example.com',
+    description: 'Correo del vendedor',
+  })
+  @IsEmail()
+  sellerEmail: string;
+}
+
+export class SendAdminPromotionDto {
+  @ApiProperty({
+    example: 'admin@example.com',
+    description: 'Correo del administrador',
+  })
+  @IsEmail()
+  adminEmail: string;
+
+  @ApiProperty({
+    example: 'seller@example.com',
+    description: 'Correo del vendedor',
+  })
+  @IsEmail()
+  sellerEmail: string;
+}
+
+export class SendSellApprovalDto {
   @ApiProperty({
     example: 'admin@example.com',
     description: 'Correo del administrador',

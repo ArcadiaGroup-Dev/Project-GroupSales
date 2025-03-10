@@ -1,13 +1,14 @@
-"use client"
 import React, { useState, useEffect, useContext } from "react";
 import DeleteAccount from "./DeleteAccount";
 import { EditProfile } from "./EditProfile";
 import { FaUser, FaEnvelope, FaPhone, FaHome, FaFlag, FaCity, FaBirthdayCake } from "react-icons/fa";
-import { IUserResponse } from "@/Interfaces/IUser";
+import { IUpdateUserData, IUserResponse } from "@/Interfaces/IUser";
 import LogOut from "./LogOut";
 import { HistorySection } from "./HistorySection";
 import PublishSection from "./PublishSection";
 import { UserContext } from "@/context/userContext";
+import MisVentas from "./MisVentas";
+import { fetchEditUser } from "../Fetchs/FetchsUser";
 
 export default function MyAccount() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -15,11 +16,10 @@ export default function MyAccount() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<IUserResponse | null>(null); 
-  const {user} = useContext(UserContext)
+  const { user } = useContext(UserContext);
+  const userId = user?.id;
   useEffect(() => {
-  
     const storedUserData = localStorage.getItem("user");
-    
     if (storedUserData) {
       try {
         const parsedUserData = JSON.parse(storedUserData);
@@ -38,7 +38,6 @@ export default function MyAccount() {
     return <p className="mt-32">Cargando datos del usuario...</p>;
   }
 
-  
   // Funciones para manejar acciones
   const handleOpenLogout = () => setIsLogoutModalOpen(true);
   const handleCloseLogout = () => setIsLogoutModalOpen(false);
@@ -46,16 +45,21 @@ export default function MyAccount() {
   const handleCloseDeleteAccount = () => setIsDeleteModalOpen(false);
   const handleEditClick = () => setIsEditing(true);
   const handleCancelEdit = () => setIsEditing(false);
-  const handleSaveEdit = (data: { address: string; phone: string }) => {
-    setUserData((prev) => {
-      if (prev) {
-        const updatedUserData = { ...prev, user: { ...prev.user, ...data } };
-        localStorage.setItem("user", JSON.stringify(updatedUserData)); 
-        return updatedUserData;
-      }
-      return null;
-    });
-    setIsEditing(false);
+  const handleSaveEdit = async (data: IUpdateUserData) => {
+    try {
+      const updatedUser = await fetchEditUser(userData.user.id, data);
+      setUserData((prev) => {
+        if (prev) {
+          const updatedUserData = { ...prev, user: { ...prev.user, ...data } };
+          localStorage.setItem("user", JSON.stringify(updatedUserData));
+          return updatedUserData;
+        }
+        return null;
+      });
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error al guardar los cambios del usuario:", error);
+    }
   };
   
 
@@ -83,10 +87,10 @@ export default function MyAccount() {
                 <p className="text-gray-700">{userData.user.phone}</p>
               </div>
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
-              <FaHome className="text-gray-600" />
-              <span className="font-medium text-gray-600">Dirección:</span>
-              <p className="text-gray-700">{userData.user.address}</p>
-            </div> 
+                <FaHome className="text-gray-600" />
+                <span className="font-medium text-gray-600">Dirección:</span>
+                <p className="text-gray-700">{userData.user.address}</p>
+              </div> 
               <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                 <FaFlag className="text-gray-600" />
                 <span className="font-medium text-gray-600">País:</span>
@@ -132,9 +136,10 @@ export default function MyAccount() {
                 </div>
               ) : (
                 <EditProfile
-                initialAddress={userData.user.address} 
-                 initialPhone={userData.user.phone}  
-                 initialCity={userData.user.city}
+                  userId={user.id}
+                  initialAddress={userData.user.address} 
+                  initialPhone={userData.user.phone}  
+                  initialCity={userData.user.city}
                   onCancel={handleCancelEdit}
                   onSave={handleSaveEdit}
                 />
@@ -154,24 +159,28 @@ export default function MyAccount() {
     },
     ...(user.role === "seller" ? [{
       title: "Mis Ventas",
-      content: <div>Contenido de Mis Ventas</div>, 
+      content: <MisVentas />, 
     }] : []),
   ];
+
   return (
     <div className="mt-28 p-8 bg-white shadow-lg rounded-lg">
-      <nav className="mb-8 flex space-x-4 border-b pb-2">
-        {sections.map((section, index) => (
-          <button
-            key={index}
-            className={`px-4 py-2 ${activeIndex === index
+      <nav className="mb-8 flex flex-col sm:flex-row justify-between items-center border-b pb-2">
+        {/* Menú de secciones */}
+        <div className="flex sm:space-x-4 w-full justify-between sm:block">
+          {sections.map((section, index) => (
+            <button
+              key={index}
+              className={`px-4 py-2 ${activeIndex === index
                 ? "border-b-2 border-teal-700 text-teal-700 font-semibold"
                 : "text-gray-600 hover:text-teal-700"
               }`}
-            onClick={() => setActiveIndex(index)}
-          >
-            {section.title}
-          </button>
-        ))}
+              onClick={() => setActiveIndex(index)}
+            >
+              {section.title}
+            </button>
+          ))}
+        </div>
       </nav>
 
       <div>{sections[activeIndex].content}</div>

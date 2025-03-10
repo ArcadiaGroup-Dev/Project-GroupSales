@@ -1,0 +1,11 @@
+<h1>Gracias por tu compra</h1>
+<p>Tu compra ha sido procesada correctamente.</p>
+<p><strong>Detalles de los productos:</strong></p>
+<ul>
+   {{#each productDetails}}
+    <li>Nombre: {{name}}</li>
+    <li>Descripción: {{description}}</li>
+    <li>Precio: {{price}}</li>
+    <li>Cantidad: {{quantity}}</li>
+  {{/each}}
+</ul>

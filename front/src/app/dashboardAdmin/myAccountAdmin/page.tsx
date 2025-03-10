@@ -60,7 +60,7 @@ export default function MyAccountAdmin() {
                 </div>
                 <div className="flex items-center space-x-2 p-2 border-b border-gray-300">
                   <FaEnvelope className="text-gray-600" />
-                  <span className="font-medium text-gray-600">Correo Electrónico:</span>
+                  <span className="font-small text-gray-600">Correo Electrónico:</span>
                   <p className="text-gray-700">{userData.user.email}</p>
                 </div>
                 <div className="flex items-center space-x-2 p-2 border-b border-gray-300">

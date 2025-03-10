@@ -10,8 +10,15 @@ export interface IProduct {
   currency: string;
   quantity: number;
   user: {
-    id:string;
-    name: string;
+    id: string | null;
+    email:string | null;
+    name: string | null;
+    bank: string | null;
+    account: string | null;
+    cardHolder: string | null;
+    alias: string | null;
+    cbu: string | null;
+    phone:string | null;
   }
 }
 

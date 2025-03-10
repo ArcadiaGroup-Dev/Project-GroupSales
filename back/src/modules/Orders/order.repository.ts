@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Orders } from './entities/order.entity';
 import { Repository } from 'typeorm';
@@ -21,7 +25,7 @@ export class OrdersRepository {
 
   async addOrder(
     userId: string,
-    products: Array<{ id: string; quantity: number }>,
+    products: Array<{ id: string; quantity: number; seller: string }>,
   ) {
     let total = 0;
 
@@ -29,9 +33,25 @@ export class OrdersRepository {
     if (!user)
       throw new NotFoundException(`Usuario con id ${userId} no encontrado`);
 
+    // Obtener el vendedor (seller)
+    const sellerIds = [...new Set(products.map((product) => product.seller))];
+    if (sellerIds.length !== 1) {
+      throw new BadRequestException(
+        'Todos los productos deben tener el mismo vendedor.',
+      );
+    }
+
+    const seller = await this.usersRepository.findOneBy({ id: sellerIds[0] });
+    if (!seller)
+      throw new NotFoundException(
+        `Vendedor con id ${sellerIds[0]} no encontrado`,
+      );
+
+    // Crear la nueva orden
     const order = new Orders();
     order.date = new Date();
     order.user = user;
+    order.seller = seller; // Asignar el vendedor
     const newOrder = await this.ordersRepository.save(order);
 
     const productsArray = await Promise.all(

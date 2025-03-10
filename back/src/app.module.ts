@@ -17,6 +17,7 @@ import { MercadopagoService } from './mercadopago/mercadopago.service'; */
 import { AdsModule } from './modules/Ads/ads.module';
 import { MercadoPagoModule } from './modules/mercadopago/mercadopago.module';
 import { MercadoPagoService } from './modules/mercadopago/mercadopago.service';
+import { EmailController } from './modules/Mailing/email.controller';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { MercadoPagoService } from './modules/mercadopago/mercadopago.service';
     MercadoPagoModule,
     AdsModule,
   ],
-  controllers: [PaymentsController],
+  controllers: [PaymentsController, EmailController],
   providers: [EmailService, MercadoPagoService],
 })
 export class AppModule {}

@@ -7,11 +7,12 @@ import {
   Param,
   Delete,
   Query,
+  Put,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { ApiBody, ApiTags } from '@nestjs/swagger';
-import { UserRole } from './entities/user.entity';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -113,6 +114,32 @@ export class UsersController {
   async removeUser(@Param('id') id: string) {
     try {
       return await this.usersService.removeUser(id);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+
+  @Put(':id') // Definimos la ruta PUT para actualizar un usuario
+  @ApiBody({
+    description: 'Datos actualizados del usuario',
+    schema: {
+      example: {
+        name: 'Jane Doe Updated',
+        email: 'janedoeupdated@example.com',
+        phone: '9876543210',
+        address: '456 Updated St',
+        city: 'New City',
+        country: 'New Country',
+      },
+    },
+  })
+  async updateUser(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    try {
+      const updatedUser = await this.usersService.updateUser(id, updateUserDto);
+      return updatedUser;
     } catch (error) {
       throw new Error(error.message);
     }

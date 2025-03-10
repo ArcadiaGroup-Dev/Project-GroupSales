@@ -21,4 +21,6 @@ export class MercadoPagoService {
       throw new Error(`Error creating preference: ${error.message}`);
     }
   }
+
+  
 }

@@ -1,4 +1,4 @@
-import { ICartItem, IProduct } from "./IProduct";
+
 
 export interface IUserRegister {
     name: string;
@@ -25,7 +25,28 @@ export interface IUser {
   country: string;
   role: 'admin' | 'seller' | 'client'; 
   isActive: boolean;
+  bank?: string;
+  account?: string;
+  cardHolder?: string;
+  alias?: string;
+  cbu?: string;
 }
+
+export interface ITransferenciaData {
+  bank?: string;
+  account?: string;
+  cardHolder?: string;
+  alias?: string;
+  cbu?: string;
+}
+
+
+export interface IUpdateUserData {
+  address: string;
+  phone: string;
+  city: string;
+}
+
 
 
 export enum UserRole {
