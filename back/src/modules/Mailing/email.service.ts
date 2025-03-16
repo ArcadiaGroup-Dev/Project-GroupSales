@@ -163,9 +163,9 @@ export class EmailService {
     productDetails: any,
   ) {
     try {
-      console.log("Detalles de productos recibidos en el servicio:");
+      console.log('Detalles de productos recibidos en el servicio:');
       console.log(productDetails);
-  
+
       await this.mailerService.sendMail({
         to: adminEmail,
         subject: 'Nueva compra realizada',
@@ -174,7 +174,7 @@ export class EmailService {
           productDetails,
         },
       });
-  
+
       await this.mailerService.sendMail({
         to: sellerEmail,
         subject: 'Una compra ha sido realizada en tu tienda',
@@ -183,7 +183,7 @@ export class EmailService {
           productDetails,
         },
       });
-  
+
       await this.mailerService.sendMail({
         to: userEmail,
         subject: 'Gracias por tu compra',
@@ -192,15 +192,15 @@ export class EmailService {
           productDetails,
         },
       });
-  
+
       this.logger.log('Notificación de compra enviada correctamente.');
     } catch (error) {
-      this.logger.error(`Error al enviar la notificación de compra: ${error.message}`);
+      this.logger.error(
+        `Error al enviar la notificación de compra: ${error.message}`,
+      );
       throw new Error(
         'No se pudo enviar la notificación de compra. Por favor, inténtelo de nuevo más tarde.',
       );
     }
   }
-  
-  
 }

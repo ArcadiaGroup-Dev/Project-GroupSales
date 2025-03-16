@@ -1,83 +1,44 @@
 "use client";
-import { useState } from "react";
-import CategoryDropdown from "../Navbar/Dropdown"; // Importa el componente de subcategorías
+import { useState, useEffect } from "react";
+import { fetchGetCategories } from "../Fetchs/FetchCategories";
+import { ICategories } from "@/Interfaces/ICategories";
 
-export default function CategoryNavbar() {
-  const [categoryOpen, setCategoryOpen] = useState("");
+interface CategoryNavbarProps {
+  onFilterProducts: (category: string) => void;
+}
+
+export default function CategoryNavbar({ onFilterProducts }: CategoryNavbarProps) {
+  const [categoryOpen, setCategoryOpen] = useState<string>("");
+  const [categories, setCategories] = useState<ICategories[]>([]);
+
+  useEffect(() => {
+    const loadCategories = async () => {
+      const data = await fetchGetCategories();
+      setCategories(data);
+    };
+    loadCategories();
+  }, []);
 
   const handleCategoryClick = (category: string) => {
     setCategoryOpen(category === categoryOpen ? "" : category);
+    onFilterProducts(category); // Llamada a la función que viene desde el componente principal
   };
 
   return (
-    <nav className="bg-teal-800 p-4 text-white">
-      <div className="container mx-auto flex justify-between space-x-8">
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("indumentaria")}
-        >
-          Indumentaria
-          {categoryOpen === "indumentaria" && (
-            <CategoryDropdown category="indumentaria" />
-          )}
+    <div>
+      <nav className="bg-teal-800 p-4 text-white">
+        <div className="container mx-auto flex justify-between space-x-8">
+          {categories.map((category) => (
+            <div
+              key={category.id}
+              className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
+              onClick={() => handleCategoryClick(category.name)}
+            >
+              {category.name}
+            </div>
+          ))}
         </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("decoracion")}
-        >
-          Decoración
-          {categoryOpen === "decoracion" && (
-            <CategoryDropdown category="decoracion" />
-          )}
-        </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("electronica")}
-        >
-          Electrónica
-          {categoryOpen === "electronica" && (
-            <CategoryDropdown category="electronica" />
-          )}
-        </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("hogar")}
-        >
-          Hogar
-          {categoryOpen === "hogar" && <CategoryDropdown category="hogar" />}
-        </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("deportes")}
-        >
-          Deportes
-          {categoryOpen === "deportes" && (
-            <CategoryDropdown category="deportes" />
-          )}
-        </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("juguetes")}
-        >
-          Juguetes
-          {categoryOpen === "juguetes" && (
-            <CategoryDropdown category="juguetes" />
-          )}
-        </div>
-
-        <div
-          className="cursor-pointer hover:text-tertiary hover:scale-105 transition-all"
-          onClick={() => handleCategoryClick("otros")}
-        >
-          Otros
-          {categoryOpen === "otros" && <CategoryDropdown category="otros" />}
-        </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }

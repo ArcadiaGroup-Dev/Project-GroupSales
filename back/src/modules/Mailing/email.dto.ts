@@ -18,7 +18,7 @@ export class PurchaseNotificationDto {
   userEmail: string;
 
   @IsArray()
-  productDetails: IProducto[];  
+  productDetails: IProducto[];
 }
 
 export class SendSellRequestDto {

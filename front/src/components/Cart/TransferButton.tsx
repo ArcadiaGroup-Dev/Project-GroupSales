@@ -26,7 +26,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
   useEffect(() => {
     if (productId) {
       const fetchData = async () => {
-        try {
+        try { 
           const productData = await fetchProductById(productId);
           setProduct(productData);
           console.log("Vendedor email:", productData.user.email);  // Verificar que el correo del vendedor está correctamente obtenido

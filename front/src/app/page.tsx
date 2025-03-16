@@ -1,18 +1,17 @@
 "use client";
 import TopNavbar from "../components/Navbar/Navbar";
 import CategoryNavbar from "../components/Navbar/NavbarInferior";
-import CardProduct from "@/components/Products/CardProduct";
-import Image from "next/image";
+import IntercalatedAdsB from "@/components/Ads/SlideTypeB";
 import WhatsApp from "@/components/WhatsApp/WhatsApp";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 import { fetchGetProducts } from "@/components/Fetchs/FetchProducts";
-import IntercalatedAdsB from "@/components/Ads/SlideTypeB";
 
 export default function ProductList() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [products, setProducts] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para la barra de búsqueda
   const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const slides = [
     {
@@ -42,16 +41,22 @@ export default function ProductList() {
       try {
         const fetchedProducts = await fetchGetProducts();
         setProducts(fetchedProducts);
-        setFilteredProducts(fetchedProducts); // Inicialmente mostrar todos
+        setFilteredProducts(fetchedProducts);
       } catch (error) {
         console.error("Error fetching products:", error);
       }
     };
-
     loadProducts();
   }, []);
 
-  // Filtrar productos cuando searchTerm cambie
+  const handleFilterProducts = (category: string) => {
+    const filtered = products.filter((product) =>
+      product.category.name === category
+    );
+    setFilteredProducts(filtered);
+  };
+
+  // Filtrado por búsqueda
   useEffect(() => {
     const filtered = products.filter((product) =>
       product.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -62,6 +67,7 @@ export default function ProductList() {
   return (
     <div className="mt-12 md:mt-24 lg:mt-24 bg-primary">
       <TopNavbar />
+
       <div className="relative w-full h-96 mb-10 overflow-hidden rounded-lg shadow-xl">
         {slides.map((slide, index) => (
           <div
@@ -88,9 +94,9 @@ export default function ProductList() {
           </div>
         ))}
       </div>
-      <CategoryNavbar />
 
-      {/* Barra de búsqueda */}
+      <CategoryNavbar onFilterProducts={handleFilterProducts} />
+
       <div className="max-w-7xl mx-auto py-4 px-4">
         <input
           type="text"
@@ -101,17 +107,14 @@ export default function ProductList() {
         />
       </div>
 
-     
       <div className="max-w-7xl mx-auto py-8 px-4">
-  {filteredProducts.length > 0 ? (
-    <IntercalatedAdsB products={filteredProducts} />
-  ) : (
-    <p>No se encontraron productos.</p>
-  )}
-</div>
+        {filteredProducts.length > 0 ? (
+          <IntercalatedAdsB products={filteredProducts} />
+        ) : (
+          <p>No se encontraron productos.</p>
+        )}
+      </div>
 
-
-      
       <div className="fixed bottom-6 right-6">
         <WhatsApp />
       </div>

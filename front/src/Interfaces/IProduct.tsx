@@ -6,6 +6,9 @@ export interface IProduct {
   stock?: number;
   imageUrl: string;
   seller: string;
+  category: {
+    name: string;
+  };
   categoryId: string;
   currency: string;
   quantity: number;

@@ -65,16 +65,22 @@ export class EmailController {
   async sendPurchaseNotification(
     @Body() purchaseNotificationDto: PurchaseNotificationDto,
   ) {
-    const { adminEmail, sellerEmail, userEmail, productDetails } = purchaseNotificationDto;
-  
-    console.log("Datos recibidos en el backend:");
-    console.log("Admin Email:", adminEmail);
-    console.log("Seller Email:", sellerEmail);
-    console.log("User Email:", userEmail);
-    console.log("Detalles de los productos:", productDetails);
-  
+    const { adminEmail, sellerEmail, userEmail, productDetails } =
+      purchaseNotificationDto;
+
+    console.log('Datos recibidos en el backend:');
+    console.log('Admin Email:', adminEmail);
+    console.log('Seller Email:', sellerEmail);
+    console.log('User Email:', userEmail);
+    console.log('Detalles de los productos:', productDetails);
+
     try {
-      await this.emailService.sendPurchaseNotification(adminEmail, sellerEmail, userEmail, productDetails);
+      await this.emailService.sendPurchaseNotification(
+        adminEmail,
+        sellerEmail,
+        userEmail,
+        productDetails,
+      );
       return {
         message: 'Correos de compra enviados correctamente.',
       };
@@ -82,6 +88,4 @@ export class EmailController {
       return { message: error.message };
     }
   }
-  
-
 }

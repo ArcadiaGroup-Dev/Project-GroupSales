@@ -57,14 +57,14 @@ export default function CardProduct({ product }: CardProductProps) {
           <span className="p-4 text-tertiary">Vendido por {product.user?.name || "Cargando..."}</span>
         </p>
 
-        <h3 className="mt-1.5 text-lg font-medium text-gray-900">
+        <h3 className="mt-1.5 text-lg font-bold text-gray-800">
           {product.name}
         </h3>
 
         <div className="mt-4 flex gap-4">
           <Link
             href={`/product/${product.id}`}
-            className="block w-full rounded bg-gray-100 px-4 py-3 text-sm font-medium text-gray-900 transition hover:bg-orange-300 hover:text-primary"
+            className="block w-full rounded bg-gray-100 px-4 py-3 text-sm font-semibold text-gray-700 transition hover:bg-orange-300 hover:text-primary"
           >
             Ver más
           </Link>
