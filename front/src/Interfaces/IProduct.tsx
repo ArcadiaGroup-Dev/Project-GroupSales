@@ -6,6 +6,7 @@ export interface IProduct {
   stock?: number;
   imageUrl: string;
   seller: string;
+  userId?:string;
   category: {
     name: string;
   };

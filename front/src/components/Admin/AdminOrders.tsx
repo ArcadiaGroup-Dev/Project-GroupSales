@@ -119,34 +119,37 @@ export default function AdminOrders() {
             </tr>
           </thead>
           <tbody>
-            {filteredOrders.length > 0 ? (
-              filteredOrders.map((order) => (
-                <tr key={order.id} className="border-b text-center">
-                  <td className="border px-4 py-2">{new Date(order.date).toLocaleDateString()}</td>
-                  <td className="border px-4 py-2">{order.user.name}</td>
-                  <td className="border px-4 py-2">{order.user.email}</td>
-                  <td className="border px-4 py-2">{order.user.address}</td>
-                  <td className="border px-4 py-2">{order.user.city}</td>
-                  <td className="border px-4 py-2">{order.user.phone}</td>
-                  <td className="border px-4 py-2">${parseFloat(order.orderDetails.price).toFixed(2)}</td>
-                  <td className="border px-4 py-2">{order.orderDetails.quantity}</td>
-                  <td className="border px-4 py-2">
-                    <button 
-                      onClick={() => handleFetchOrderDetails(order.id)} 
-                      className="bg-tertiary text-white p-2 rounded"
-                    >
-                      Ver detalles
-                    </button>
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={9} className="text-center p-4 text-gray-500">
-                  No hay órdenes disponibles.
-                </td>
-              </tr>
-            )}
+          {filteredOrders.length > 0 ? (
+  filteredOrders.map((order) => (
+    <tr key={order.id} className="border-b text-center">
+      <td className="border px-4 py-2">{new Date(order.date).toLocaleDateString()}</td>
+      <td className="border px-4 py-2">{order.user?.name || "N/A"}</td>
+      <td className="border px-4 py-2">{order.user?.email || "N/A"}</td>
+      <td className="border px-4 py-2">{order.user?.address || "N/A"}</td>
+      <td className="border px-4 py-2">{order.user?.city || "N/A"}</td>
+      <td className="border px-4 py-2">{order.user?.phone || "N/A"}</td>
+      <td className="border px-4 py-2">
+        ${order.orderDetails?.price ? parseFloat(order.orderDetails.price).toFixed(2) : "N/A"}
+      </td>
+      <td className="border px-4 py-2">{order.orderDetails?.quantity || "N/A"}</td>
+      <td className="border px-4 py-2">
+        <button 
+          onClick={() => handleFetchOrderDetails(order.id)} 
+          className="bg-tertiary text-white p-2 rounded"
+        >
+          Ver detalles
+        </button>
+      </td>
+    </tr>
+  ))
+) : (
+  <tr>
+    <td colSpan={9} className="text-center p-4 text-gray-500">
+      No hay órdenes disponibles.
+    </td>
+  </tr>
+)}
+
           </tbody>
         </table>
       </div>
