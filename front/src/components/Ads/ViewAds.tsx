@@ -101,7 +101,7 @@ const ViewAds = () => {
 
 
   if (loading) {
-    return <p className="text-blue-500">Cargando publicidades...</p>;
+    return <p className="text-blue-500">Cargando publicidades..</p>;
   }
 
   if (error) {
