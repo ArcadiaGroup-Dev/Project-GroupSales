@@ -9,7 +9,6 @@ interface DeleteAccountProps {
   handleCloseDeleteAccount: () => void;
 }
 
-const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
 export default function DeleteAccount({ userId, handleCloseDeleteAccount }: DeleteAccountProps) {
   const [isProcessing, setIsProcessing] = useState(false);

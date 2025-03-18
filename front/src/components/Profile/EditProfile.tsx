@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { fetchEditUser } from "../Fetchs/FetchsUser";
 
+export interface UpdatedUserData {
+  address?: string;
+  phone?: string;
+  city?: string;
+}
+
 interface EditProfileProps {
   onCancel: () => void;
   onSave: (data: { address: string; phone: string; city: string }) => void;
@@ -43,11 +49,15 @@ export const EditProfile: React.FC<EditProfileProps> = ({
       setIsLoading(false);
       onCancel(); // Cerrar el formulario
 
-    } catch (error: any) {
-      // Manejar errores
-      setError(error.message || "Hubo un problema al guardar los datos");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("Hubo un problema al guardar los datos");
+      }
       setIsLoading(false);
     }
+    
   };
 
   return (

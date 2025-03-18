@@ -1,12 +1,10 @@
 "use client";
-
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { fetchCreateOrder } from "@/components/Fetchs/FetchsOrders";
 import Swal from "sweetalert2";
 import { useCart } from "@/context/cartContext";
 import { UserContext } from "@/context/userContext";
-import Link from "next/link";
 import { IProduct } from "@/Interfaces/IProduct";
 import { sendPurchaseEmailNotification } from "@/components/Fetchs/FetchsEmail";
 import { ICreateOrder } from "@/Interfaces/IOrders";
@@ -14,13 +12,13 @@ import { fetchProductById } from "@/components/Fetchs/FetchProducts";
 
 const CompraExitosa = () => {
   const { user, token } = useContext(UserContext);
-  const { cart, removeFromCart, clearCart, getTotal, updateQuantity } = useCart();
+  const { cart, clearCart} = useCart();
 
   const router = useRouter();
   const [product, setProduct] = useState<IProduct | null>(null);
   
-  // Obtener el ID del producto (supongamos que lo pasas como prop o lo tienes en el carrito)
-  const productId = cart[0]?.id; // Aquí se asume que el primer producto del carrito es el que deseas obtener
+ 
+  const productId = cart[0]?.id;
 
   useEffect(() => {
     if (productId) {
@@ -28,7 +26,7 @@ const CompraExitosa = () => {
         try { 
           const productData = await fetchProductById(productId);
           setProduct(productData);
-          console.log("Vendedor email:", productData.user.email);  // Verificar que el correo del vendedor está correctamente obtenido
+          console.log("Vendedor email:", productData.user.email);
         } catch (error) {
           console.error("Error fetching product:", error);
         }
@@ -48,7 +46,6 @@ const CompraExitosa = () => {
       return;
     }
 
-    // Asegurarte que el carrito tiene productos con la información necesaria
     const cartItems = cart.map((item) => ({
       id: item.id,
       quantity: item.quantity,
@@ -64,14 +61,14 @@ const CompraExitosa = () => {
       return;
     }
 
-    // Estructura de la orden que se envía al backend
+ 
     const orderData: ICreateOrder = {
       userId: user.id,
       products: cartItems,
     };
 
     try {
-      // Llamada a la función para crear la orden
+      
       const orderResponse = await fetchCreateOrder(orderData, token);
 
       Swal.fire({
@@ -81,12 +78,12 @@ const CompraExitosa = () => {
       });
 
       // Verificar que el correo del admin, vendedor y usuario se están obteniendo correctamente
-      console.log("Correo Admin:", "gimenapascuale@gmail.com");
+      console.log("Correo Admin:", "mmipyme@gmail.com");
       console.log("Correo Usuario:", user.email);
 
       // Enviar los correos de notificación
       await sendPurchaseEmailNotification(
-        "gimenapascuale@gmail.com",  // Correo del administrador
+        "mmipyme@gmail.com",  // Correo del administrador
         product?.user.email || "",   // Correo del vendedor, si no está disponible lo dejamos vacío
         user.email,                  // Correo del usuario
         cart                          // Detalles del producto

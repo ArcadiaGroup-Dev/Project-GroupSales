@@ -15,12 +15,17 @@ const RectangularSliderTypeA: React.FC = () => {
       try {
         const data = await fetchGetAds();
         setAds(data.filter((ad: ICreateAds) => ad.type === AdType.A));
-      } catch (error) {
-        console.error("Error al cargar las publicidades");
+      } catch (error: unknown) { 
+        if (error instanceof Error) {
+          console.error("Error al cargar las publicidades:", error.message);
+        } else {
+          console.error("Error al cargar las publicidades");
+        }
       }
     };
     loadAds();
   }, []);
+  
 
   useEffect(() => {
     if (ads.length > 0) {

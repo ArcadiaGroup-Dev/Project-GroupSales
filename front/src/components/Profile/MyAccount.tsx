@@ -17,7 +17,7 @@ export default function MyAccount() {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<IUserResponse | null>(null); 
   const { user } = useContext(UserContext);
-  const userId = user?.id;
+ 
   useEffect(() => {
     const storedUserData = localStorage.getItem("user");
     if (storedUserData) {
@@ -47,7 +47,7 @@ export default function MyAccount() {
   const handleCancelEdit = () => setIsEditing(false);
   const handleSaveEdit = async (data: IUpdateUserData) => {
     try {
-      const updatedUser = await fetchEditUser(userData.user.id, data);
+       await fetchEditUser(userData.user.id, data);
       setUserData((prev) => {
         if (prev) {
           const updatedUserData = { ...prev, user: { ...prev.user, ...data } };

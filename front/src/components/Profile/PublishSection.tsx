@@ -55,7 +55,7 @@ const PublishSection: React.FC = () => {
           const sellerEmail = parsedSession.user.email; // Correo del vendedor
           console.log("Correo del vendedor (sellerEmail):", sellerEmail);
   
-          const adminEmail = "gimenapascuale@gmail.com"; // Correo del administrador
+          const adminEmail = "mmipyme@gmail.com"; // Correo del administrador
           console.log("Correo del administrador (adminEmail):", adminEmail);
   
           // Aquí se llama a la función que envía el correo

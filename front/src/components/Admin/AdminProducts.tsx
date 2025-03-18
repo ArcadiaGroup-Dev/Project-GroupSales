@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { IProduct } from "@/Interfaces/IProduct";
@@ -7,8 +7,6 @@ import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
 
 export default function AdminProducts() {
   const [products, setProducts] = useState<IProduct[]>([]);
-  const [editingProductId, setEditingProductId] = useState<string | null>(null);
-  const [editForm, setEditForm] = useState<IProduct | null>(null);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
@@ -24,52 +22,47 @@ export default function AdminProducts() {
     fetchProducts();
   }, []);
 
-  const handleCancel = () => {
-    setEditingProductId(null);
-    setEditForm(null);
+  // Función para abrir el modal de confirmación de eliminación
+  const handleDeleteClick = (productId: string) => {
+    setProductToDelete(productId); // Abre el modal de confirmación
   };
-// Función para abrir el modal de confirmación de eliminación
-const handleDeleteClick = (productId: string) => {
-  setProductToDelete(productId); // Abre el modal de confirmación
-};
-const handleDeleteConfirm = async () => {
-  if (productToDelete) {
-    try {
-      const response = await fetchDeleteProduct(productToDelete);
 
-      // Verificar si la respuesta tiene éxito (status 200)
-      if (response.ok) {  // Verifica solo si la respuesta es exitosa (200-299)
-        // Actualizar los productos en el estado para reflejar la eliminación
-        setProducts((prev) => prev.filter((product) => product.id !== productToDelete));
-        setFilteredProducts((prev) => prev.filter((product) => product.id !== productToDelete));
+  const handleDeleteConfirm = async () => {
+    if (productToDelete) {
+      try {
+        const response = await fetchDeleteProduct(productToDelete);
 
-        setNotificationMessage('Producto eliminado con éxito.');
-        
-        // Limpiar la notificación después de 4 segundos
-        setTimeout(() => {
-          setNotificationMessage('');
-        }, 2000);
-      } else {
-        // Si la respuesta no es exitosa, lanzar un error
-        throw new Error('No se pudo eliminar el producto.');
+        // Verificar si la respuesta tiene éxito (status 200)
+        if (response.ok) {
+          // Actualizar los productos en el estado para reflejar la eliminación
+          setProducts((prev) => prev.filter((product) => product.id !== productToDelete));
+          setFilteredProducts((prev) => prev.filter((product) => product.id !== productToDelete));
+
+          setNotificationMessage('Producto eliminado con éxito.');
+          
+          // Limpiar la notificación después de 4 segundos
+          setTimeout(() => {
+            setNotificationMessage('');
+          }, 2000);
+        } else {
+          // Si la respuesta no es exitosa, lanzar un error
+          throw new Error('No se pudo eliminar el producto.');
+        }
+      } catch (error) {
+        console.error('Error al eliminar el producto:', error);
+        // Mostrar la notificación de error si ocurre un problema
+        setNotificationMessage('Hubo un error al eliminar el producto.');
       }
-    } catch (error) {
-      console.error('Error al eliminar el producto:', error);
-      // Mostrar la notificación de error si ocurre un problema
-      setNotificationMessage('Hubo un error al eliminar el producto.');
+
+      // Cerrar el modal de eliminación
+      setProductToDelete(null);
     }
+  };
 
-    // Cerrar el modal de eliminación
-    setProductToDelete(null);
-  }
-};
-
-
-
-// Cancelar eliminación
-const handleDeleteCancel = () => {
-  setProductToDelete(null); // Cierra el modal de confirmación
-};
+  // Cancelar eliminación
+  const handleDeleteCancel = () => {
+    setProductToDelete(null); // Cierra el modal de confirmación
+  };
 
   // Handle search term change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +89,6 @@ const handleDeleteCancel = () => {
         <h1 className="text-secondary bg-gray-300 font-bold border-b border-gray-300 text-center p-2 mt-24">
           Productos / Servicios
         </h1>
-     
   
         {/* Search filter */}
         <div className="mb-4 mt-8 md:justify-end">
@@ -129,8 +121,8 @@ const handleDeleteCancel = () => {
                 <div className="p-2">
                   <h3 className="text-2xl font-semibold text-gray-800 mb-2">{product.name}</h3>
                   <p className="text-gray-600 mb-4">{product.description}</p>
-                    <p className="text-xl font-bold text-gray-900">${product.price}</p>
-                    <p className="text-gray-600 mt-2" >Stock: {product.stock}</p>
+                  <p className="text-xl font-bold text-gray-900">${product.price}</p>
+                  <p className="text-gray-600 mt-2" >Stock: {product.stock}</p>
                  
                   <p className="text-md text-gray-700">
                     <span className="text-sm mt-2 text-tertiary italic">Vendido por: {product.user.name}</span>
@@ -175,4 +167,4 @@ const handleDeleteCancel = () => {
       </div>
     </>
   );
-}  
+}

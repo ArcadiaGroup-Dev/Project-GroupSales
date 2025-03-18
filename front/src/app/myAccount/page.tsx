@@ -1,5 +1,4 @@
 "use client"
-import AdminDashboard from "@/components/Admin/AdminDashboard";
 import PrivateRouteAdmin from "@/components/PrivateRoutAdmin";
 import MyAccount from "@/components/Profile/MyAccount";
 import ProtectedRoute from "@/components/ProtectedRoute";
@@ -9,7 +8,7 @@ import MyAccountAdmin from "../dashboardAdmin/myAccountAdmin/page";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
-  const { isAdmin, isActive, user } = useContext(UserContext);
+  const { isAdmin, user } = useContext(UserContext);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 

@@ -6,11 +6,12 @@ import WhatsApp from "@/components/WhatsApp/WhatsApp";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { fetchGetProducts } from "@/components/Fetchs/FetchProducts";
+import { IProduct } from "@/Interfaces/IProduct";
 
 export default function ProductList() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [products, setProducts] = useState<any[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const slides = [

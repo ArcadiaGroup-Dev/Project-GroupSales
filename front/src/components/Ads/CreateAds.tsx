@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ICreateAds, AdType } from "@/Interfaces/IAds";
 import { fetchCreateAds } from "../Fetchs/FetchAds";
-import Notification from "./NotificationAds"; // Asegúrate de importar el componente de notificación
+import Notification from "./NotificationAds"; 
 
 const CreateAds = () => {
   const [formData, setFormData] = useState<ICreateAds>({

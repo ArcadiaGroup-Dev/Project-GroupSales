@@ -74,7 +74,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
     try {
       // Llamada a la función para crear la orden
       const orderResponse = await fetchCreateOrder(orderData, token);
-
+      console.log("Respuesta de la orden:", orderResponse);
       Swal.fire({
         icon: "success",
         title: "Orden creada con éxito",
@@ -82,7 +82,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
       });
 
       // Verificar que el correo del admin, vendedor y usuario se están obteniendo correctamente
-      console.log("Correo Admin:", "gimenapascuale@gmail.com");
+      console.log("Correo Admin:", "mmipyme@gmail.com");
       console.log("Correo Usuario:", user.email);
 
       // Enviar los correos de notificación
@@ -101,7 +101,9 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
 
       // Cerrar el modal o la vista de la transferencia
       onClose();
-    } catch (error) {
+    }catch (error) {
+      console.error("Error al crear la orden:", error);
+    
       Swal.fire({
         icon: "error",
         title: "Error al crear la orden",

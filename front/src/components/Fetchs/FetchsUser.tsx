@@ -1,4 +1,5 @@
 import {ILoginUser, IUserRegister } from "@/Interfaces/IUser";
+import {  UpdatedUserData } from "../Profile/EditProfile";
 
 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
@@ -148,7 +149,7 @@ export const fetchUserOrdersById = async (userId:string) => {
   }
 };
 
-export const fetchEditUser = async (userId: string, updatedData: Record<string, any>) => {
+export const fetchEditUser = async (userId: string, updatedData:UpdatedUserData) => {
   try {
     const response = await fetch(`${apiUrl}/users/${userId}`, {
       method: "PUT",

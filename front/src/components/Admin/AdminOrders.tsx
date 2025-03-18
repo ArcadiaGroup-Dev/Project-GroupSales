@@ -28,6 +28,7 @@ export default function AdminOrders() {
         setFilteredOrders(sortedOrders); // Inicialmente mostrar todas las órdenes
       } catch (err) {
         setError("Error al obtener las órdenes.");
+        console.error("Error al obtener las órdenes:", err); 
       } finally {
         setLoading(false);
       }
@@ -80,6 +81,7 @@ export default function AdminOrders() {
       setShowDetails(true); // Muestra los detalles al hacer clic en el botón
     } catch (err) {
       setError("Error al obtener los detalles de la orden.");
+      console.error("Error al obtener los detalles de la orden:", err); 
     }
   };
 

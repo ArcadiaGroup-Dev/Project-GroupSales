@@ -6,13 +6,14 @@ import { fetchGetAds } from "../Fetchs/FetchAds";
 import CardProduct from "@/components/Products/CardProduct";
 import RectangularSliderTypeA from "./SliderTypeA";
 import Link from "next/link";
+import { IProduct } from "@/Interfaces/IProduct";
 
 interface IntercalatedAdsBProps {
-  products: any[]; // Tipa correctamente si tienes una interfaz
+  products: IProduct[]; 
 }
 
 type CombinedItem =
-  | { type: "product"; data: any }
+  | { type: "product"; data: IProduct }
   | { type: "ad"; data: ICreateAds }
   | { type: "adA" }; // Tipo para la publicidad tipo A
 

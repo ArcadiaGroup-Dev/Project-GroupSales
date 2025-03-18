@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { forgotPassword } from "@/components/Fetchs/FetchsUser";
-import Link from "next/link";
+
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");

@@ -50,7 +50,7 @@ export default function Users() {
         // Luego, obtenemos los correos de administrador y vendedor
         const selectedUser = users.find(user => user.id === selectedUserId);
         if (selectedUser) {
-          const adminEmail = 'gimenapascuale@gmail.com'; // Debes obtener el correo del administrador
+          const adminEmail = 'mmipyme@gmail.com'; // Debes obtener el correo del administrador
           const sellerEmail = selectedUser.email; // El correo del vendedor seleccionado
   
           // Llamamos a la función que envía el correo de aprobación
@@ -87,7 +87,7 @@ export default function Users() {
           const sellerEmail = updatedUser.email;
   
           // Llamar a la función para enviar el correo de notificación al admin
-          await sendApprovalAdmin('gimenapascuale@gmail.com', sellerEmail);  // El correo del admin y del vendedor
+          await sendApprovalAdmin('mmipyme@gmail.com', sellerEmail);  // El correo del admin y del vendedor
   
           // Actualizar la lista de usuarios con el nuevo rol de administrador
           setUsers((prevUsers) =>

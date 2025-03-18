@@ -12,7 +12,6 @@ export default function ViewProducts() {
   const [editForm, setEditForm] = useState<IProduct | null>(null);
   const [productToDelete, setProductToDelete] = useState<string | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
-  const [userId, setUserId] = useState<string | undefined>(undefined);
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string>("");
 
