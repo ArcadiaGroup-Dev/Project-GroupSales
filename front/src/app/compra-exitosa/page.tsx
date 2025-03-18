@@ -70,7 +70,7 @@ const CompraExitosa = () => {
     try {
       
       const orderResponse = await fetchCreateOrder(orderData, token);
-
+     console.log(orderResponse)
       Swal.fire({
         icon: "success",
         title: "Orden creada con éxito",
@@ -96,6 +96,7 @@ const CompraExitosa = () => {
       clearCart();
 
     } catch (error) {
+      console.log(error)
       Swal.fire({
         icon: "error",
         title: "Error al crear la orden",

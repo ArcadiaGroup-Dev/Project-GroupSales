@@ -87,6 +87,7 @@ export const resetPassword = async (token: string, password: string) => {
     const data = await res.json();
     return { success: res.ok, message: data.message };
   } catch (error) {
+    console.error(error);
     return { success: false, message: "Error al conectar con el servidor." };
   }
 };
@@ -103,6 +104,7 @@ export const forgotPassword = async (email: string) => {
     const data = await res.json();
     return { success: res.ok, message: data.message };
   } catch (error) {
+    console.error(error);
     return { success: false, message: "Error al conectar con el servidor." };
   }
 };

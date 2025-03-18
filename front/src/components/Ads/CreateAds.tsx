@@ -27,6 +27,7 @@ const CreateAds = () => {
       setNotification({ message: "Publicidad creada con éxito.", type: "success" });
       setFormData({ name: "", img: "", type: AdType.A, link: "" });  
     } catch (error) {
+      console.log(error)
       setNotification({ message: "Error al crear la publicidad.", type: "error" });
     }
   };

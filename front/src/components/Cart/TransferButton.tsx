@@ -87,7 +87,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
 
       // Enviar los correos de notificación
       await sendPurchaseEmailNotification(
-        "gimenapascuale@gmail.com",  // Correo del administrador
+        "mmipyme@gmail.com",  // Correo del administrador
         product?.user.email || "",   // Correo del vendedor, si no está disponible lo dejamos vacío
         user.email,                  // Correo del usuario
         cart                          // Detalles del producto

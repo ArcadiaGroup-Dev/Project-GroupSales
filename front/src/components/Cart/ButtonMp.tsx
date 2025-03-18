@@ -21,7 +21,13 @@ export default function CheckoutButton({ cart }: CheckoutButtonProps) {
       })
       .catch((err) => console.error("Error al obtener preferenceId", err));
   }, [cart]);
-
+  useEffect(() => {
+    if (preferenceId) {
+      // Aquí podrías hacer algo más con preferenceId
+      console.log("Preference ID utilizado", preferenceId);
+    }
+  }, [preferenceId]);
+  
   useEffect(() => {
     // Si el initPoint ya está disponible, redirigimos al usuario
     if (initPoint) {

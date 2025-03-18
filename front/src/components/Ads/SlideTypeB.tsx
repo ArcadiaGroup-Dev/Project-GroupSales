@@ -32,6 +32,7 @@ const IntercalatedAdsB: React.FC<IntercalatedAdsBProps> = ({ products }) => {
         const filtered = data.filter((ad: ICreateAds) => ad.type === AdType.B);
         setAdsB(filtered);
       } catch (error) {
+        console.log(error)
         setErrorAds("Error al cargar anuncios tipo B.");
       } finally {
         setLoadingAds(false);
