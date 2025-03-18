@@ -30,7 +30,7 @@ const ViewAds = () => {
     try {
       const data: ICreateAds[] = await fetchGetAds();
       setAds(data);
-    } catch (_error) {
+    } catch  {
       setError("Error al cargar las publicidades. Intenta de nuevo.");
     } finally {
       setLoading(false);
@@ -48,7 +48,7 @@ const ViewAds = () => {
       }
       setIsDeleteConfirmVisible(false);
       setAdToDelete(null);
-    } catch (_error) {
+    } catch {
       setNotification({ message: "Error al eliminar la publicidad.", type: "error" });
       setIsDeleteConfirmVisible(false);
       setAdToDelete(null);
@@ -69,7 +69,7 @@ const ViewAds = () => {
       setImg(adToEdit.img);
       setType(adToEdit.type);
       setLink(adToEdit.link);
-    } catch (_error) {
+    } catch  {
       setNotification({ message: "Error al cargar la publicidad para editar.", type: "error" });
     }
   };
@@ -80,7 +80,7 @@ const ViewAds = () => {
       await fetchDeleteAds(id);
       setAds(ads.filter((ad) => ad.id !== id));
       setNotification({ message: "Publicidad eliminada con éxito.", type: "success" });
-    } catch (_error) {
+    } catch  {
       setNotification({ message: "Error al eliminar la publicidad.", type: "error" });
     }
   };
@@ -94,7 +94,7 @@ const ViewAds = () => {
       setNotification({ message: "Publicidad modificada con éxito.", type: "success" });
       loadAds();
       setEditAd(null); 
-    } catch (_error) {
+    } catch  {
       setNotification({ message: "Error al modificar la publicidad.", type: "error" });
     }
   };
