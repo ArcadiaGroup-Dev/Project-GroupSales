@@ -22,7 +22,6 @@ export class MercadoPagoService {
     }
   }
 
-
   async processWebhook(body: any) {
     if (body.type === 'payment') {
       const paymentId = body.data.id;

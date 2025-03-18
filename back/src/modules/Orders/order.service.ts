@@ -25,8 +25,6 @@ export class OrderService {
     private readonly orderDetailRepository: Repository<OrderDetails>,
   ) {}
 
-
-
   async create(
     userId: string,
     products: Array<{ id: string; quantity: number; seller: string }>,

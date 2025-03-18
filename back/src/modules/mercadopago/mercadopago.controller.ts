@@ -23,7 +23,7 @@ export class MercadoPagoController {
         failure: 'http://localhost:3001/error-pago', // URL de fallo en desarrollo
         pending: 'http://localhost:3001/pendiente-pago', // URL de pendiente en desarrollo
       },
-      auto_return: 'approved', 
+      auto_return: 'approved',
     };
 
     try {
