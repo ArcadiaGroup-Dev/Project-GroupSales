@@ -2,19 +2,20 @@ import { useEffect, useState } from "react";
 import { fetchGetAds, fetchDeleteAds, fetchAdsById, fetchUpdateAds } from "../Fetchs/FetchAds";
 import { FiTrash2, FiEdit } from "react-icons/fi";
 import Notification from "./NotificationAds";
+import { ICreateAds,AdType } from "@/Interfaces/IAds";
 
 const ViewAds = () => {
-  const [ads, setAds] = useState<any[]>([]);
+  const [ads, setAds] = useState<ICreateAds[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const [isDeleteConfirmVisible, setIsDeleteConfirmVisible] = useState(false);
-  const [adToDelete, setAdToDelete] = useState<any | null>(null);
+  const [adToDelete, setAdToDelete] = useState<string | null>(null);
 
-  const [editAd, setEditAd] = useState<any | null>(null);
+  const [editAd, setEditAd] = useState<ICreateAds | null>(null);
   const [name, setName] = useState<string>('');
   const [img, setImg] = useState<string>('');
-  const [type, setType] = useState<string>('');
+  const [type, setType] = useState<AdType>(AdType.A);
   const [link, setLink] = useState<string>('');
 
   const [notification, setNotification] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -27,19 +28,16 @@ const ViewAds = () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchGetAds();
+      const data: ICreateAds[] = await fetchGetAds();
       setAds(data);
-    } catch (error) {
+    } catch (_error) {
       setError("Error al cargar las publicidades. Intenta de nuevo.");
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = (id: string) => {
-    setIsDeleteConfirmVisible(true);
-    setAdToDelete(id);
-  };
+
 
   const confirmDelete = async () => {
     try {
@@ -50,7 +48,7 @@ const ViewAds = () => {
       }
       setIsDeleteConfirmVisible(false);
       setAdToDelete(null);
-    } catch (error) {
+    } catch (_error) {
       setNotification({ message: "Error al eliminar la publicidad.", type: "error" });
       setIsDeleteConfirmVisible(false);
       setAdToDelete(null);
@@ -62,30 +60,45 @@ const ViewAds = () => {
     setAdToDelete(null);
   };
 
-  const handleEdit = async (id: string) => {
+  const handleEdit = async (id?: string) => {
+    if (!id) return;
     try {
-      const adToEdit = await fetchAdsById(id);
+      const adToEdit: ICreateAds = await fetchAdsById(id);
       setEditAd(adToEdit);
       setName(adToEdit.name);
       setImg(adToEdit.img);
       setType(adToEdit.type);
       setLink(adToEdit.link);
-    } catch (error) {
+    } catch (_error) {
       setNotification({ message: "Error al cargar la publicidad para editar.", type: "error" });
     }
   };
+  
+  const handleDelete = async (id?: string) => {
+    if (!id) return;
+    try {
+      await fetchDeleteAds(id);
+      setAds(ads.filter((ad) => ad.id !== id));
+      setNotification({ message: "Publicidad eliminada con éxito.", type: "success" });
+    } catch (_error) {
+      setNotification({ message: "Error al eliminar la publicidad.", type: "error" });
+    }
+  };
+  
 
   const handleUpdate = async () => {
     try {
-      const updatedAd = { ...editAd, name, img, type, link };
-      await fetchUpdateAds(editAd.id, updatedAd);
+      if (!editAd) return;
+      const updatedAd: ICreateAds = { ...editAd, name, img, type, link };
+      await fetchUpdateAds(editAd.id!, updatedAd);
       setNotification({ message: "Publicidad modificada con éxito.", type: "success" });
       loadAds();
       setEditAd(null); 
-    } catch (error) {
+    } catch (_error) {
       setNotification({ message: "Error al modificar la publicidad.", type: "error" });
     }
   };
+
 
   if (loading) {
     return <p className="text-blue-500">Cargando publicidades...</p>;
@@ -168,13 +181,14 @@ const ViewAds = () => {
               <div>
                 <label className="block">Tipo</label>
                 <select
-                  value={type}
-                  onChange={(e) => setType(e.target.value)}
-                  className="border p-2 w-full"
-                >
-                  <option value="A">A</option>
-                  <option value="B">B</option>
-                </select>
+              value={type}
+              onChange={(e) => setType(e.target.value as AdType)}
+              className="border p-2 w-full"
+            >
+              <option value="A">A</option>
+              <option value="B">B</option>
+            </select>
+
               </div>
               <div className="mt-4 flex justify-end space-x-4">
                 <button onClick={() => setEditAd(null)} className="px-4 py-2 bg-gray-300 rounded">Cancelar</button>
