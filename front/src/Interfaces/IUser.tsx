@@ -42,9 +42,14 @@ export interface ITransferenciaData {
 
 
 export interface IUpdateUserData {
-  address: string;
-  phone: string;
-  city: string;
+  address?: string;
+  phone?: string;
+  city?: string;
+  bank?: string;
+  account?: string;
+  cardHolder?: string;
+  alias?: string;
+  cbu?: string;
 }
 
 

@@ -1,12 +1,12 @@
 "use client";
 import React, { useState, useEffect, useContext } from "react";
-import { ITransferenciaData } from "@/Interfaces/IUser";
+import { IUpdateUserData } from "@/Interfaces/IUser";
 import { fetchEditUser, fetchUserId } from "../Fetchs/FetchsUser";
 import { NotifFormsUsers } from "../Notifications/NotifiFormsUsers";
 import { UserContext } from "@/context/userContext";
 
 export default function DatosTransferencia() {
-  const [data, setData] = useState<ITransferenciaData>({
+  const [data, setData] = useState<IUpdateUserData>({
     bank: "",
     account: "",
     cardHolder: "",
@@ -45,7 +45,7 @@ export default function DatosTransferencia() {
     fetchData();
   }, [userId]);
 
-  const handleChange = (key: keyof ITransferenciaData, value: string) => {
+  const handleChange = (key: keyof IUpdateUserData, value: string) => {
     setData((prev) => ({ ...prev, [key]: value }));
   };
 
