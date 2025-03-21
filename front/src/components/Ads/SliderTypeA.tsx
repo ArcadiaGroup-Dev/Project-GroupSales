@@ -61,15 +61,16 @@ const RectangularSliderTypeA: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <div className="w-full h-48 flex-shrink-0">
-            <Image
-              src={ads[current].img}
-              alt={ads[current].name}
-              width={800}
-              height={200}
-              className="rounded-md object-cover w-full h-48"
-            />
-          </div>
+         <div className="w-full h-48 flex-shrink-0">
+          <Image
+            src={ads[current].img}
+            alt={ads[current].name}
+            width={800}
+            height={200}
+            className="rounded-md object-contain w-full h-full"
+          />
+        </div>
+
         </Link>
       )}
     </div>

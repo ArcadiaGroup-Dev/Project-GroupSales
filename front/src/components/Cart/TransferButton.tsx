@@ -94,7 +94,7 @@ export function TransferButton({ cart, onClose }: TransferButtonProps) {
       );
 
       // Redirigir al usuario a la página de compra exitosa
-      router.push("/compra-exitosa");
+      router.push("/compra-transfer");
 
       // Limpiar el carrito después de la compra
       clearCart();

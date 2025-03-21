@@ -75,13 +75,13 @@ const IntercalatedAdsB: React.FC<IntercalatedAdsBProps> = ({ products }) => {
             <div key={index} className="bg-gray-100 p-4 rounded shadow relative">
              <Link href={ad.link} target="_blank" rel="noopener noreferrer">
               <div className="relative w-full h-80 mt-2">
-                <Image
-                  src={ad.img}
-                  alt={ad.name}
-                  fill
-                  objectFit="cover"
-                  className="rounded-lg"
-                />
+              <Image
+              src={ad.img}
+              alt={ad.name}
+              fill
+              className="rounded-lg object-contain w-full h-full"
+            />
+
               </div>
               </Link>
             </div>
