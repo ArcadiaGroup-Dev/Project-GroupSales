@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react'
 
 const CompraExitosa = () => {
- const router = useRouter();
+
 
   return (
     <div className="mt-24 flex justify-center items-center min-h-screen bg-gray-100">
