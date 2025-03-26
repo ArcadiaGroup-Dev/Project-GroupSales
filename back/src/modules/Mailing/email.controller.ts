@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body } from '@nestjs/common';
 import { EmailService } from './email.service';
 import {
   SendSellApprovalDto,
@@ -44,6 +44,7 @@ export class EmailController {
       return { message: error.message };
     }
   }
+
   @Post('send-admin-promotion') // Nuevo endpoint para la promoción a administrador
   async sendAdminPromotionNotification(
     @Body() sendAdminPromotionDto: SendAdminPromotionDto,
@@ -87,5 +88,18 @@ export class EmailController {
     } catch (error) {
       return { message: error.message };
     }
+  }
+
+  // Nuevo endpoint para verificar variables de entorno en Render
+  @Get('debug/env')
+  getEnvVariables() {
+    return {
+      NODE_ENV: process.env.NODE_ENV,
+      MAIL_HOST: process.env.MAIL_HOST,
+      MAIL_PORT: process.env.MAIL_PORT,
+      MAIL_USER: process.env.MAIL_USER,
+      MAIL_PASSWORD: process.env.MAIL_PASSWORD ? '********' : 'Not Set',
+      MAIL_FROM: process.env.MAIL_FROM,
+    };
   }
 }
