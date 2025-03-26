@@ -28,7 +28,7 @@ export default function PaymentModal({ cart, onClose }: PaymentModalProps): JSX.
       {/* Botón de cancelar */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 border-2 border-red-600 p-1 bg-red-600 rounded text-white text-2xl hover:text-red-600 hover:bg-white"
+        className="absolute top-2 right-4 mb-4  text-red-600 p-1  rounded  text-2xl hover:text-red-600 hover:bg-white"
       >
         x
       </button>
