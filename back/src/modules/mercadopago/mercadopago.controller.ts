@@ -1,6 +1,9 @@
-import { Controller, Post, Body, Query, Res } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
 import { Response } from 'express'; // Importa la clase Response de Express
 import { MercadoPagoService } from './mercadopago.service';
+
+const webhookUrl = process.env.MERCADO_PAGO_WEBHOOK_URL || 'http://localhost:3000/mercadopago/webhook';
+
 
 @Controller('mercadopago')
 export class MercadoPagoController {
@@ -19,11 +22,12 @@ export class MercadoPagoController {
         quantity: product.quantity, // Cantidad de productos
       })),
       back_urls: {
-        success: 'http://localhost:3001/compra-exitosa', // URL de éxito en desarrollo
-        failure: 'http://localhost:3001/error-pago', // URL de fallo en desarrollo
-        pending: 'http://localhost:3001/pendiente-pago', // URL de pendiente en desarrollo
+        success: 'https://project-groupsales-front.onrender.com/compra-exitosa', // URL de éxito en desarrollo
+        failure: 'https://project-groupsales-front.onrender.com/error-pago', // URL de fallo en desarrollo
+        pending: 'https://project-groupsales-front.onrender.com/pendiente-pago', // URL de pendiente en desarrollo
       },
       auto_return: 'approved',
+      notification_url: webhookUrl,
     };
 
     try {
@@ -38,41 +42,30 @@ export class MercadoPagoController {
   }
 
   @Post('webhook')
-  async handleWebhook(
-    @Body() body: any,
-    @Query('expectedId') expectedId: string,
-    @Res() res: Response, // Asegúrate de que `res` esté correctamente tipado
-  ) {
-    // Verifica que el tipo de la notificación sea 'payment'
-    if (body.type === 'payment') {
+  async handleWebhook(@Body() body: any, @Res() res: Response) {
+    console.log('Webhook recibido:', body);
+
+    if (body.type === 'payment' && body.data.id) {
       const paymentId = body.data.id;
+      try {
+        // Llama al servicio para validar el pago
+        const paymentResult =
+          await this.mercadoPagoService.validatePayment(paymentId);
 
-      // Compara el ID del pago recibido con el esperado
-      if (paymentId === expectedId) {
-        try {
-          // Llama al servicio para validar el pago
-          const paymentResult =
-            await this.mercadoPagoService.validatePayment(paymentId);
+        console.log('Pago validado:', paymentResult);
 
-          // Responde con el resultado del pago si es válido
-          return res.status(200).json({
-            message: 'ID coincidente, pago procesado',
-            paymentResult,
-          });
-        } catch (error) {
-          // Si ocurre un error al procesar el pago, responde con error
-          return res.status(500).json({
-            message: 'Error al procesar el pago',
-            error: error.message,
-          });
-        }
-      } else {
-        // Si los IDs no coinciden, responde con un error
-        return res.status(400).json({ message: 'ID no coincidente' });
+        return res.status(200).json({
+          message: 'Pago procesado correctamente',
+          paymentResult,
+        });
+      } catch (error) {
+        console.error('Error al procesar el pago:', error);
+        return res
+          .status(500)
+          .json({ message: 'Error en el procesamiento', error: error.message });
       }
-    } else {
-      // Si el tipo no es 'payment', simplemente responde que la notificación fue recibida
-      return res.status(200).json({ message: 'Webhook recibido' });
     }
+
+    return res.status(400).json({ message: 'Notificación no reconocida' });
   }
 }
