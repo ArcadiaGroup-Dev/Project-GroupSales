@@ -13,7 +13,7 @@ const config: DataSourceOptions = {
   password: process.env.DB_PASSWORD,
 
   ssl: {
-    rejectUnauthorized: false,
+    rejectUnauthorized: true,
   },
   dropSchema: false,
   logging: true,
