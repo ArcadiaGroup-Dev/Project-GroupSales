@@ -1,6 +1,12 @@
-import { MailerOptions } from '@nestjs-modules/mailer';
+import { MailerOptions } from '@nestjs-modules/mailer'; 
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { join } from 'path';
+import { resolve } from 'path';
+console.log('Ruta de plantillas:', resolve(
+  __dirname,
+  process.env.NODE_ENV === 'production'
+    ? '../../dist/templates'
+    : '../../src/templates'
+));
 
 export const mailConfig: MailerOptions = {
   transport: {
@@ -16,11 +22,11 @@ export const mailConfig: MailerOptions = {
     from: `"No Reply" <${process.env.MAIL_FROM}>`,
   },
   template: {
-    dir: join(
+    dir: resolve(
       __dirname,
       process.env.NODE_ENV === 'production'
-        ? '../../dist/templates'
-        : '../../src/templates',
+        ? '../../dist/templates' // Asegúrate de que esta ruta esté correcta en producción
+        : '../../src/templates'   // Ruta para desarrollo
     ),
     adapter: new HandlebarsAdapter(),
     options: {
