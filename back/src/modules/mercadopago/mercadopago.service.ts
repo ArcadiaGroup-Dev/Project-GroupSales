@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { MercadoPagoConfig, Preference, Payment } from 'mercadopago';
 import 'dotenv/config';
 
-
 @Injectable()
 export class MercadoPagoService {
   private mercadopago: MercadoPagoConfig;

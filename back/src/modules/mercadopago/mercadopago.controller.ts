@@ -2,8 +2,9 @@ import { Controller, Post, Body, Res } from '@nestjs/common';
 import { Response } from 'express'; // Importa la clase Response de Express
 import { MercadoPagoService } from './mercadopago.service';
 
-const webhookUrl = process.env.MERCADO_PAGO_WEBHOOK_URL || 'http://localhost:3000/mercadopago/webhook';
-
+const webhookUrl =
+  process.env.MERCADO_PAGO_WEBHOOK_URL ||
+  'http://localhost:3000/mercadopago/webhook';
 
 @Controller('mercadopago')
 export class MercadoPagoController {
